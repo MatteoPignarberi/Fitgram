@@ -1,10 +1,670 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitgram - Be Fit. Be Style.</title>
+    <link rel="canonical" href="https://fitgram.altervista.org/">
+    <meta property="og:url" content="https://fitgram.altervista.org/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        :root {
+            --primary-color: #D4745C;
+            --secondary-color: #E8B49A;
+            --accent-color: #2C2C2C;
+            --bg-light: #F9F6F4;
+            --text-dark: #2C2C2C;
+            --text-light: #666;
+            --white: #FFFFFF;
+            --shadow: 0 8px 32px rgba(212, 116, 92, 0.12);
+            --shadow-hover: 0 12px 48px rgba(212, 116, 92, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg-light) 0%, #FFF5F0 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            height: 50px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05) rotate(-2deg);
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--primary-color);
+            letter-spacing: -1px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(212, 116, 92, 0.3);
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 6px 20px rgba(212, 116, 92, 0.4);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.8rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), #E8745C);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(212, 116, 92, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(212, 116, 92, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 620px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+            animation: fadeIn 0.8s ease 0.2s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .hero-accent {
+            color: var(--primary-color);
+        }
+
+        /* Stories */
+        .stories {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            scrollbar-width: none;
+            animation: fadeIn 0.8s ease 0.4s both;
+        }
+
+        .stories::-webkit-scrollbar {
+            display: none;
+        }
+
+        .story {
+            flex-shrink: 0;
+            width: 80px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .story-ring {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            padding: 3px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .story:hover .story-ring {
+            transform: scale(1.1);
+        }
+
+        .story-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--primary-color);
+            overflow: hidden;
+        }
+
+        .story-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-name {
+            font-size: 0.75rem;
+            color: var(--text-dark);
+        }
+
+        /* Feed */
+        .feed {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .outfit-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            animation: fadeIn 0.8s ease both;
+        }
+
+        .outfit-card:nth-child(1) {
+            animation-delay: 0.5s;
+        }
+
+        .outfit-card:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+
+        .outfit-card:nth-child(3) {
+            animation-delay: 0.7s;
+        }
+
+        .outfit-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-header {
+            padding: 1rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.9rem;
+            overflow: hidden;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-info h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .user-info p {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .outfit-image {
+            width: 100%;
+            aspect-ratio: 4/5;
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--secondary-color), var(--bg-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .outfit-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .outfit-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.2) 100%);
+            pointer-events: none;
+        }
+
+        .card-actions {
+            padding: 1rem 1.2rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            color: var(--text-dark);
+        }
+
+        .action-btn:hover {
+            transform: scale(1.2);
+            color: var(--primary-color);
+        }
+
+        .card-content {
+            padding: 0 1.2rem 1.2rem;
+        }
+
+        .likes {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .description {
+            color: var(--text-dark);
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        .username {
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .tags {
+            margin-top: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: var(--bg-light);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--accent-color);
+            color: var(--white);
+            text-align: center;
+            padding: 2.5rem 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-motto {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-copyright {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        /* Font Awesome placeholder */
+        .fa-heart,
+        .fa-comment,
+        .fa-paper-plane,
+        .fa-bookmark {
+            /* Basic styling if FontAwesome fails to load */
+            font-style: normal;
+        }
+
+        /* Loading placeholder for images */
+        .placeholder {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+    </style>
+    <!-- Add Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <!-- Replaced broken base64 image with a text/icon placeholder -->
+            <div style="font-size: 2rem; color: var(--primary-color);">
+                <i class="fas fa-dumbbell"></i>
+            </div>
+            <span class="logo-text">Fitgram</span>
+        </div>
+
+        <div class="header-right">
+            <div class="profile-pic">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="auth-buttons">
+                <a href="#" class="btn btn-secondary">Accedi</a>
+                <a href="#" class="btn btn-primary">Iscriviti</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Be Fit. <span class="hero-accent">Be Style.</span></h1>
+            <p>Esplora gli outfit sportivi più trendy del momento.</p>
+        </section>
+
+        <!-- Stories Section -->
+        <div class="stories">
+            <div class="story">
+                <div class="story-ring">
+                    <div class="story-inner">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                </div>
+                <div class="story-name">Aggiungi</div>
+            </div>
+            <div class="story">
+                <div class="story-ring">
+                    <div class="story-inner">
+                        <span>JD</span>
+                    </div>
+                </div>
+                <div class="story-name">Jessica</div>
+            </div>
+            <div class="story">
+                <div class="story-ring">
+                    <div class="story-inner">
+                        <span>MR</span>
+                    </div>
+                </div>
+                <div class="story-name">Marco</div>
+            </div>
+            <div class="story">
+                <div class="story-ring">
+                    <div class="story-inner">
+                        <span>EL</span>
+                    </div>
+                </div>
+                <div class="story-name">Elena</div>
+            </div>
+            <div class="story">
+                <div class="story-ring">
+                    <div class="story-inner">
+                        <span>TS</span>
+                    </div>
+                </div>
+                <div class="story-name">Tommaso</div>
+            </div>
+        </div>
+
+        <!-- Feed Section -->
+        <div class="feed">
+            <!-- Post 1 -->
+            <article class="outfit-card">
+                <div class="card-header">
+                    <div class="user-avatar">
+                        <span>G</span>
+                    </div>
+                    <div class="user-info">
+                        <h3>Giulia_Fit</h3>
+                        <p>Milano, Italia</p>
+                    </div>
+                </div>
+                <div class="outfit-image">
+                    <!-- Placeholder image -->
+                    <div
+                        style="width:100%; height:100%; background: #ddd; display:flex; align-items:center; justify-content:center;">
+                        <i class="fas fa-image" style="font-size: 3rem; color: #aaa;"></i>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn"><i class="far fa-heart"></i></button>
+                    <button class="action-btn"><i class="far fa-comment"></i></button>
+                    <button class="action-btn"><i class="far fa-paper-plane"></i></button>
+                    <button class="action-btn" style="margin-left: auto;"><i class="far fa-bookmark"></i></button>
+                </div>
+                <div class="card-content">
+                    <div class="likes">1.243 Mi piace</div>
+                    <div class="description">
+                        <span class="username">Giulia_Fit</span>
+                        Outfit perfetto per il workout di oggi! 💪 Combinazione colori super estiva.
+                    </div>
+                    <div class="tags">
+                        <span class="tag">#GymLife</span>
+                        <span class="tag">#SummerVibes</span>
+                        <span class="tag">#OOTD</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Post 2 -->
+            <article class="outfit-card">
+                <div class="card-header">
+                    <div class="user-avatar">
+                        <span>L</span>
+                    </div>
+                    <div class="user-info">
+                        <h3>Luca_Runner</h3>
+                        <p>Roma, Italia</p>
+                    </div>
+                </div>
+                <div class="outfit-image">
+                    <div
+                        style="width:100%; height:100%; background: #ddd; display:flex; align-items:center; justify-content:center;">
+                        <i class="fas fa-image" style="font-size: 3rem; color: #aaa;"></i>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn"><i class="far fa-heart"></i></button>
+                    <button class="action-btn"><i class="far fa-comment"></i></button>
+                    <button class="action-btn"><i class="far fa-paper-plane"></i></button>
+                    <button class="action-btn" style="margin-left: auto;"><i class="far fa-bookmark"></i></button>
+                </div>
+                <div class="card-content">
+                    <div class="likes">856 Mi piace</div>
+                    <div class="description">
+                        <span class="username">Luca_Runner</span>
+                        Nuove scarpe da running testate oggi. Performance incredibile! 🏃‍♂️
+                    </div>
+                    <div class="tags">
+                        <span class="tag">#Running</span>
+                        <span class="tag">#MarathonTraining</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <h2 class="footer-motto">Be Fit. Be Style.</h2>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Chi Siamo</a>
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Termini di Servizio</a>
+                <a href="#" class="footer-link">Contattaci</a>
+            </div>
+            <div class="footer-copyright">
+                &copy; 2026 Fitgram. Tutti i diritti riservati.
+            </div>
+        </div>
+    </footer>
 </body>
+
 </html>

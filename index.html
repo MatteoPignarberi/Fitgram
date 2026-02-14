@@ -1,10 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitgram - Be Fit, Be Style</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo-area">
+                <!-- Logo Image Placeholder -->
+                <div class="logo-placeholder">
+                    <i class="fa-solid fa-cloud-upload-alt"></i>
+                    <span>[Logo]</span>
+                </div>
+                <!-- <img src="Images/logo.png" alt="Fitgram Logo" class="logo"> -->
+                <a href="#" class="brand-name">Fitgram</a>
+            </div>
+
+            <div class="search-bar">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" placeholder="Cerca outfit, utenti, tag...">
+            </div>
+
+            <div class="header-actions">
+                <a href="#" class="btn btn-outline">Accedi</a>
+                <a href="#" class="btn btn-primary">Iscriviti</a>
+                <div class="profile-pic-placeholder" title="Profilo">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+
+        <!-- Left Sidebar (Optional - for future use or navigation) -->
+        <aside class="sidebar left-sidebar">
+            <nav class="side-nav">
+                <a href="#" class="active"><i class="fa-solid fa-home"></i> Home</a>
+                <a href="#"><i class="fa-solid fa-fire"></i> Trending</a>
+                <a href="#"><i class="fa-solid fa-tshirt"></i> Outfit</a>
+                <a href="#"><i class="fa-solid fa-users"></i> Community</a>
+            </nav>
+        </aside>
+
+        <!-- Feed Section -->
+        <section class="feed">
+
+            <!-- Create Post Input (Visual only) -->
+            <div class="create-post">
+                <div class="profile-pic-small"></div>
+                <input type="text" placeholder="Condividi il tuo stile oggi...">
+                <button class="btn-icon"><i class="fa-solid fa-image"></i></button>
+            </div>
+
+            <!-- Post Card 1 -->
+            <article class="post-card">
+                <div class="post-header">
+                    <div class="user-info">
+                        <div class="user-avatar"></div>
+                        <div>
+                            <h4 class="username">MarcoRossi_99</h4>
+                            <span class="timestamp">2 ore fa</span>
+                        </div>
+                    </div>
+                    <button class="options-btn"><i class="fa-solid fa-ellipsis"></i></button>
+                </div>
+
+                <div class="post-image-container">
+                    <!-- Placeholder for Outfit Image -->
+                    <div class="image-placeholder">
+                        <span>[Outfit Image]</span>
+                    </div>
+                </div>
+
+                <div class="post-actions">
+                    <div class="action-buttons">
+                        <button class="action-btn"><i class="fa-regular fa-heart"></i></button>
+                        <button class="action-btn"><i class="fa-regular fa-comment"></i></button>
+                        <button class="action-btn"><i class="fa-regular fa-paper-plane"></i></button>
+                    </div>
+                    <button class="save-btn"><i class="fa-regular fa-bookmark"></i></button>
+                </div>
+
+                <div class="post-content">
+                    <p class="likes-count">Piace a 1,234 persone</p>
+                    <p class="caption"><span class="username">MarcoRossi_99</span> Ready for the summer vibes! ☀️🕶️
+                        <span class="hashtag">#summer</span> <span class="hashtag">#casual</span> <span
+                            class="hashtag">#vintage</span></p>
+                    <p class="view-comments">Visualizza tutti i 45 commenti</p>
+                </div>
+            </article>
+
+            <!-- Post Card 2 -->
+            <article class="post-card">
+                <div class="post-header">
+                    <div class="user-info">
+                        <div class="user-avatar" style="background-color: #e74c3c;"></div>
+                        <div>
+                            <h4 class="username">GiuliaStyle</h4>
+                            <span class="timestamp">5 ore fa</span>
+                        </div>
+                    </div>
+                    <button class="options-btn"><i class="fa-solid fa-ellipsis"></i></button>
+                </div>
+
+                <div class="post-image-container">
+                    <!-- Placeholder for Outfit Image -->
+                    <div class="image-placeholder" style="background-color: #fce4ec;">
+                        <span>[Outfit Image]</span>
+                    </div>
+                </div>
+
+                <div class="post-actions">
+                    <div class="action-buttons">
+                        <button class="action-btn"><i class="fa-regular fa-heart"></i></button>
+                        <button class="action-btn"><i class="fa-regular fa-comment"></i></button>
+                        <button class="action-btn"><i class="fa-regular fa-paper-plane"></i></button>
+                    </div>
+                    <button class="save-btn"><i class="fa-regular fa-bookmark"></i></button>
+                </div>
+
+                <div class="post-content">
+                    <p class="likes-count">Piace a 892 persone</p>
+                    <p class="caption"><span class="username">GiuliaStyle</span> Urban chic for today's meeting. 💼👠
+                        <span class="hashtag">#urban</span> <span class="hashtag">#workwear</span> <span
+                            class="hashtag">#chic</span></p>
+                    <p class="view-comments">Visualizza tutti i 20 commenti</p>
+                </div>
+            </article>
+
+        </section>
+
+        <!-- Right Sidebar (Suggestions) -->
+        <aside class="sidebar right-sidebar">
+            <div class="suggestions-box">
+                <h3>Suggeriti per te</h3>
+                <div class="suggestion-item">
+                    <div class="user-avatar-small"></div>
+                    <div class="suggestion-info">
+                        <span class="username">Luca_Fit</span>
+                        <span class="sub-text">Nuovo su Fitgram</span>
+                    </div>
+                    <button class="btn-text">Segui</button>
+                </div>
+                <div class="suggestion-item">
+                    <div class="user-avatar-small" style="background-color: #3498db;"></div>
+                    <div class="suggestion-info">
+                        <span class="username">FashionLover</span>
+                        <span class="sub-text">Seguito da chi segui</span>
+                    </div>
+                    <button class="btn-text">Segui</button>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <footer class="main-footer">
+        <p class="motto">" Be Fit, Be Style "</p>
+        <p class="copyright">&copy; 2024 Fitgram. All rights reserved.</p>
+    </footer>
+
 </body>
+
 </html>
