@@ -1,10 +1,218 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>67!!!!!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>67 Celebrazione</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background: linear-gradient(to bottom, #0a0a2e, #16213e, #0f3460);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .number {
+            font-size: 200px;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow:
+                    0 0 20px #ffd700,
+                    0 0 40px #ffd700,
+                    0 0 60px #ff6b6b,
+                    0 0 80px #ff6b6b;
+            position: fixed;
+            animation: riseUp 3s ease-out forwards;
+            z-index: 10;
+        }
+
+        @keyframes riseUp {
+            0% {
+                bottom: -300px;
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                bottom: 50%;
+                transform: translateY(50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .firework {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: explode 1s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y));
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
 <body>
+<canvas id="fireworks"></canvas>
+<div class="number">67!</div>
 
+<script>
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Particle {
+        constructor(x, y, color) {
+            this.x = x;
+            this.y = y;
+            this.color = color;
+            this.velocity = {
+                x: (Math.random() - 0.5) * 8,
+                y: (Math.random() - 0.5) * 8
+            };
+            this.alpha = 1;
+            this.decay = Math.random() * 0.015 + 0.015;
+            this.size = Math.random() * 3 + 2;
+        }
+
+        draw() {
+            ctx.save();
+            ctx.globalAlpha = this.alpha;
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+
+        update() {
+            this.velocity.y += 0.1;
+            this.x += this.velocity.x;
+            this.y += this.velocity.y;
+            this.alpha -= this.decay;
+        }
+    }
+
+    class Firework {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+            this.targetY = Math.random() * canvas.height / 2;
+            this.rocketY = canvas.height;
+            this.rocketVelocity = Math.random() * 3 + 8;
+            this.exploded = false;
+            this.particles = [];
+            this.colors = [
+                '#ff0000', '#00ff00', '#0000ff',
+                '#ffff00', '#ff00ff', '#00ffff',
+                '#ffd700', '#ff6b6b', '#4ecdc4'
+            ];
+        }
+
+        explode() {
+            const particleCount = 100;
+            const color = this.colors[Math.floor(Math.random() * this.colors.length)];
+
+            for (let i = 0; i < particleCount; i++) {
+                this.particles.push(new Particle(this.x, this.rocketY, color));
+            }
+        }
+
+        draw() {
+            if (!this.exploded) {
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(this.x, this.rocketY, 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            this.particles.forEach(particle => particle.draw());
+        }
+
+        update() {
+            if (!this.exploded) {
+                this.rocketY -= this.rocketVelocity;
+                if (this.rocketY <= this.targetY) {
+                    this.exploded = true;
+                    this.explode();
+                }
+            }
+
+            this.particles = this.particles.filter(particle => {
+                particle.update();
+                return particle.alpha > 0;
+            });
+        }
+
+        isFinished() {
+            return this.exploded && this.particles.length === 0;
+        }
+    }
+
+    let fireworks = [];
+
+    function createFirework() {
+        const x = Math.random() * canvas.width;
+        fireworks.push(new Firework(x, canvas.height));
+    }
+
+    function animate() {
+        ctx.fillStyle = 'rgba(10, 10, 46, 0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        fireworks = fireworks.filter(firework => {
+            firework.update();
+            firework.draw();
+            return !firework.isFinished();
+        });
+
+        requestAnimationFrame(animate);
+    }
+
+    // Crea fuochi d'artificio ogni 800ms
+    setInterval(createFirework, 800);
+
+    // Dopo 3 secondi (quando il 67 è al centro), aumenta la frequenza
+    setTimeout(() => {
+        setInterval(createFirework, 400);
+    }, 3000);
+
+    animate();
+
+    // Ridimensiona canvas se la finestra cambia
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+</script>
 </body>
 </html>
