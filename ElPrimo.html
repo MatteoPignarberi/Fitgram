@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vedi la Foto</title>
+  <style>
+    /* Stile generale della pagina */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh; /* Occupa tutta l'altezza dello schermo */
+      margin: 0;
+    }
+
+    /* Stile del container */
+    .container {
+      text-align: center;
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    /* Stile del Link (che sembra un bottone) */
+    .super-link {
+      display: inline-block;
+      background-color: #007bff; /* Colore Blu */
+      color: white;
+      padding: 20px 40px;
+      font-size: 24px;
+      font-weight: bold;
+      text-decoration: none; /* Toglie la sottolineatura standard */
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+
+    /* Effetto quando passi il mouse sopra */
+    .super-link:hover {
+      background-color: #0056b3;
+      transform: scale(1.05); /* Diventa leggermente più grande */
+      box-shadow: 0 6px 8px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>C'è una sorpresa per te!</h1>
+  <a href="Images/el_primo.png" class="super-link">APRI LA FOTO</a>
+</div>
+
+</body>
+</html>
