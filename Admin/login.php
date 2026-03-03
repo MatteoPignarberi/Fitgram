@@ -5,49 +5,58 @@ require_once "connessione.php"; // include la connessione
 $errors = [];
 $success = "";
 
+// Se l'utente arriva da registrazione
+if (isset($_GET['registered']) && $_GET['registered'] == 1) {
+    $success = "Registrazione completata! Ora puoi fare login.";
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = isset($_POST["username"]) ? trim($_POST["username"]) : '';
     $email = isset($_POST["email"]) ? trim($_POST["email"]) : '';
     $password = isset($_POST["password"]) ? $_POST["password"] : '';
 
-    // Validazione dati
-    if (strlen($username) < 3) $errors[] = "Username minimo 3 caratteri.";
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Email non valida.";
-    if (strlen($password) < 6) $errors[] = "Password minimo 6 caratteri.";
-
-    if (empty($errors)) {
-        // Controllo email
-        $stmt = $conn->prepare("SELECT id FROM utenti WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $stmt->store_result();
-
-        if ($stmt->num_rows > 0) {
-            $errors[] = "Email già registrata.";
-        }
-        $stmt->close(); // <-- chiudiamo qui
-
-// Inserimento
-        if (empty($errors)) {
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $conn->prepare("INSERT INTO utenti (username, email, password) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", $username, $email, $hashedPassword);
+    if (empty($email) || empty($password)) {
+        $errors[] = "Inserisci email e password.";
+    } else {
+        // Prepara la query
+        $stmt = $conn->prepare("SELECT id, username, password FROM utenti WHERE email = ?");
+        if ($stmt === false) {
+            $errors[] = "Errore nella query di login.";
+        } else {
+            $stmt->bind_param("s", $email);
             $stmt->execute();
+            $stmt->store_result();
+
+            if ($stmt->num_rows == 1) {
+                $stmt->bind_result($id, $username, $hashedPassword);
+                $stmt->fetch();
+
+                if (password_verify($password, $hashedPassword)) {
+                    // Login corretto
+                    session_regenerate_id(true);
+                    $_SESSION['user_id'] = $id;
+                    $_SESSION['username'] = $username;
+
+                    header("Location: dashboard.php"); // redirect a pagina protetta
+                    exit();
+                } else {
+                    $errors[] = "Password errata.";
+                }
+            } else {
+                $errors[] = "Email non registrata.";
+            }
             $stmt->close();
-            $success = "Registrazione completata! Ora puoi fare login.";
         }
     }
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="it">
+    <!DOCTYPE html>
+    <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Registrazione - Fitgram</title>
+    <title>Login - Fitgram</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* Corpo e background */
         body {
             font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #ff6b6b, #ff9472);
@@ -58,7 +67,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin: 0;
         }
 
-        /* Box centrale */
         .box {
             background: white;
             padding: 40px;
@@ -127,28 +135,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 
 <div class="box">
-    <h2>Registrati a Fitgram</h2>
+    <h2>Login Fitgram</h2>
 
-    <!-- Mostra errori -->
+    <!-- Mostra messaggi -->
     <?php foreach ($errors as $error): ?>
-        <div class="error"><?php echo htmlspecialchars($error); ?></div>
+        <div class="error"><?= htmlspecialchars($error) ?></div>
     <?php endforeach; ?>
 
-    <!-- Mostra messaggio di successo -->
     <?php if ($success): ?>
-        <div class="success"><?php echo htmlspecialchars($success); ?></div>
+        <div class="success"><?= htmlspecialchars($success) ?></div>
     <?php endif; ?>
 
-    <!-- Form registrazione -->
+    <!-- Form login -->
     <form method="POST">
-        <input type="text" name="username" placeholder="Username" required>
         <input type="email" name="email" placeholder="Email" required>
         <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Registrati</button>
+        <button type="submit">Accedi</button>
     </form>
 
-    <a class="link" href="login.php">Hai già un account? Accedi</a>
+    <a class="link" href="register.php">Non hai un account? Registrati</a>
 </div>
 
 </body>
-</html>
+    </html><?php
