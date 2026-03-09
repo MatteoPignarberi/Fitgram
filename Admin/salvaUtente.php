@@ -17,7 +17,7 @@ if (!$conn) {
 }
 
 // 1. Controllo se l'username è già presente (ATTENZIONE: controlla che la tabella si chiami 'utenti' tutto minuscolo)
-$check_sql = "SELECT * FROM utenti WHERE username=?";
+$check_sql = "SELECT * FROM Utenti WHERE username=?";
 $check_stmt = mysqli_prepare($conn, $check_sql);
 
 if (!$check_stmt) {
