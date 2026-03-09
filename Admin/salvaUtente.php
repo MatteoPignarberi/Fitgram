@@ -34,7 +34,7 @@ if (mysqli_num_rows($check_result) > 0) {
 } else {
     // 2. Inserimento
     // Uso NOW() per la data. I punti interrogativi sono 5.
-    $sql = "INSERT INTO utenti (nome, cognome, username, pass, email, dataRegistrazione) VALUES (?, ?, ?, ?, ?, NOW())";
+    $sql = "INSERT INTO Utenti (nome, cognome, username, pass, email, dataRegistrazione) VALUES (?, ?, ?, ?, ?, NOW())";
     $stmt = mysqli_prepare($conn, $sql);
 
     // SE LA QUERY FALLISCE (Es. nomi tabelle/colonne sbagliati), ORA TI STAMPA L'ERRORE VERO!
