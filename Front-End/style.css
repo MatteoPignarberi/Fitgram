@@ -1,0 +1,27 @@
+:root {
+    --black:#0a0a0a;
+    --dark:#111111;
+    --card:#181818;
+    --card2:#1f1f1f;
+    --border:#2c2c2c;
+    --accent:#c8ff00;
+    --accent-dim:#9abf00;
+    --text:#f0f0f0;
+    --muted:#777777;
+    --red:#ff4d4d;
+    --header-h:70px;
+    --r:14px;
+    --ease:0.2s ease;
+}
+
+*,*::before,*::after{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:'DM Sans',sans-serif;
+    background:var(--black);
+    color:var(--text);
+}
