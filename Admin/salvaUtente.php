@@ -13,7 +13,7 @@ $dataRegistrazione = date('Y-m-d H:i:s');
 $conn = mysqli_connect("localhost", "fitgram", "", "my_fitgram");
 
 // 1. Controllo se l'username è già presente nel database
-$check_sql = "SELECT * FROM utenti WHERE userName=?";
+$check_sql = "SELECT * FROM Utenti WHERE username=?";
 $check_stmt = mysqli_prepare($conn, $check_sql);
 mysqli_stmt_bind_param($check_stmt, "s", $username);
 mysqli_stmt_execute($check_stmt);
