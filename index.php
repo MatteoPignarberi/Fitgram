@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -362,9 +365,14 @@
         <button class="close-sidebar-btn" id="close-sidebar">×</button>
     </div>
     <div class="sidebar-content">
+
+        <?php if(isset($_SESSION['utente'])) { ?>
+
         <div class="sidebar-avatar-large">👤</div>
-        <h3 class="sidebar-username">@tuo_username</h3>
-        <p class="sidebar-bio">Appassionato di stile e fitness. Sempre alla ricerca del fit perfetto.</p>
+        <h3 class="sidebar-username">@<?php echo $_SESSION['utente']; ?></h3>
+        <p class="sidebar-bio">
+            Appassionato di stile e fitness. Sempre alla ricerca del fit perfetto.
+        </p>
 
         <div class="sidebar-stats">
             <div><strong>12</strong><br>Look</div>
@@ -372,7 +380,30 @@
             <div><strong>150</strong><br>Seguiti</div>
         </div>
 
-        <a href="modifica_profilo.php" class="edit-profile-btn">Modifica le tue informazioni</a>
+        <a href="modifica_profilo.php" class="edit-profile-btn">
+            Modifica le tue informazioni
+        </a>
+
+        <?php } else { ?>
+
+        <div class="sidebar-avatar-large">👤</div>
+
+        <h3 class="sidebar-username">Benvenuto su Fitgram</h3>
+
+        <p class="sidebar-bio">
+            Accedi o registrati per vedere il tuo profilo, caricare look e seguire altri creator.
+        </p>
+
+        <a href="Admin/login.php" class="edit-profile-btn" style="margin-bottom:10px;">
+            Accedi
+        </a>
+
+        <a href="Admin/registrazione.php" class="edit-profile-btn" style="background-color: var(--accent-dark);">
+            Registrati
+        </a>
+
+        <?php } ?>
+
     </div>
 </aside>
 
