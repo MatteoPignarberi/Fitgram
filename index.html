@@ -88,7 +88,7 @@
             position: fixed; /* Lo inchioda allo schermo */
             bottom: 30px;    /* Distanza dal fondo dello schermo */
             right: 40px;     /* Distanza da destra dello schermo */
-            z-index: 9999;   /* Sta sempre sopra a tutto */
+            z-index: 999;   /* Sta sopra i contenuti normali */
             color: var(--accent-pop);
             font-size: 5.5rem;
             font-weight: 300;
@@ -134,7 +134,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.03);
         }
 
-        /* Griglia Mosaico - Foto LEGGERMENTE più piccole (190px) */
+        /* Griglia Mosaico */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
@@ -188,8 +188,6 @@
         .look-card:hover .look-overlay { opacity: 1; }
         .overlay-user { font-weight: 600; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; }
         .overlay-mini-avatar { width: 18px; height: 18px; background-color: var(--pure-white); border-radius: 50%; }
-        .overlay-stats { font-size: 0.7rem; font-weight: 300; display: flex; justify-content: space-between; align-items: center; }
-        .overlay-tags { font-size: 0.65rem; color: var(--rosa-carne); margin-top: 3px; }
 
         footer {
             padding: 3rem 2rem;
@@ -199,7 +197,7 @@
             color: var(--text-muted);
             text-transform: uppercase;
             border-top: 1px solid var(--gray-border);
-            margin-bottom: 20px; /* Spazio extra per non far accavallare il pulsante al testo del footer */
+            margin-bottom: 20px;
         }
 
         /* Responsive Mobile */
@@ -208,8 +206,92 @@
             .elegant-tagline { display: none; }
             .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
             .look-overlay { opacity: 1; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%); }
-
             .add-look-btn { right: 20px; bottom: 20px; font-size: 4.5rem; }
+        }
+
+        /* --- OVERLAY E SIDEBAR PROFILO --- */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 1005; /* Sopra la navbar */
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .profile-sidebar {
+            position: fixed;
+            top: 0;
+            right: -350px; /* Nasconde il pannello fuori dallo schermo a destra */
+            width: 320px;
+            height: 100vh;
+            background-color: var(--pure-white);
+            z-index: 1010; /* Sopra l'overlay */
+            box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .profile-sidebar.open {
+            right: 0; /* Fa scorrere il pannello dentro lo schermo */
+        }
+
+        /* Contenuti Sidebar */
+        .sidebar-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px; border-bottom: 1px solid var(--gray-border);
+        }
+
+        .sidebar-header h2 { margin: 0; font-size: 1.2rem; font-weight: 500; }
+
+        .close-sidebar-btn {
+            background: none; border: none; font-size: 2rem; cursor: pointer;
+            color: var(--text-muted); line-height: 1; transition: color 0.3s;
+        }
+
+        .close-sidebar-btn:hover { color: var(--accent-pop); }
+
+        .sidebar-content { padding: 30px 20px; text-align: center; }
+
+        .sidebar-avatar-large {
+            width: 90px; height: 90px; background-color: var(--beige-chiaro);
+            border: 2px solid var(--accent-dark); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem; margin: 0 auto 15px auto;
+        }
+
+        .sidebar-username { margin: 0 0 10px 0; font-size: 1.2rem; color: var(--text-main); }
+        .sidebar-bio { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 25px; }
+
+        .sidebar-stats {
+            display: flex; justify-content: space-around; margin-bottom: 30px;
+            padding: 15px 0; border-top: 1px solid var(--gray-border); border-bottom: 1px solid var(--gray-border);
+        }
+
+        .sidebar-stats div { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+        .sidebar-stats strong { font-size: 1.2rem; color: var(--text-main); }
+
+        .edit-profile-btn {
+            display: block; width: 100%; padding: 14px 0;
+            background-color: var(--accent-pop); color: var(--pure-white);
+            text-decoration: none; border-radius: 30px; font-weight: 500;
+            font-size: 0.9rem; transition: background-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .edit-profile-btn:hover { background-color: var(--text-main); }
+
+        /* Responsive Sidebar */
+        @media (max-width: 400px) {
+            .profile-sidebar { width: 100%; right: -100%; }
         }
     </style>
 </head>
@@ -220,7 +302,6 @@
         <div class="menu-container">
             <div class="hamburger">☰</div>
             <div class="dropdown-menu">
-                <a href="#">Il mio Profilo</a>
                 <a href="#">Esplora Tendenze</a>
                 <a href="#">Premium</a>
                 <a href="#">Impostazioni</a>
@@ -236,9 +317,9 @@
     <div class="nav-links">
         <a href="Admin/login.php" class="text-link">Accedi</a>
         <a href="Admin/registrazione.php" class="text-link" style="color: var(--accent-dark);">Registrati</a>
-        <a href="modifica_profilo.php" class="header-profile-link" title="Modifica Profilo">
+        <div id="profile-toggle-btn" class="header-profile-link" title="Visualizza Profilo" style="cursor: pointer;">
             <div class="header-avatar">👤</div>
-        </a>
+        </div>
     </div>
 </nav>
 
@@ -272,6 +353,59 @@
     &copy; 2026 Fitgram - Be fit, Be Style.<br>
     <div style="margin-top: 10px; font-size: 0.6rem;">Privacy Policy • Termini di Servizio • Contatti</div>
 </footer>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<aside class="profile-sidebar" id="profile-sidebar">
+    <div class="sidebar-header">
+        <h2>Il mio Profilo</h2>
+        <button class="close-sidebar-btn" id="close-sidebar">×</button>
+    </div>
+    <div class="sidebar-content">
+        <div class="sidebar-avatar-large">👤</div>
+        <h3 class="sidebar-username">@tuo_username</h3>
+        <p class="sidebar-bio">Appassionato di stile e fitness. Sempre alla ricerca del fit perfetto.</p>
+
+        <div class="sidebar-stats">
+            <div><strong>12</strong><br>Look</div>
+            <div><strong>340</strong><br>Follower</div>
+            <div><strong>150</strong><br>Seguiti</div>
+        </div>
+
+        <a href="modifica_profilo.php" class="edit-profile-btn">Modifica le tue informazioni</a>
+    </div>
+</aside>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const profileToggleBtn = document.getElementById('profile-toggle-btn');
+        const sidebar = document.getElementById('profile-sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        const closeBtn = document.getElementById('close-sidebar');
+
+        // Funzione per aprire la sidebar
+        function openSidebar() {
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+            // Blocca lo scorrimento della pagina dietro quando il pannello è aperto
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Funzione per chiudere la sidebar
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            // Riabilita lo scorrimento
+            document.body.style.overflow = '';
+        }
+
+        // Event Listeners
+        profileToggleBtn.addEventListener('click', openSidebar);
+        closeBtn.addEventListener('click', closeSidebar);
+        // Chiude la sidebar se clicchi sullo sfondo scuro fuori dal pannello
+        overlay.addEventListener('click', closeSidebar);
+    });
+</script>
 
 </body>
 </html>
