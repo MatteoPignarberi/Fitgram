@@ -130,10 +130,11 @@ session_start();
             text-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
 
+        /* --- TASTO ARMADIO --- */
         .wardrobe-btn {
             position: fixed;
             bottom: 120px;
-            right: 44px; /* Aggiustato per centrarlo visivamente con il "+" */
+            right: 44px; /* Centrato col tasto + */
             z-index: 998;
             display: flex;
             align-items: center;
@@ -143,17 +144,18 @@ session_start();
         }
 
         .wardrobe-btn img {
-            width: 45px; /* Icona ingrandita */
+            width: 45px;
             height: auto;
-            opacity: 0.9;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); /* Ombra applicata direttamente all'immagine */
+            opacity: 0.8;
+            /* IL TRUCCO PER RIMUOVERE LO SFONDO BIANCO DALL'IMMAGINE: */
+            mix-blend-mode: multiply;
             transition: all 0.3s ease;
         }
 
         .wardrobe-btn:hover img {
             transform: translateY(-4px) scale(1.1);
             opacity: 1;
-            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.2));
+            /* Ho tolto l'ombra al passaggio del mouse perché altrimenti evidenzierebbe di nuovo il quadrato dell'immagine */
         }
 
         /* Filtri di Stile Centrali */
