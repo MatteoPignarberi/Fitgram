@@ -61,10 +61,33 @@ session_start();
         }
         .dropdown-menu a:hover { background-color: var(--beige-chiaro); padding-left: 25px; }
 
-        .search-container { flex: 2; display: flex; justify-content: center; }
+        /* --- BARRA DI RICERCA CON LENTE --- */
+        .search-container {
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            max-width: 350px;
+            margin: 0 auto;
+        }
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            opacity: 0.5;
+            pointer-events: none; /* Impedisce che l'icona blocchi il click sull'input */
+        }
         .search-bar {
-            width: 100%; max-width: 350px; padding: 10px 18px; border-radius: 20px;
-            border: 1px solid var(--rosa-carne); outline: none; font-family: inherit; font-size: 0.85rem;
+            width: 100%;
+            padding: 10px 18px 10px 42px; /* Spazio a sinistra aumentato per l'icona */
+            border-radius: 20px;
+            border: 1px solid var(--rosa-carne);
+            outline: none;
+            font-family: inherit;
+            font-size: 0.85rem;
             background-color: var(--beige-chiaro);
             transition: all 0.3s ease;
         }
@@ -86,12 +109,12 @@ session_start();
             padding: 0 1.5rem 4rem 1.5rem;
         }
 
-        /* --- IL + FISSATO ALLO SCHERMO --- */
+        /* --- TASTI FISSATI ALLO SCHERMO --- */
         .add-look-btn {
-            position: fixed; /* Lo inchioda allo schermo */
-            bottom: 30px;    /* Distanza dal fondo dello schermo */
-            right: 40px;     /* Distanza da destra dello schermo */
-            z-index: 999;   /* Sta sopra i contenuti normali */
+            position: fixed;
+            bottom: 30px;
+            right: 40px;
+            z-index: 999;
             color: var(--accent-pop);
             font-size: 5.5rem;
             font-weight: 300;
@@ -105,6 +128,35 @@ session_start();
             transform: scale(1.15) rotate(90deg);
             color: var(--text-main);
             text-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .wardrobe-btn {
+            position: fixed;
+            bottom: 120px; /* Posizionato sopra al tasto + */
+            right: 48px;   /* Allineato al centro del tasto + */
+            z-index: 998;
+            width: 50px;
+            height: 50px;
+            background-color: var(--pure-white);
+            border: 1px solid var(--rosa-carne);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .wardrobe-btn img {
+            width: 24px;
+            height: 24px;
+            opacity: 0.8;
+        }
+
+        .wardrobe-btn:hover {
+            transform: scale(1.1);
+            background-color: var(--beige-chiaro);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
         }
 
         /* Filtri di Stile Centrali */
@@ -209,7 +261,11 @@ session_start();
             .elegant-tagline { display: none; }
             .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
             .look-overlay { opacity: 1; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%); }
+
+            /* Aggiustamento tasti per mobile */
             .add-look-btn { right: 20px; bottom: 20px; font-size: 4.5rem; }
+            .wardrobe-btn { right: 28px; bottom: 100px; width: 40px; height: 40px; }
+            .wardrobe-btn img { width: 20px; height: 20px; }
         }
 
         /* --- OVERLAY E SIDEBAR PROFILO --- */
@@ -314,6 +370,7 @@ session_start();
     </div>
 
     <div class="search-container">
+        <img src="images/LenteDiIngrandimento.png" alt="Cerca" class="search-icon">
         <input type="text" class="search-bar" placeholder="Cerca stili, capi o creator...">
     </div>
 
@@ -326,6 +383,9 @@ session_start();
     </div>
 </nav>
 
+<a href="#" class="wardrobe-btn" title="Il mio armadio">
+    <img src="images/Armadio.png" alt="Armadio">
+</a>
 <a href="carica_look.php" class="add-look-btn" title="Carica un nuovo look">+</a>
 
 <main class="lookbook-container">
@@ -368,39 +428,39 @@ session_start();
 
         <?php if(isset($_SESSION['utente'])) { ?>
 
-        <div class="sidebar-avatar-large">👤</div>
-        <h3 class="sidebar-username">@<?php echo $_SESSION['utente']; ?></h3>
-        <p class="sidebar-bio">
-            Appassionato di stile e fitness. Sempre alla ricerca del fit perfetto.
-        </p>
+            <div class="sidebar-avatar-large">👤</div>
+            <h3 class="sidebar-username">@<?php echo $_SESSION['utente']; ?></h3>
+            <p class="sidebar-bio">
+                Appassionato di stile e fitness. Sempre alla ricerca del fit perfetto.
+            </p>
 
-        <div class="sidebar-stats">
-            <div><strong>12</strong><br>Look</div>
-            <div><strong>340</strong><br>Follower</div>
-            <div><strong>150</strong><br>Seguiti</div>
-        </div>
+            <div class="sidebar-stats">
+                <div><strong>12</strong><br>Look</div>
+                <div><strong>340</strong><br>Follower</div>
+                <div><strong>150</strong><br>Seguiti</div>
+            </div>
 
-        <a href="modifica_profilo.php" class="edit-profile-btn">
-            Modifica le tue informazioni
-        </a>
+            <a href="modifica_profilo.php" class="edit-profile-btn">
+                Modifica le tue informazioni
+            </a>
 
         <?php } else { ?>
 
-        <div class="sidebar-avatar-large">👤</div>
+            <div class="sidebar-avatar-large">👤</div>
 
-        <h3 class="sidebar-username">Benvenuto su Fitgram</h3>
+            <h3 class="sidebar-username">Benvenuto su Fitgram</h3>
 
-        <p class="sidebar-bio">
-            Accedi o registrati per vedere il tuo profilo, caricare look e seguire altri creator.
-        </p>
+            <p class="sidebar-bio">
+                Accedi o registrati per vedere il tuo profilo, caricare look e seguire altri creator.
+            </p>
 
-        <a href="Admin/login.php" class="edit-profile-btn" style="margin-bottom:10px;">
-            Accedi
-        </a>
+            <a href="Admin/login.php" class="edit-profile-btn" style="margin-bottom:10px;">
+                Accedi
+            </a>
 
-        <a href="Admin/registrazione.php" class="edit-profile-btn" style="background-color: var(--accent-dark);">
-            Registrati
-        </a>
+            <a href="Admin/registrazione.php" class="edit-profile-btn" style="background-color: var(--accent-dark);">
+                Registrati
+            </a>
 
         <?php } ?>
 
