@@ -8,7 +8,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fitgram</title>
 
-    <link rel="icon" href="images/iconaFitgram.jpg?v=2" type="image/jpeg">
+    <link rel="icon" href="images/iconaFitgram.png?v=2" type="image/jpeg">
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
     <style>
