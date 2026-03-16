@@ -360,7 +360,7 @@ session_start();
             <div class="dropdown-menu">
                 <a href="#">Esplora Tendenze</a>
                 <a href="Admin/premium.php">Premium</a>
-                <a href="#">Impostazioni</a>
+                <a href="impostazioni.php">Impostazioni</a>
             </div>
         </div>
         <div class="elegant-tagline">be fit. be style.</div>
