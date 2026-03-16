@@ -153,8 +153,8 @@ session_start();
 <body>
 
 <nav>
-    <a href="javascript:window.close();" class="back-link">
-        ← Chiudi scheda
+    <a href="index.php" class="back-link">
+        ← Torna alla Home
     </a>
     <div class="elegant-tagline">Fitgram</div>
 </nav>
