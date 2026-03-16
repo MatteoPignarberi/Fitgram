@@ -7,9 +7,6 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fitgram</title>
-
-    <link rel="icon" href="images/iconaFitgram.jpg?v=2" type="image/jpeg">
-
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -75,17 +72,17 @@ session_start();
         }
         .search-icon {
             position: absolute;
-            left: 15px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            width: 18px;
-            height: 18px;
-            opacity: 0.5;
-            pointer-events: none; /* Impedisce che l'icona blocchi il click sull'input */
+            width: 24px; /* Lente ingrandita */
+            height: 24px;
+            opacity: 0.6;
+            pointer-events: none;
         }
         .search-bar {
             width: 100%;
-            padding: 10px 18px 10px 42px; /* Spazio a sinistra aumentato per l'icona */
+            padding: 10px 18px 10px 48px; /* Spazio a sinistra aumentato per la lente più grande */
             border-radius: 20px;
             border: 1px solid var(--rosa-carne);
             outline: none;
@@ -135,31 +132,28 @@ session_start();
 
         .wardrobe-btn {
             position: fixed;
-            bottom: 120px; /* Posizionato sopra al tasto + */
-            right: 48px;   /* Allineato al centro del tasto + */
+            bottom: 120px;
+            right: 44px; /* Aggiustato per centrarlo visivamente con il "+" */
             z-index: 998;
-            width: 50px;
-            height: 50px;
-            background-color: var(--pure-white);
-            border: 1px solid var(--rosa-carne);
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
+            text-decoration: none;
         }
 
         .wardrobe-btn img {
-            width: 24px;
-            height: 24px;
-            opacity: 0.8;
+            width: 45px; /* Icona ingrandita */
+            height: auto;
+            opacity: 0.9;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); /* Ombra applicata direttamente all'immagine */
+            transition: all 0.3s ease;
         }
 
-        .wardrobe-btn:hover {
-            transform: scale(1.1);
-            background-color: var(--beige-chiaro);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        .wardrobe-btn:hover img {
+            transform: translateY(-4px) scale(1.1);
+            opacity: 1;
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.2));
         }
 
         /* Filtri di Stile Centrali */
@@ -267,8 +261,8 @@ session_start();
 
             /* Aggiustamento tasti per mobile */
             .add-look-btn { right: 20px; bottom: 20px; font-size: 4.5rem; }
-            .wardrobe-btn { right: 28px; bottom: 100px; width: 40px; height: 40px; }
-            .wardrobe-btn img { width: 20px; height: 20px; }
+            .wardrobe-btn { right: 24px; bottom: 95px; } /* Riallineato per mobile */
+            .wardrobe-btn img { width: 35px; }
         }
 
         /* --- OVERLAY E SIDEBAR PROFILO --- */
@@ -373,7 +367,7 @@ session_start();
     </div>
 
     <div class="search-container">
-        <img src="images/LenteDiIngrandimento.png" alt="Cerca" class="search-icon">
+        <img src="lenteDiIngrandimento.png" alt="Cerca" class="search-icon">
         <input type="text" class="search-bar" placeholder="Cerca stili, capi o creator...">
     </div>
 
@@ -387,7 +381,7 @@ session_start();
 </nav>
 
 <a href="#" class="wardrobe-btn" title="Il mio armadio">
-    <img src="images/Armadio.png" alt="Armadio">
+    <img src="Armadio.png" alt="Armadio">
 </a>
 <a href="carica_look.php" class="add-look-btn" title="Carica un nuovo look">+</a>
 
