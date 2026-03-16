@@ -75,14 +75,14 @@ session_start();
             left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            width: 24px; /* Lente ingrandita */
+            width: 24px;
             height: 24px;
             opacity: 0.6;
             pointer-events: none;
         }
         .search-bar {
             width: 100%;
-            padding: 10px 18px 10px 48px; /* Spazio a sinistra aumentato per la lente più grande */
+            padding: 10px 18px 10px 48px;
             border-radius: 20px;
             border: 1px solid var(--rosa-carne);
             outline: none;
@@ -130,7 +130,7 @@ session_start();
             text-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
 
-        /* --- TASTO ARMADIO --- */
+        /* --- TASTO ARMADIO PULITO --- */
         .wardrobe-btn {
             position: fixed;
             bottom: 120px;
@@ -141,21 +141,23 @@ session_start();
             justify-content: center;
             transition: all 0.3s ease;
             text-decoration: none;
+            background: transparent !important; /* Forza l'assenza di sfondo */
+            border: none !important;
+            box-shadow: none !important;
         }
 
         .wardrobe-btn img {
             width: 45px;
             height: auto;
             opacity: 0.8;
-            /* IL TRUCCO PER RIMUOVERE LO SFONDO BIANCO DALL'IMMAGINE: */
-            mix-blend-mode: multiply;
+            background: transparent !important; /* Forza l'assenza di sfondo sull'immagine */
             transition: all 0.3s ease;
+            /* Ho tolto mix-blend-mode che rovinava l'immagine già trasparente */
         }
 
         .wardrobe-btn:hover img {
             transform: translateY(-4px) scale(1.1);
             opacity: 1;
-            /* Ho tolto l'ombra al passaggio del mouse perché altrimenti evidenzierebbe di nuovo il quadrato dell'immagine */
         }
 
         /* Filtri di Stile Centrali */
