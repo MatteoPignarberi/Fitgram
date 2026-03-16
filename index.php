@@ -306,7 +306,7 @@ session_start();
             <div class="hamburger">☰</div>
             <div class="dropdown-menu">
                 <a href="#">Esplora Tendenze</a>
-                <a href="#">Premium</a>
+                <a href="Admin/premium.php">Premium</a>
                 <a href="#">Impostazioni</a>
             </div>
         </div>
