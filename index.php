@@ -367,7 +367,7 @@ session_start();
     </div>
 
     <div class="search-container">
-        <img src="lenteDiIngrandimento.png" alt="Cerca" class="search-icon">
+        <img src="images/LenteDiIngrandimento.png" alt="Cerca" class="search-icon">
         <input type="text" class="search-bar" placeholder="Cerca stili, capi o creator...">
     </div>
 
@@ -381,7 +381,7 @@ session_start();
 </nav>
 
 <a href="#" class="wardrobe-btn" title="Il mio armadio">
-    <img src="Armadio.png" alt="Armadio">
+    <img src="images/Armadio.png" alt="Armadio">
 </a>
 <a href="carica_look.php" class="add-look-btn" title="Carica un nuovo look">+</a>
 
