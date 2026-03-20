@@ -1,10 +1,41 @@
 <?php
 session_start();
-// In index.php NON ci vuole il punto esclamativo!
-// Significa: "Se la sessione 'username' ESISTE, vai alla dashboard"
+
+// 1. VARIABILI DI DEFAULT (Per chi NON è loggato)
+$is_logged = false;
+$nome = "Ospite";
+$username_mostrato = "Accedi";
+$bio = "Benvenuto su Fitgram. Effettua il login per vedere il tuo profilo.";
+
+// 2. SE L'UTENTE E' LOGGATO, RECUPERIAMO I SUOI DATI
 if (isset($_SESSION['username'])) {
-    header("Location: Admin/dashboard.php");
-    exit();
+    $is_logged = true;
+    $username_loggato = $_SESSION['username'];
+    $nome = isset($_SESSION['nome']) ? $_SESSION['nome'] : $_SESSION['username'];
+    $username_mostrato = $username_loggato;
+    $bio = "Appassionato di stile e fitness. Sempre alla ricerca del fit perfetto.";
+
+    $conn = mysqli_connect("localhost", "root", "", "my_fitgram");
+
+    if ($conn) {
+        $sql = "SELECT * FROM Utenti WHERE username = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, "s", $username_loggato);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+
+            // Se trovo l'utente nel DB, aggiorno la bio
+            if ($dati_utente = mysqli_fetch_assoc($result)) {
+                if (!empty($dati_utente['bio'])) {
+                    $bio = $dati_utente['bio'];
+                }
+            }
+            mysqli_stmt_close($stmt);
+        }
+        mysqli_close($conn);
+    }
 }
 ?>
 <!DOCTYPE html>
