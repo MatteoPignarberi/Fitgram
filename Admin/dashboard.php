@@ -49,10 +49,9 @@ if ($conn) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitgram - Home</title>
+    <title>Fitgram - Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
     <style>
-        /* [IL TUO CSS ORIGINALE RIMANE INVARIATO QUI SOTTO] */
         :root {
             --rosa-carne: #efd3d2;
             --beige-chiaro: #f8f5f0;
@@ -84,7 +83,6 @@ if ($conn) {
         .search-bar:focus { background-color: var(--pure-white); border-color: var(--accent-dark); }
 
         .nav-links { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 15px; }
-        .nav-links a.text-link { text-decoration: none; color: var(--text-main); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
         .header-profile-link { text-decoration: none; display: flex; align-items: center; margin-left: 10px; }
         .header-avatar { width: 32px; height: 32px; background-color: var(--beige-chiaro); border: 1px solid var(--rosa-carne); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
         .header-avatar:hover { background-color: var(--rosa-carne); transform: scale(1.05); }
@@ -141,7 +139,6 @@ if ($conn) {
         .edit-profile-btn { display: block; width: 100%; padding: 14px 0; background-color: var(--accent-pop); color: var(--pure-white); text-decoration: none; border-radius: 30px; font-weight: 500; font-size: 0.9rem; transition: background-color 0.3s ease; box-sizing: border-box; margin-bottom: 10px; }
         .edit-profile-btn:hover { background-color: var(--text-main); }
 
-        /* Stile per il bottone di logout rosso */
         .logout-btn { background-color: #f8f5f0; color: #d9534f; border: 1px solid #d9534f; }
         .logout-btn:hover { background-color: #d9534f; color: white; }
 
@@ -164,13 +161,11 @@ if ($conn) {
     </div>
 
     <div class="search-container">
-        <img src="../images/LenteDiIngrandimento.png" alt="Cerca" class="search-icon">
+        <img src="images/LenteDiIngrandimento.png" alt="Cerca" class="search-icon">
         <input type="text" class="search-bar" placeholder="Cerca stili, capi o creator...">
     </div>
 
     <div class="nav-links">
-        <span class="text-link" style="color: var(--accent-dark);">Ciao, <?php echo htmlspecialchars($nome); ?></span>
-
         <div id="profile-toggle-btn" class="header-profile-link" title="Visualizza Profilo" style="cursor: pointer;">
             <div class="header-avatar">👤</div>
         </div>
@@ -178,7 +173,7 @@ if ($conn) {
 </nav>
 
 <a href="#" class="wardrobe-btn" title="Il mio armadio">
-    <img src="../images/Armadio.png" alt="Armadio">
+    <img src="images/Armadio.png" alt="Armadio">
 </a>
 <a href="carica_look.php" class="add-look-btn" title="Carica un nuovo look">+</a>
 
@@ -196,6 +191,13 @@ if ($conn) {
         <article class="look-card"><div class="look-image-placeholder">FOTO_01</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @m_pigna</div></div></article>
         <article class="look-card" style="background-color: #d1d5db;"><div class="look-image-placeholder">FOTO_02</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @ale_ono</div></div></article>
         <article class="look-card" style="background-color: #e2c9c8;"><div class="look-image-placeholder">FOTO_03</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @simone_dm</div></div></article>
+        <article class="look-card" style="background-color: #dcd7d2;"><div class="look-image-placeholder">FOTO_04</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @cosmin_r</div></div></article>
+        <article class="look-card" style="background-color: #c5d0d3;"><div class="look-image-placeholder">FOTO_05</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @sara_style</div></div></article>
+        <article class="look-card"><div class="look-image-placeholder">FOTO_06</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @luca_fit</div></div></article>
+        <article class="look-card" style="background-color: #d1d5db;"><div class="look-image-placeholder">FOTO_07</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @ale_ono</div></div></article>
+        <article class="look-card" style="background-color: #e2c9c8;"><div class="look-image-placeholder">FOTO_08</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @simone_dm</div></div></article>
+        <article class="look-card" style="background-color: #c5d0d3;"><div class="look-image-placeholder">FOTO_09</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @sara_style</div></div></article>
+        <article class="look-card"><div class="look-image-placeholder">FOTO_10</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @luca_fit</div></div></article>
     </div>
 </main>
 
