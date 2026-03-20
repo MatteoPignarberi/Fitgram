@@ -3,8 +3,8 @@ session_start();
 header('Content-Type: application/json');
 
 // Recupero i dati dal form
-$username = $_POST["username"] ?? '';
-$password = $_POST["password"] ?? '';
+$username = isset($_POST["username"]) ? $_POST["username"] : '';
+$password = isset($_POST["password"]) ? $_POST["password"] : '';
 
 // Connessione locale (ricordati di cambiarla in Altervista quando andrai online!)
 $conn = mysqli_connect("localhost", "root", "", "my_fitgram");
