@@ -1,11 +1,11 @@
 <?php
 session_start();
-// Se l'utente ha già fatto il login, lo mando direttamente alla dashboard!
+// In index.php NON ci vuole il punto esclamativo!
+// Significa: "Se la sessione 'username' ESISTE, vai alla dashboard"
 if (isset($_SESSION['username'])) {
-    header("Location: dashboard.php");
+    header("Location: Admin/dashboard.php");
     exit();
 }
-?>
 ?>
 <!DOCTYPE html>
 <html lang="it">
@@ -433,10 +433,10 @@ if (isset($_SESSION['username'])) {
     </div>
     <div class="sidebar-content">
 
-        <?php if(isset($_SESSION['utente'])) { ?>
+        <?php if(isset($_SESSION['username'])) { ?>
 
             <div class="sidebar-avatar-large">👤</div>
-            <h3 class="sidebar-username">@<?php echo $_SESSION['utente']; ?></h3>
+            <h3 class="sidebar-username">@<?php echo $_SESSION['username']; ?></h3>
             <p class="sidebar-bio">
                 Appassionato di stile e fitness. Sempre alla ricerca del fit perfetto.
             </p>
