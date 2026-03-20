@@ -1,5 +1,11 @@
 <?php
 session_start();
+// Se l'utente ha già fatto il login, lo mando direttamente alla dashboard!
+if (isset($_SESSION['username'])) {
+    header("Location: dashboard.php");
+    exit();
+}
+?>
 ?>
 <!DOCTYPE html>
 <html lang="it">
