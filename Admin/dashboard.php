@@ -1,15 +1,12 @@
 <?php
 session_start();
-
-// 1. CONTROLLO DI SICUREZZA: Se non c'è una sessione attiva, rimando al login
 if (!isset($_SESSION['username'])) {
     header("Location: Admin/login.php");
     exit();
 }
-
 // Inizializzo le variabili con valori di default di base prima di chiamare il database
 $username_loggato = $_SESSION['username'];
-$nome = $_SESSION['nome'] ?? $_SESSION['username']; // Prende il nome se esiste, altrimenti l'username
+$nome = isset($_SESSION['nome']) ? $_SESSION['nome'] : $_SESSION['username']; // Prende il nome se esiste, altrimenti l'username
 $bio = "Appassionato di stile e fitness. Sempre alla ricerca del fit perfetto.";
 
 // 2. RECUPERO I DATI REALI DAL DATABASE
