@@ -52,12 +52,14 @@ if ($conn) {
             $res_f2 = mysqli_stmt_get_result($stmt_f2);
             $num_seguite = mysqli_fetch_assoc($res_f2)['total'];
 
-            // 4. RECUPERO UTENTI SUGGERITI
-            // Seleziono utenti a caso, ma escludo me stesso (id != ?)
-            // ed escludo chi seguo già (id NOT IN ...)
-            $sql_sugg = "SELECT id, username, nome FROM Utenti 
-                         WHERE id != ? AND id NOT IN (SELECT idSeguito FROM Followers WHERE idFollower = ?) 
+            // Query migliorata con LEFT JOIN (più sicura del NOT IN)
+            // Query migliorata con LEFT JOIN (più sicura del NOT IN)
+            $sql_sugg = "SELECT u.id, u.username, u.nome 
+                         FROM Utenti u 
+                         LEFT JOIN Followers f ON u.id = f.idSeguito AND f.idFollower = ? 
+                         WHERE u.id != ? AND f.idSeguito IS NULL 
                          ORDER BY RAND() LIMIT 5";
+
             $stmt_sugg = mysqli_prepare($conn, $sql_sugg);
             if ($stmt_sugg) {
                 mysqli_stmt_bind_param($stmt_sugg, "ii", $mio_id, $mio_id);
