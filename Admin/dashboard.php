@@ -1,16 +1,26 @@
 <?php
 session_start();
 
-// Inizializzo le variabili con valori di default di base prima di chiamare il database
-$username_loggato = $_SESSION['username'];
-$nome = isset($_SESSION['nome']) ? $_SESSION['nome'] : $_SESSION['username']; // Prende il nome se esiste, altrimenti l'username
-$bio = "Appassionato di stile e fitness. Sempre alla ricerca del fit perfetto.";
+// SICUREZZA: Se non c'è una sessione attiva, lo sbatto fuori al login
+if (!isset($_SESSION['username'])) {
+    header("Location: Admin/login.php");
+    exit();
+}
 
-// 2. RECUPERO I DATI REALI DAL DATABASE
+// Inizializzo le variabili base
+$username_loggato = $_SESSION['username'];
+$nome = isset($_SESSION['nome']) ? $_SESSION['nome'] : $username_loggato;
+$bio = "Appassionato di stile e fitness. Sempre alla ricerca del fit perfetto.";
+$num_followers = 0;
+$num_seguite = 0;
+$num_look = 0;
+
+// Mi collego al DB
 $conn = mysqli_connect("localhost", "root", "", "my_fitgram");
 
 if ($conn) {
-    $sql = "SELECT * FROM Utenti WHERE username = ?";
+    // 1. Prendo l'ID e la bio dell'utente loggato
+    $sql = "SELECT id, bio FROM Utenti WHERE username = ?";
     $stmt = mysqli_prepare($conn, $sql);
 
     if ($stmt) {
@@ -18,26 +28,41 @@ if ($conn) {
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
 
-        // Se trovo l'utente, aggiorno le variabili
         if ($dati_utente = mysqli_fetch_assoc($result)) {
-            // Se nel DB c'è una bio salvata, la uso al posto di quella di default
+            $mio_id = $dati_utente['id']; // ECCO L'ID CHE CI SERVE!
+
             if (!empty($dati_utente['bio'])) {
                 $bio = $dati_utente['bio'];
             }
+
+            // 2. Conto i FOLLOWER (Quanti hanno il mio ID come 'idSeguito')
+            // N.B: Usa il nome esatto della tabella, dallo screen sembra si chiami "Followers" con la S finale
+            $sql_f1 = "SELECT COUNT(*) AS total FROM Followers WHERE idSeguito = ?";
+            $stmt_f1 = mysqli_prepare($conn, $sql_f1);
+            mysqli_stmt_bind_param($stmt_f1, "i", $mio_id);
+            mysqli_stmt_execute($stmt_f1);
+            $res_f1 = mysqli_stmt_get_result($stmt_f1);
+            $num_followers = mysqli_fetch_assoc($res_f1)['total'];
+
+            // 3. Conto i SEGUITI (Quanti hanno il mio ID come 'idFollower')
+            $sql_f2 = "SELECT COUNT(*) AS total FROM Followers WHERE idFollower = ?";
+            $stmt_f2 = mysqli_prepare($conn, $sql_f2);
+            mysqli_stmt_bind_param($stmt_f2, "i", $mio_id);
+            mysqli_stmt_execute($stmt_f2);
+            $res_f2 = mysqli_stmt_get_result($stmt_f2);
+            $num_seguite = mysqli_fetch_assoc($res_f2)['total'];
+
         } else {
-            // STRANO CASO: C'è la sessione ma l'utente non è nel DB.
-            // Distruggo la sessione e lo rimando al login
+            // Strano caso: ha la sessione ma non è nel DB. Lo slogghiamo.
             session_destroy();
             header("Location: Admin/login.php");
             exit();
         }
-
         mysqli_stmt_close($stmt);
     }
     mysqli_close($conn);
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -155,7 +180,7 @@ if ($conn) {
     </div>
 
     <div class="search-container">
-        <img src="../images/LenteDiIngrandimento.png" alt="Cerca" class="search-icon">
+        <img src="/images/LenteDiIngrandimento.png" alt="Cerca" class="search-icon">
         <input type="text" class="search-bar" placeholder="Cerca stili, capi o creator...">
     </div>
 
@@ -167,7 +192,7 @@ if ($conn) {
 </nav>
 
 <a href="#" class="wardrobe-btn" title="Il mio armadio">
-    <img src="../images/Armadio.png" alt="Armadio">
+    <img src="/images/Armadio.png" alt="Armadio">
 </a>
 <a href="carica_look.php" class="add-look-btn" title="Carica un nuovo look">+</a>
 
@@ -218,9 +243,9 @@ if ($conn) {
         </p>
 
         <div class="sidebar-stats">
-            <div><strong>12</strong><br>Look</div>
-            <div><strong>340</strong><br>Follower</div>
-            <div><strong>150</strong><br>Seguiti</div>
+            <div><strong><?php echo $num_look; ?></strong><br>Look</div>
+            <div><strong><?php echo $num_followers; ?></strong><br>Follower</div>
+            <div><strong><?php echo $num_seguite; ?></strong><br>Seguiti</div>
         </div>
 
         <a href="modifica_profilo.php" class="edit-profile-btn">
