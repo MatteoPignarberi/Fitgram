@@ -14,6 +14,7 @@ $bio = "Appassionato di stile e fitness. Sempre alla ricerca del fit perfetto.";
 $num_followers = 0;
 $num_seguite = 0;
 $num_look = 0;
+$utenti_suggeriti = []; // Inizializzo l'array per i suggeriti
 
 // Mi collego al DB
 $conn = mysqli_connect("localhost", "root", "", "my_fitgram");
@@ -36,7 +37,6 @@ if ($conn) {
             }
 
             // 2. Conto i FOLLOWER (Quanti hanno il mio ID come 'idSeguito')
-            // N.B: Usa il nome esatto della tabella, dallo screen sembra si chiami "Followers" con la S finale
             $sql_f1 = "SELECT COUNT(*) AS total FROM Followers WHERE idSeguito = ?";
             $stmt_f1 = mysqli_prepare($conn, $sql_f1);
             mysqli_stmt_bind_param($stmt_f1, "i", $mio_id);
@@ -51,6 +51,23 @@ if ($conn) {
             mysqli_stmt_execute($stmt_f2);
             $res_f2 = mysqli_stmt_get_result($stmt_f2);
             $num_seguite = mysqli_fetch_assoc($res_f2)['total'];
+
+            // 4. RECUPERO UTENTI SUGGERITI
+            // Seleziono utenti a caso, ma escludo me stesso (id != ?)
+            // ed escludo chi seguo già (id NOT IN ...)
+            $sql_sugg = "SELECT id, username, nome FROM Utenti 
+                         WHERE id != ? AND id NOT IN (SELECT idSeguito FROM Followers WHERE idFollower = ?) 
+                         ORDER BY RAND() LIMIT 5";
+            $stmt_sugg = mysqli_prepare($conn, $sql_sugg);
+            if ($stmt_sugg) {
+                mysqli_stmt_bind_param($stmt_sugg, "ii", $mio_id, $mio_id);
+                mysqli_stmt_execute($stmt_sugg);
+                $res_sugg = mysqli_stmt_get_result($stmt_sugg);
+                while ($row = mysqli_fetch_assoc($res_sugg)) {
+                    $utenti_suggeriti[] = $row;
+                }
+                mysqli_stmt_close($stmt_sugg);
+            }
 
         } else {
             // Strano caso: ha la sessione ma non è nel DB. Lo slogghiamo.
@@ -68,7 +85,7 @@ if ($conn) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitgram</title>
+    <title>Fitgram - Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -119,6 +136,11 @@ if ($conn) {
         .style-pill { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); padding: 8px 20px; border-radius: 25px; font-family: 'Montserrat', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s ease; }
         .style-pill:hover, .style-pill.active { border-color: var(--text-main); color: var(--text-main); background-color: var(--pure-white); box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
 
+        /* --- LAYOUT DUE COLONNE --- */
+        .content-layout { display: flex; gap: 30px; align-items: flex-start; }
+        .main-feed { flex: 1; }
+        .suggested-sidebar { width: 320px; flex-shrink: 0; position: sticky; top: 100px; }
+
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 20px; }
         .look-card { position: relative; border-radius: 12px; overflow: hidden; background-color: var(--rosa-carne); aspect-ratio: 3/4; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.4s ease, box-shadow 0.4s ease; }
         .look-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(216, 180, 178, 0.4); }
@@ -128,7 +150,27 @@ if ($conn) {
         .overlay-user { font-weight: 600; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; }
         .overlay-mini-avatar { width: 18px; height: 18px; background-color: var(--pure-white); border-radius: 50%; }
 
+        /* --- STILE LISTA SUGGERITI --- */
+        .suggested-section { background-color: var(--pure-white); padding: 20px; border-radius: 12px; border: 1px solid var(--rosa-carne); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .suggested-section h3 { font-family: 'Playfair Display', serif; font-style: italic; color: var(--accent-dark); font-size: 1.2rem; margin-top: 0; margin-bottom: 20px; }
+        .suggested-list { display: flex; flex-direction: column; gap: 15px; }
+        .suggested-card { display: flex; align-items: center; gap: 12px; transition: transform 0.2s ease; }
+        .suggested-card:hover { transform: translateX(3px); }
+        .suggested-avatar { width: 44px; height: 44px; background-color: var(--beige-chiaro); border: 1px solid var(--accent-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+        .suggested-info { flex: 1; overflow: hidden; }
+        .suggested-info strong { font-size: 0.85rem; color: var(--text-main); display: block; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .suggested-info span { font-size: 0.75rem; color: var(--text-muted); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* Modifica pulsante per renderlo compatibile col tag <button> */
+        .follow-btn-index { background-color: var(--accent-pop); color: var(--pure-white); text-decoration: none; padding: 8px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; transition: background-color 0.3s ease; white-space: nowrap; flex-shrink: 0; border: none; cursor: pointer; font-family: 'Montserrat', sans-serif; }
+        .follow-btn-index:hover { background-color: var(--text-main); }
+
         footer { padding: 3rem 2rem; text-align: center; font-size: 0.7rem; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; border-top: 1px solid var(--gray-border); margin-bottom: 20px; }
+
+        @media (max-width: 900px) {
+            .content-layout { flex-direction: column; }
+            .suggested-sidebar { width: 100%; position: static; margin-bottom: 2rem; }
+        }
 
         @media (max-width: 768px) {
             .search-container { display: none; }
@@ -140,6 +182,7 @@ if ($conn) {
             .wardrobe-btn img { width: 35px; }
         }
 
+        /* OVERLAY E SIDEBAR PROFILO */
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 1005; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
         .sidebar-overlay.active { opacity: 1; visibility: visible; }
         .profile-sidebar { position: fixed; top: 0; right: -350px; width: 320px; height: 100vh; background-color: var(--pure-white); z-index: 1010; box-shadow: -5px 0 25px rgba(0,0,0,0.1); transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; overflow-y: auto; }
@@ -172,15 +215,15 @@ if ($conn) {
             <div class="hamburger">☰</div>
             <div class="dropdown-menu">
                 <a href="#">Esplora Tendenze</a>
-                <a href="Admin/premium.php">Premium</a>
-                <a href="impostazioni.php">Impostazioni</a>
+                <a href="premium.php">Premium</a>
+                <a href="../impostazioni.php">Impostazioni</a>
             </div>
         </div>
         <div class="elegant-tagline">be fit. be style.</div>
     </div>
 
     <div class="search-container">
-        <img src="/images/LenteDiIngrandimento.png" alt="Cerca" class="search-icon">
+        <img src="../images/LenteDiIngrandimento.png" alt="Cerca" class="search-icon">
         <input type="text" class="search-bar" placeholder="Cerca stili, capi o creator...">
     </div>
 
@@ -192,9 +235,9 @@ if ($conn) {
 </nav>
 
 <a href="#" class="wardrobe-btn" title="Il mio armadio">
-    <img src="/images/Armadio.png" alt="Armadio">
+    <img src="../images/Armadio.png" alt="Armadio">
 </a>
-<a href="carica_look.php" class="add-look-btn" title="Carica un nuovo look">+</a>
+<a href="../carica_look.php" class="add-look-btn" title="Carica un nuovo look">+</a>
 
 <main class="lookbook-container">
     <div class="style-navigation">
@@ -206,19 +249,53 @@ if ($conn) {
         <button class="style-pill">Accessori</button>
     </div>
 
-    <div class="gallery-grid">
-        <article class="look-card"><div class="look-image-placeholder">FOTO_01</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @m_pigna</div></div></article>
-        <article class="look-card" style="background-color: #d1d5db;"><div class="look-image-placeholder">FOTO_02</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @ale_ono</div></div></article>
-        <article class="look-card" style="background-color: #e2c9c8;"><div class="look-image-placeholder">FOTO_03</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @simone_dm</div></div></article>
-        <article class="look-card" style="background-color: #dcd7d2;"><div class="look-image-placeholder">FOTO_04</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @cosmin_r</div></div></article>
-        <article class="look-card" style="background-color: #c5d0d3;"><div class="look-image-placeholder">FOTO_05</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @sara_style</div></div></article>
-        <article class="look-card"><div class="look-image-placeholder">FOTO_06</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @luca_fit</div></div></article>
-        <article class="look-card" style="background-color: #d1d5db;"><div class="look-image-placeholder">FOTO_07</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @ale_ono</div></div></article>
-        <article class="look-card" style="background-color: #e2c9c8;"><div class="look-image-placeholder">FOTO_08</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @simone_dm</div></div></article>
-        <article class="look-card" style="background-color: #c5d0d3;"><div class="look-image-placeholder">FOTO_09</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @sara_style</div></div></article>
-        <article class="look-card"><div class="look-image-placeholder">FOTO_10</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @luca_fit</div></div></article>
-    </div>
-</main>
+    <div class="content-layout">
+
+        <div class="main-feed">
+            <div class="gallery-grid">
+                <article class="look-card"><div class="look-image-placeholder">FOTO_01</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @m_pigna</div></div></article>
+                <article class="look-card" style="background-color: #d1d5db;"><div class="look-image-placeholder">FOTO_02</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @ale_ono</div></div></article>
+                <article class="look-card" style="background-color: #e2c9c8;"><div class="look-image-placeholder">FOTO_03</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @simone_dm</div></div></article>
+                <article class="look-card" style="background-color: #dcd7d2;"><div class="look-image-placeholder">FOTO_04</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @cosmin_r</div></div></article>
+                <article class="look-card" style="background-color: #c5d0d3;"><div class="look-image-placeholder">FOTO_05</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @sara_style</div></div></article>
+                <article class="look-card"><div class="look-image-placeholder">FOTO_06</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @luca_fit</div></div></article>
+                <article class="look-card" style="background-color: #d1d5db;"><div class="look-image-placeholder">FOTO_07</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @ale_ono</div></div></article>
+                <article class="look-card" style="background-color: #e2c9c8;"><div class="look-image-placeholder">FOTO_08</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @simone_dm</div></div></article>
+                <article class="look-card" style="background-color: #c5d0d3;"><div class="look-image-placeholder">FOTO_09</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @sara_style</div></div></article>
+                <article class="look-card"><div class="look-image-placeholder">FOTO_10</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @luca_fit</div></div></article>
+            </div>
+        </div>
+
+        <aside class="suggested-sidebar">
+            <?php if (!empty($utenti_suggeriti)): ?>
+                <section class="suggested-section">
+                    <h3>Suggeriti per te</h3>
+                    <div class="suggested-list">
+                        <?php foreach($utenti_suggeriti as $u): ?>
+                            <div class="suggested-card">
+                                <div class="suggested-avatar">👤</div>
+                                <div class="suggested-info">
+                                    <strong><?php echo htmlspecialchars(!empty($u['nome']) ? $u['nome'] : $u['username']); ?></strong>
+                                    <span>@<?php echo htmlspecialchars($u['username']); ?></span>
+                                </div>
+
+                                <form action="azione_follow.php" method="POST" style="margin: 0;">
+                                    <input type="hidden" name="id_da_seguire" value="<?php echo $u['id']; ?>">
+                                    <button type="submit" class="follow-btn-index">Segui</button>
+                                </form>
+
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </section>
+            <?php else: ?>
+                <section class="suggested-section" style="text-align: center; color: var(--text-muted);">
+                    <p style="font-size: 0.85rem; margin: 0;">Nessun nuovo suggerimento al momento!</p>
+                </section>
+            <?php endif; ?>
+        </aside>
+
+    </div> </main>
 
 <footer>
     &copy; 2026 Fitgram - Be fit, Be Style.<br>
@@ -236,7 +313,7 @@ if ($conn) {
     <div class="sidebar-content">
         <div class="sidebar-avatar-large">👤</div>
 
-        <h3 class="sidebar-username">@<?php echo htmlspecialchars($dati_utente['username']); ?></h3>
+        <h3 class="sidebar-username">@<?php echo htmlspecialchars($username_loggato); ?></h3>
 
         <p class="sidebar-bio">
             <?php echo htmlspecialchars($bio); ?>
