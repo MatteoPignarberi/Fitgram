@@ -1,12 +1,6 @@
 <?php
 session_start();
 
-// Qui il punto esclamativo (!) CI DEVE ESSERE, significa "Se NON sei loggato"
-if (!isset($_SESSION['username'])) {
-    header("Location: index.php"); // o Admin/login.php
-    exit();
-}
-
 // Inizializzo le variabili con valori di default di base prima di chiamare il database
 $username_loggato = $_SESSION['username'];
 $nome = isset($_SESSION['nome']) ? $_SESSION['nome'] : $_SESSION['username']; // Prende il nome se esiste, altrimenti l'username
