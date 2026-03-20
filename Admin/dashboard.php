@@ -43,7 +43,7 @@ if ($conn) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitgram - Dashboard</title>
+    <title>Fitgram</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -155,7 +155,7 @@ if ($conn) {
     </div>
 
     <div class="search-container">
-        <img src="images/LenteDiIngrandimento.png" alt="Cerca" class="search-icon">
+        <img src="../images/LenteDiIngrandimento.png" alt="Cerca" class="search-icon">
         <input type="text" class="search-bar" placeholder="Cerca stili, capi o creator...">
     </div>
 
@@ -167,7 +167,7 @@ if ($conn) {
 </nav>
 
 <a href="#" class="wardrobe-btn" title="Il mio armadio">
-    <img src="images/Armadio.png" alt="Armadio">
+    <img src="../images/Armadio.png" alt="Armadio">
 </a>
 <a href="carica_look.php" class="add-look-btn" title="Carica un nuovo look">+</a>
 
