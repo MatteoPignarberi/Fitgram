@@ -16,8 +16,8 @@ $num_seguite = 0;
 $num_look = 0;
 $utenti_suggeriti = []; // Inizializzo l'array per i suggeriti
 
-// Mi collego al DB
-$conn = mysqli_connect("localhost", "root", "", "my_fitgram");
+// Mi collego al DB (Ricorda di mettere i dati di Altervista se sei online!)
+$conn = mysqli_connect("localhost", "fitgram", "", "my_fitgram");
 
 if ($conn) {
     // 1. Prendo l'ID e la bio dell'utente loggato
@@ -52,7 +52,15 @@ if ($conn) {
             $res_f2 = mysqli_stmt_get_result($stmt_f2);
             $num_seguite = mysqli_fetch_assoc($res_f2)['total'];
 
-            // Query alternativa usando NOT EXISTS
+            // 4. NUOVO: Conto quanti LOOK ha caricato questo utente
+            $sql_l = "SELECT COUNT(*) AS total FROM Outfit WHERE username = ?";
+            $stmt_l = mysqli_prepare($conn, $sql_l);
+            mysqli_stmt_bind_param($stmt_l, "s", $username_loggato);
+            mysqli_stmt_execute($stmt_l);
+            $res_l = mysqli_stmt_get_result($stmt_l);
+            $num_look = mysqli_fetch_assoc($res_l)['total'];
+
+            // Query per utenti suggeriti usando NOT EXISTS
             $sql_sugg = "SELECT id, username, nome 
              FROM Utenti u
              WHERE id != ? 
@@ -66,14 +74,11 @@ if ($conn) {
             $stmt_sugg = mysqli_prepare($conn, $sql_sugg);
 
             if ($stmt_sugg) {
-                // Qui l'ordine è: 1° punto interrogativo = mio_id, 2° punto interrogativo = mio_id
                 mysqli_stmt_bind_param($stmt_sugg, "ii", $mio_id, $mio_id);
                 mysqli_stmt_execute($stmt_sugg);
                 $res_sugg = mysqli_stmt_get_result($stmt_sugg);
 
-                // Svuotiamo l'array prima di riempirlo per sicurezza
                 $utenti_suggeriti = [];
-
                 while ($row = mysqli_fetch_assoc($res_sugg)) {
                     $utenti_suggeriti[] = $row;
                 }
@@ -81,14 +86,12 @@ if ($conn) {
             }
 
         } else {
-            // Strano caso: ha la sessione ma non è nel DB. Lo slogghiamo.
             session_destroy();
             header("Location: Admin/login.php");
             exit();
         }
         mysqli_stmt_close($stmt);
     }
-    mysqli_close($conn);
 }
 ?>
 <!DOCTYPE html>
@@ -155,11 +158,10 @@ if ($conn) {
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 20px; }
         .look-card { position: relative; border-radius: 12px; overflow: hidden; background-color: var(--rosa-carne); aspect-ratio: 3/4; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.4s ease, box-shadow 0.4s ease; }
         .look-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(216, 180, 178, 0.4); }
-        .look-image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--pure-white); font-weight: 300; font-size: 1.1rem; letter-spacing: 1px; }
         .look-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 18px 12px; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%); color: var(--pure-white); box-sizing: border-box; opacity: 0; transition: opacity 0.3s ease; display: flex; flex-direction: column; gap: 4px; }
         .look-card:hover .look-overlay { opacity: 1; }
         .overlay-user { font-weight: 600; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; }
-        .overlay-mini-avatar { width: 18px; height: 18px; background-color: var(--pure-white); border-radius: 50%; }
+        .overlay-mini-avatar { width: 18px; height: 18px; background-color: var(--pure-white); border-radius: 50%; color: black; display: flex; align-items: center; justify-content: center; font-size: 10px;}
 
         /* --- STILE LISTA SUGGERITI --- */
         .suggested-section { background-color: var(--pure-white); padding: 20px; border-radius: 12px; border: 1px solid var(--rosa-carne); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
@@ -172,7 +174,6 @@ if ($conn) {
         .suggested-info strong { font-size: 0.85rem; color: var(--text-main); display: block; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .suggested-info span { font-size: 0.75rem; color: var(--text-muted); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Modifica pulsante per renderlo compatibile col tag <button> */
         .follow-btn-index { background-color: var(--accent-pop); color: var(--pure-white); text-decoration: none; padding: 8px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; transition: background-color 0.3s ease; white-space: nowrap; flex-shrink: 0; border: none; cursor: pointer; font-family: 'Montserrat', sans-serif; }
         .follow-btn-index:hover { background-color: var(--text-main); }
 
@@ -264,16 +265,33 @@ if ($conn) {
 
         <div class="main-feed">
             <div class="gallery-grid">
-                <article class="look-card"><div class="look-image-placeholder">FOTO_01</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @m_pigna</div></div></article>
-                <article class="look-card" style="background-color: #d1d5db;"><div class="look-image-placeholder">FOTO_02</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @ale_ono</div></div></article>
-                <article class="look-card" style="background-color: #e2c9c8;"><div class="look-image-placeholder">FOTO_03</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @simone_dm</div></div></article>
-                <article class="look-card" style="background-color: #dcd7d2;"><div class="look-image-placeholder">FOTO_04</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @cosmin_r</div></div></article>
-                <article class="look-card" style="background-color: #c5d0d3;"><div class="look-image-placeholder">FOTO_05</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @sara_style</div></div></article>
-                <article class="look-card"><div class="look-image-placeholder">FOTO_06</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @luca_fit</div></div></article>
-                <article class="look-card" style="background-color: #d1d5db;"><div class="look-image-placeholder">FOTO_07</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @ale_ono</div></div></article>
-                <article class="look-card" style="background-color: #e2c9c8;"><div class="look-image-placeholder">FOTO_08</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @simone_dm</div></div></article>
-                <article class="look-card" style="background-color: #c5d0d3;"><div class="look-image-placeholder">FOTO_09</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @sara_style</div></div></article>
-                <article class="look-card"><div class="look-image-placeholder">FOTO_10</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @luca_fit</div></div></article>
+                <?php
+                if ($conn) {
+                    // Peschiamo gli ultimi 20 outfit
+                    $sql_outfits = "SELECT * FROM Outfit ORDER BY timestamp DESC LIMIT 20";
+                    $result_outfits = mysqli_query($conn, $sql_outfits);
+
+                    if ($result_outfits && mysqli_num_rows($result_outfits) > 0) {
+                        while ($outfit = mysqli_fetch_assoc($result_outfits)) {
+                            ?>
+                            <article class="look-card">
+                                <img src="../uploads/<?php echo htmlspecialchars($outfit['immagine']); ?>" alt="<?php echo htmlspecialchars($outfit['descrizione'] ?? 'Look'); ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                                <div class="look-overlay">
+                                    <div class="overlay-user">
+                                        <div class="overlay-mini-avatar">👤</div>
+                                        @<?php echo htmlspecialchars($outfit['username']); ?>
+                                    </div>
+                                </div>
+                            </article>
+                            <?php
+                        }
+                    } else {
+                        echo "<p style='color: var(--text-muted); grid-column: 1 / -1; text-align: center; padding: 40px;'>Nessun outfit caricato ancora. Sii il primo!</p>";
+                    }
+
+                    mysqli_close($conn); // Chiudo la connessione solo alla fine!
+                }
+                ?>
             </div>
         </div>
 
