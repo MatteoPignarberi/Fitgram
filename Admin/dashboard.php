@@ -51,34 +51,33 @@ if ($conn) {
             mysqli_stmt_execute($stmt_f2);
             $res_f2 = mysqli_stmt_get_result($stmt_f2);
             $num_seguite = mysqli_fetch_assoc($res_f2)['total'];
-
-            // Query alternativa usando NOT EXISTS
-            $sql_sugg = "SELECT id, username, nome 
-             FROM Utenti u
-             WHERE id != ? 
-             AND NOT EXISTS (
-                 SELECT 1 FROM Followers f 
-                 WHERE f.idSeguito = u.id 
-                 AND f.idFollower = ?
-             )
-             ORDER BY RAND() LIMIT 5";
-
+// --- INIZIO TEST BRUTALE ---
+            $sql_sugg = "SELECT id, username, nome FROM Utenti WHERE id != ? LIMIT 5";
             $stmt_sugg = mysqli_prepare($conn, $sql_sugg);
 
-            if ($stmt_sugg) {
-                // Qui l'ordine è: 1° punto interrogativo = mio_id, 2° punto interrogativo = mio_id
-                mysqli_stmt_bind_param($stmt_sugg, "ii", $mio_id, $mio_id);
-                mysqli_stmt_execute($stmt_sugg);
-                $res_sugg = mysqli_stmt_get_result($stmt_sugg);
-
-                // Svuotiamo l'array prima di riempirlo per sicurezza
-                $utenti_suggeriti = [];
-
-                while ($row = mysqli_fetch_assoc($res_sugg)) {
-                    $utenti_suggeriti[] = $row;
-                }
-                mysqli_stmt_close($stmt_sugg);
+            if (!$stmt_sugg) {
+                // Se fallisce qui, significa che una colonna (es. 'nome') o la tabella non esiste
+                die("<div style='background:red; color:white; padding:20px; text-align:center; position:relative; z-index:9999;'>ERRORE PREPARE: " . mysqli_error($conn) . "</div>");
             }
+
+            mysqli_stmt_bind_param($stmt_sugg, "i", $mio_id);
+
+            if (!mysqli_stmt_execute($stmt_sugg)) {
+                die("<div style='background:red; color:white; padding:20px; text-align:center; position:relative; z-index:9999;'>ERRORE EXECUTE: " . mysqli_stmt_error($stmt_sugg) . "</div>");
+            }
+
+            $res_sugg = mysqli_stmt_get_result($stmt_sugg);
+            $utenti_suggeriti = [];
+
+            while ($row = mysqli_fetch_assoc($res_sugg)) {
+                $utenti_suggeriti[] = $row;
+            }
+            mysqli_stmt_close($stmt_sugg);
+
+            // SCOMMENTA LA RIGA QUI SOTTO (togli i due slash) per stampare a schermo i dati grezzi e bloccare la pagina
+            // die("<div style='background:yellow; padding:20px; z-index:9999; position:relative;'>MIO ID: " . $mio_id . " - UTENTI TROVATI: " . count($utenti_suggeriti) . "</div>");
+            // --- FINE TEST BRUTALE ---
+            // --- FINE TEST BRUTALE ---
 
         } else {
             // Strano caso: ha la sessione ma non è nel DB. Lo slogghiamo.
