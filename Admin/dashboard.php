@@ -16,8 +16,8 @@ $num_seguite = 0;
 $num_look = 0;
 $utenti_suggeriti = []; // Inizializzo l'array per i suggeriti
 
-// Mi collego al DB
-$conn = mysqli_connect("localhost", "root", "", "my_fitgram");
+// Mi collego al DB (Ricorda di mettere i dati di Altervista se sei online!)
+$conn = mysqli_connect("localhost", "fitgram", "", "my_fitgram");
 
 if ($conn) {
     // 1. Prendo l'ID e la bio dell'utente loggato
@@ -51,36 +51,41 @@ if ($conn) {
             mysqli_stmt_execute($stmt_f2);
             $res_f2 = mysqli_stmt_get_result($stmt_f2);
             $num_seguite = mysqli_fetch_assoc($res_f2)['total'];
-// --- INIZIO TEST BRUTALE ---
-            $sql_sugg = "SELECT id, username, nome FROM Utenti WHERE id != ? LIMIT 5";
+
+            // 4. NUOVO: Conto quanti LOOK ha caricato questo utente
+            $sql_l = "SELECT COUNT(*) AS total FROM Outfit WHERE username = ?";
+            $stmt_l = mysqli_prepare($conn, $sql_l);
+            mysqli_stmt_bind_param($stmt_l, "s", $username_loggato);
+            mysqli_stmt_execute($stmt_l);
+            $res_l = mysqli_stmt_get_result($stmt_l);
+            $num_look = mysqli_fetch_assoc($res_l)['total'];
+
+            // Query per utenti suggeriti usando NOT EXISTS
+            $sql_sugg = "SELECT id, username, nome 
+             FROM Utenti u
+             WHERE id != ? 
+             AND NOT EXISTS (
+                 SELECT 1 FROM Followers f 
+                 WHERE f.idSeguito = u.id 
+                 AND f.idFollower = ?
+             )
+             ORDER BY RAND() LIMIT 5";
+
             $stmt_sugg = mysqli_prepare($conn, $sql_sugg);
 
-            if (!$stmt_sugg) {
-                // Se fallisce qui, significa che una colonna (es. 'nome') o la tabella non esiste
-                die("<div style='background:red; color:white; padding:20px; text-align:center; position:relative; z-index:9999;'>ERRORE PREPARE: " . mysqli_error($conn) . "</div>");
+            if ($stmt_sugg) {
+                mysqli_stmt_bind_param($stmt_sugg, "ii", $mio_id, $mio_id);
+                mysqli_stmt_execute($stmt_sugg);
+                $res_sugg = mysqli_stmt_get_result($stmt_sugg);
+
+                $utenti_suggeriti = [];
+                while ($row = mysqli_fetch_assoc($res_sugg)) {
+                    $utenti_suggeriti[] = $row;
+                }
+                mysqli_stmt_close($stmt_sugg);
             }
-
-            mysqli_stmt_bind_param($stmt_sugg, "i", $mio_id);
-
-            if (!mysqli_stmt_execute($stmt_sugg)) {
-                die("<div style='background:red; color:white; padding:20px; text-align:center; position:relative; z-index:9999;'>ERRORE EXECUTE: " . mysqli_stmt_error($stmt_sugg) . "</div>");
-            }
-
-            $res_sugg = mysqli_stmt_get_result($stmt_sugg);
-            $utenti_suggeriti = [];
-
-            while ($row = mysqli_fetch_assoc($res_sugg)) {
-                $utenti_suggeriti[] = $row;
-            }
-            mysqli_stmt_close($stmt_sugg);
-
-            // SCOMMENTA LA RIGA QUI SOTTO (togli i due slash) per stampare a schermo i dati grezzi e bloccare la pagina
-            // die("<div style='background:yellow; padding:20px; z-index:9999; position:relative;'>MIO ID: " . $mio_id . " - UTENTI TROVATI: " . count($utenti_suggeriti) . "</div>");
-            // --- FINE TEST BRUTALE ---
-            // --- FINE TEST BRUTALE ---
 
         } else {
-            // Strano caso: ha la sessione ma non è nel DB. Lo slogghiamo.
             session_destroy();
             header("Location: Admin/login.php");
             exit();
@@ -263,16 +268,33 @@ if ($conn) {
 
         <div class="main-feed">
             <div class="gallery-grid">
-                <article class="look-card"><div class="look-image-placeholder">FOTO_01</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @m_pigna</div></div></article>
-                <article class="look-card" style="background-color: #d1d5db;"><div class="look-image-placeholder">FOTO_02</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @ale_ono</div></div></article>
-                <article class="look-card" style="background-color: #e2c9c8;"><div class="look-image-placeholder">FOTO_03</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @simone_dm</div></div></article>
-                <article class="look-card" style="background-color: #dcd7d2;"><div class="look-image-placeholder">FOTO_04</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @cosmin_r</div></div></article>
-                <article class="look-card" style="background-color: #c5d0d3;"><div class="look-image-placeholder">FOTO_05</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @sara_style</div></div></article>
-                <article class="look-card"><div class="look-image-placeholder">FOTO_06</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @luca_fit</div></div></article>
-                <article class="look-card" style="background-color: #d1d5db;"><div class="look-image-placeholder">FOTO_07</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @ale_ono</div></div></article>
-                <article class="look-card" style="background-color: #e2c9c8;"><div class="look-image-placeholder">FOTO_08</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @simone_dm</div></div></article>
-                <article class="look-card" style="background-color: #c5d0d3;"><div class="look-image-placeholder">FOTO_09</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @sara_style</div></div></article>
-                <article class="look-card"><div class="look-image-placeholder">FOTO_10</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @luca_fit</div></div></article>
+                <?php
+                if ($conn) {
+                    // Peschiamo gli ultimi 20 outfit
+                    $sql_outfits = "SELECT * FROM Outfit ORDER BY timestamp DESC LIMIT 20";
+                    $result_outfits = mysqli_query($conn, $sql_outfits);
+
+                    if ($result_outfits && mysqli_num_rows($result_outfits) > 0) {
+                        while ($outfit = mysqli_fetch_assoc($result_outfits)) {
+                            ?>
+                            <article class="look-card">
+                                <img src="../uploads/<?php echo htmlspecialchars($outfit['immagine']); ?>" alt="<?php echo htmlspecialchars($outfit['descrizione'] ?? 'Look'); ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                                <div class="look-overlay">
+                                    <div class="overlay-user">
+                                        <div class="overlay-mini-avatar">👤</div>
+                                        @<?php echo htmlspecialchars($outfit['username']); ?>
+                                    </div>
+                                </div>
+                            </article>
+                            <?php
+                        }
+                    } else {
+                        echo "<p style='color: var(--text-muted); grid-column: 1 / -1; text-align: center; padding: 40px;'>Nessun outfit caricato ancora. Sii il primo!</p>";
+                    }
+
+                    mysqli_close($conn); // Chiudo la connessione solo alla fine!
+                }
+                ?>
             </div>
         </div>
 
