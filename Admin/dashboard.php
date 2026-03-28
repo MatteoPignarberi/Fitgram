@@ -3,9 +3,14 @@ session_start();
 
 // SICUREZZA: Se non c'è una sessione attiva, lo sbatto fuori al login
 if (!isset($_SESSION['username'])) {
-    header("Location: Admin/login.php");
+    header("Location: login.php"); // Nota: ho tolto "Admin/" perché sei già dentro la cartella!
     exit();
 }
+
+// === IL PASS VIP PER L'HEADER ===
+$is_logged = true;
+$username_mostrato = $_SESSION['username'];
+// ================================
 
 // Inizializzo le variabili base
 $username_loggato = $_SESSION['username'];
@@ -16,9 +21,9 @@ $num_seguite = 0;
 $num_look = 0;
 $utenti_suggeriti = []; // Inizializzo l'array per i suggeriti
 
-// Mi collego al DB (Ricorda di mettere i dati di Altervista se sei online!)
-$conn = mysqli_connect("localhost", "fitgram", "", "my_fitgram");
-
+// Mi collego al DB (Usiamo il file intelligente!)
+require_once '../config/connessione.php';
+/** @var mysqli $conn */
 if ($conn) {
     // 1. Prendo l'ID e la bio dell'utente loggato
     $sql = "SELECT id, bio FROM Utenti WHERE username = ?";
