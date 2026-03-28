@@ -60,6 +60,5 @@ if ($row = mysqli_fetch_assoc($result)) {
     ]);
     exit();
 }
-
 mysqli_close($conn);
 ?>
