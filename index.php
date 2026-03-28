@@ -1,29 +1,35 @@
 <?php
 session_start();
 
-// 1. CAPIAMO SE L'UTENTE È LOGGATO O È UN OSPITE
-$is_logged = isset($_SESSION['username']);
-
-// 2. INIZIALIZZO LE VARIABILI BASE (Valori di default per chi non ha l'accesso)
-$username_loggato = "Ospite";
-$nome = "Visitatore";
-$bio = "Benvenuto su Fitgram. Accedi o registrati per caricare i tuoi look!";
-$num_followers = 0;
-$num_seguite = 0;
-$num_look = 0;
+// 1. VARIABILI DI DEFAULT E CONNESSIONE AL DB
+$is_logged = false;
+$nome = "Ospite";
+$username_mostrato = "Accedi";
+$bio = "Benvenuto su Fitgram. Effettua il login per vedere il tuo profilo.";
 $utenti_suggeriti = [];
 
-// 3. MI COLLEGO AL DB (Ricorda di inserire i dati corretti di Altervista qui!)
+// Ci connettiamo al database
 $conn = mysqli_connect("localhost", "root", "", "my_fitgram");
 
 if ($conn) {
-    // SE L'UTENTE E' LOGGATO: Carico i suoi dati personali reali
-    if ($is_logged) {
+    // --- RECUPERO UTENTI DA SEGUIRE ---
+    $sql_utenti = "SELECT id, username, nome FROM Utenti ORDER BY RAND() LIMIT 5";
+    $result_utenti = mysqli_query($conn, $sql_utenti);
+    if ($result_utenti) {
+        while ($row = mysqli_fetch_assoc($result_utenti)) {
+            $utenti_suggeriti[] = $row;
+        }
+    }
+
+    // 2. SE L'UTENTE E' LOGGATO, RECUPERIAMO I SUOI DATI
+    if (isset($_SESSION['username'])) {
+        $is_logged = true;
         $username_loggato = $_SESSION['username'];
-        $nome = isset($_SESSION['nome']) ? $_SESSION['nome'] : $username_loggato;
+        $nome = isset($_SESSION['nome']) ? $_SESSION['nome'] : $_SESSION['username'];
+        $username_mostrato = $username_loggato;
         $bio = "Appassionato di stile e fitness. Sempre alla ricerca del fit perfetto.";
 
-        $sql = "SELECT id, bio FROM Utenti WHERE username = ?";
+        $sql = "SELECT * FROM Utenti WHERE username = ?";
         $stmt = mysqli_prepare($conn, $sql);
 
         if ($stmt) {
@@ -32,60 +38,14 @@ if ($conn) {
             $result = mysqli_stmt_get_result($stmt);
 
             if ($dati_utente = mysqli_fetch_assoc($result)) {
-                $mio_id = $dati_utente['id'];
-
                 if (!empty($dati_utente['bio'])) {
                     $bio = $dati_utente['bio'];
                 }
-
-                // Conto Followers
-                $sql_f1 = "SELECT COUNT(*) AS total FROM Followers WHERE idSeguito = ?";
-                $stmt_f1 = mysqli_prepare($conn, $sql_f1);
-                mysqli_stmt_bind_param($stmt_f1, "i", $mio_id);
-                mysqli_stmt_execute($stmt_f1);
-                $num_followers = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt_f1))['total'];
-
-                // Conto Seguiti
-                $sql_f2 = "SELECT COUNT(*) AS total FROM Followers WHERE idFollower = ?";
-                $stmt_f2 = mysqli_prepare($conn, $sql_f2);
-                mysqli_stmt_bind_param($stmt_f2, "i", $mio_id);
-                mysqli_stmt_execute($stmt_f2);
-                $num_seguite = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt_f2))['total'];
-
-                // Conto quanti Look ha caricato
-                $sql_l = "SELECT COUNT(*) AS total FROM Outfit WHERE username = ?";
-                $stmt_l = mysqli_prepare($conn, $sql_l);
-                mysqli_stmt_bind_param($stmt_l, "s", $username_loggato);
-                mysqli_stmt_execute($stmt_l);
-                $num_look = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt_l))['total'];
-
-                // Suggeriti per utente loggato (esclude chi segue già)
-                $sql_sugg = "SELECT id, username, nome FROM Utenti WHERE id != ? AND NOT EXISTS (SELECT 1 FROM Followers f WHERE f.idSeguito = u.id AND f.idFollower = ?) ORDER BY RAND() LIMIT 5";
-                $stmt_sugg = mysqli_prepare($conn, $sql_sugg);
-                if ($stmt_sugg) {
-                    mysqli_stmt_bind_param($stmt_sugg, "ii", $mio_id, $mio_id);
-                    mysqli_stmt_execute($stmt_sugg);
-                    $res_sugg = mysqli_stmt_get_result($stmt_sugg);
-                    while ($row = mysqli_fetch_assoc($res_sugg)) { $utenti_suggeriti[] = $row; }
-                }
-            } else {
-                // Se c'è un errore col DB, distruggiamo la sessione fantasma
-                session_destroy();
-                $is_logged = false;
             }
+            mysqli_stmt_close($stmt);
         }
     }
-
-    // SE L'UTENTE NON E' LOGGATO (Ospite): Mostro 5 utenti a caso nei suggeriti
-    if (!$is_logged) {
-        $sql_sugg_ospite = "SELECT id, username, nome FROM Utenti ORDER BY RAND() LIMIT 5";
-        $res_sugg_ospite = mysqli_query($conn, $sql_sugg_ospite);
-        if ($res_sugg_ospite) {
-            while ($row = mysqli_fetch_assoc($res_sugg_ospite)) {
-                $utenti_suggeriti[] = $row;
-            }
-        }
-    }
+    mysqli_close($conn);
 }
 ?>
 <!DOCTYPE html>
@@ -93,7 +53,7 @@ if ($conn) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitgram - Home</title>
+    <title>Fitgram</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -107,77 +67,182 @@ if ($conn) {
             --accent-pop: #b8807d;
         }
 
-        body { font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; background-color: var(--beige-chiaro); color: var(--text-main); overflow-x: hidden; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--beige-chiaro);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
 
-        nav { background-color: var(--pure-white); padding: 0.8rem 2%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--rosa-carne); }
+        /* Navbar */
+        nav {
+            background-color: var(--pure-white);
+            padding: 0.8rem 2%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--rosa-carne);
+        }
+
         .nav-left { display: flex; align-items: center; gap: 15px; flex: 1; }
         .menu-container { position: relative; }
         .hamburger { font-size: 1.6rem; cursor: pointer; padding: 5px; }
         .elegant-tagline { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.25rem; color: var(--accent-dark); }
 
-        .dropdown-menu { display: none; position: absolute; left: 0; top: 100%; margin-top: 12px; background-color: var(--pure-white); min-width: 220px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid var(--rosa-carne); border-radius: 8px; z-index: 1001; }
+        .dropdown-menu {
+            display: none; position: absolute; left: 0; top: 100%; margin-top: 12px;
+            background-color: var(--pure-white); min-width: 220px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid var(--rosa-carne);
+            border-radius: 8px; z-index: 1001;
+        }
         .dropdown-menu::before { content: ''; position: absolute; top: -12px; left: 0; width: 100%; height: 12px; }
         .menu-container:hover .dropdown-menu { display: block; }
-        .dropdown-menu a { color: var(--text-main); padding: 14px 20px; text-decoration: none; display: block; font-size: 0.85rem; border-bottom: 1px solid var(--beige-chiaro); transition: all 0.2s ease; }
+        .dropdown-menu a {
+            color: var(--text-main); padding: 14px 20px; text-decoration: none; display: block;
+            font-size: 0.85rem; border-bottom: 1px solid var(--beige-chiaro); transition: all 0.2s ease;
+        }
         .dropdown-menu a:hover { background-color: var(--beige-chiaro); padding-left: 25px; }
 
-        .search-container { flex: 2; display: flex; justify-content: center; position: relative; max-width: 350px; margin: 0 auto; }
-        .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; opacity: 0.6; pointer-events: none; }
-        .search-bar { width: 100%; padding: 10px 18px 10px 48px; border-radius: 20px; border: 1px solid var(--rosa-carne); outline: none; font-family: inherit; font-size: 0.85rem; background-color: var(--beige-chiaro); transition: all 0.3s ease; }
+        /* --- BARRA DI RICERCA CON LENTE --- */
+        .search-container {
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            max-width: 350px;
+            margin: 0 auto;
+        }
+        .search-icon {
+            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+            width: 24px; height: 24px; opacity: 0.6; pointer-events: none;
+        }
+        .search-bar {
+            width: 100%; padding: 10px 18px 10px 48px; border-radius: 20px;
+            border: 1px solid var(--rosa-carne); outline: none; font-family: inherit;
+            font-size: 0.85rem; background-color: var(--beige-chiaro); transition: all 0.3s ease;
+        }
         .search-bar:focus { background-color: var(--pure-white); border-color: var(--accent-dark); }
 
         .nav-links { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 15px; }
+        .nav-links a.text-link { text-decoration: none; color: var(--text-main); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
         .header-profile-link { text-decoration: none; display: flex; align-items: center; margin-left: 10px; }
-        .header-avatar { width: 32px; height: 32px; background-color: var(--beige-chiaro); border: 1px solid var(--rosa-carne); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+        .header-avatar {
+            width: 32px; height: 32px; background-color: var(--beige-chiaro); border: 1px solid var(--rosa-carne);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;
+        }
         .header-avatar:hover { background-color: var(--rosa-carne); transform: scale(1.05); }
 
-        .lookbook-container { max-width: 1200px; margin: 2rem auto 0 auto; padding: 0 1.5rem 4rem 1.5rem; }
+        /* Layout Lookbook Generale */
+        .lookbook-container {
+            max-width: 1200px;
+            margin: 2rem auto 0 auto;
+            padding: 0 1.5rem 4rem 1.5rem;
+        }
 
-        .add-look-btn { position: fixed; bottom: 30px; right: 40px; z-index: 999; color: var(--accent-pop); font-size: 5.5rem; font-weight: 300; text-decoration: none; transition: all 0.3s ease; line-height: 0.8; text-shadow: 0 4px 15px rgba(0,0,0,0.12); cursor: pointer;}
+        /* Tasti Fissi */
+        .add-look-btn {
+            position: fixed; bottom: 30px; right: 40px; z-index: 999; color: var(--accent-pop);
+            font-size: 5.5rem; font-weight: 300; text-decoration: none; transition: all 0.3s ease;
+            line-height: 0.8; text-shadow: 0 4px 15px rgba(0,0,0,0.12);
+        }
         .add-look-btn:hover { transform: scale(1.15) rotate(90deg); color: var(--text-main); text-shadow: 0 8px 20px rgba(0,0,0,0.2); }
-
-        .wardrobe-btn { position: fixed; bottom: 120px; right: 44px; z-index: 998; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; text-decoration: none; background: transparent !important; border: none !important; box-shadow: none !important; }
+        .wardrobe-btn {
+            position: fixed; bottom: 120px; right: 44px; z-index: 998; display: flex;
+            align-items: center; justify-content: center; transition: all 0.3s ease;
+            text-decoration: none; background: transparent !important; border: none !important; box-shadow: none !important;
+        }
         .wardrobe-btn img { width: 45px; height: auto; opacity: 0.8; background: transparent !important; transition: all 0.3s ease; }
         .wardrobe-btn:hover img { transform: translateY(-4px) scale(1.1); opacity: 1; }
 
-        .style-navigation { display: flex; justify-content: center; gap: 15px; margin-bottom: 3rem; flex-wrap: wrap; }
-        .style-pill { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); padding: 8px 20px; border-radius: 25px; font-family: 'Montserrat', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s ease; }
+        /* Filtri di Stile Centrali */
+        .style-navigation { display: flex; justify-content: center; gap: 15px; margin-bottom: 2rem; flex-wrap: wrap; }
+        .style-pill {
+            background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); padding: 8px 20px;
+            border-radius: 25px; font-family: 'Montserrat', sans-serif; font-size: 0.8rem; text-transform: uppercase;
+            letter-spacing: 1px; cursor: pointer; transition: all 0.3s ease;
+        }
         .style-pill:hover, .style-pill.active { border-color: var(--text-main); color: var(--text-main); background-color: var(--pure-white); box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
 
-        /* --- LAYOUT DUE COLONNE --- */
-        .content-layout { display: flex; gap: 30px; align-items: flex-start; }
-        .main-feed { flex: 1; }
-        .suggested-sidebar { width: 320px; flex-shrink: 0; position: sticky; top: 100px; }
 
+        /* --- NUOVO LAYOUT A DUE COLONNE --- */
+        .content-layout {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start; /* Fa sì che la colonna destra non si allunghi fino in fondo */
+        }
+
+        .main-feed {
+            flex: 1; /* Prende tutto lo spazio rimanente */
+        }
+
+        .suggested-sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            position: sticky; /* Rimane fissa mentre scorri */
+            top: 100px; /* Distanza dalla navbar */
+        }
+
+        /* Griglia Mosaico (ora dentro .main-feed) */
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 20px; }
-        .look-card { position: relative; border-radius: 12px; overflow: hidden; background-color: var(--rosa-carne); aspect-ratio: 3/4; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.4s ease, box-shadow 0.4s ease; }
+        .look-card {
+            position: relative; border-radius: 12px; overflow: hidden; background-color: var(--rosa-carne);
+            aspect-ratio: 3/4; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
         .look-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(216, 180, 178, 0.4); }
-        .look-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 18px 12px; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%); color: var(--pure-white); box-sizing: border-box; opacity: 0; transition: opacity 0.3s ease; display: flex; flex-direction: column; gap: 4px; }
+        .look-image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--pure-white); font-weight: 300; font-size: 1.1rem; letter-spacing: 1px; }
+        .look-overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 18px 12px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%); color: var(--pure-white);
+            box-sizing: border-box; opacity: 0; transition: opacity 0.3s ease; display: flex; flex-direction: column; gap: 4px;
+        }
         .look-card:hover .look-overlay { opacity: 1; }
         .overlay-user { font-weight: 600; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; }
-        .overlay-mini-avatar { width: 18px; height: 18px; background-color: var(--pure-white); border-radius: 50%; color: black; display: flex; align-items: center; justify-content: center; font-size: 10px;}
+        .overlay-mini-avatar { width: 18px; height: 18px; background-color: var(--pure-white); border-radius: 50%; }
 
-        /* --- STILE LISTA SUGGERITI --- */
-        .suggested-section { background-color: var(--pure-white); padding: 20px; border-radius: 12px; border: 1px solid var(--rosa-carne); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        /* --- STILE LISTA UTENTI SUGGERITI IN VERTICALE --- */
+        .suggested-section {
+            background-color: var(--pure-white);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--rosa-carne);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
         .suggested-section h3 { font-family: 'Playfair Display', serif; font-style: italic; color: var(--accent-dark); font-size: 1.2rem; margin-top: 0; margin-bottom: 20px; }
         .suggested-list { display: flex; flex-direction: column; gap: 15px; }
-        .suggested-card { display: flex; align-items: center; gap: 12px; transition: transform 0.2s ease; }
+        .suggested-card {
+            display: flex; align-items: center; gap: 12px;
+            transition: transform 0.2s ease;
+        }
         .suggested-card:hover { transform: translateX(3px); }
-        .suggested-avatar { width: 44px; height: 44px; background-color: var(--beige-chiaro); border: 1px solid var(--accent-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
-        .suggested-info { flex: 1; overflow: hidden; }
+        .suggested-avatar {
+            width: 44px; height: 44px; background-color: var(--beige-chiaro); border: 1px solid var(--accent-dark);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;
+        }
+        .suggested-info {
+            flex: 1;
+            overflow: hidden;
+        }
         .suggested-info strong { font-size: 0.85rem; color: var(--text-main); display: block; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .suggested-info span { font-size: 0.75rem; color: var(--text-muted); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-        .follow-btn-index { background-color: var(--accent-pop); color: var(--pure-white); text-decoration: none; padding: 8px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; transition: background-color 0.3s ease; white-space: nowrap; flex-shrink: 0; border: none; cursor: pointer; font-family: 'Montserrat', sans-serif; }
+        .follow-btn-index {
+            background-color: var(--accent-pop); color: var(--pure-white); text-decoration: none; padding: 6px 14px;
+            border-radius: 20px; font-size: 0.75rem; font-weight: 500; transition: background-color 0.3s ease; white-space: nowrap; flex-shrink: 0;
+        }
         .follow-btn-index:hover { background-color: var(--text-main); }
 
-        footer { padding: 3rem 2rem; text-align: center; font-size: 0.7rem; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; border-top: 1px solid var(--gray-border); margin-bottom: 20px; }
 
+        footer { padding: 3rem 2rem; text-align: center; font-size: 0.7rem; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; border-top: 1px solid var(--gray-border); margin-top: 40px; margin-bottom: 20px; }
+
+        /* Responsive Mobile */
         @media (max-width: 900px) {
             .content-layout { flex-direction: column; }
             .suggested-sidebar { width: 100%; position: static; margin-bottom: 2rem; }
         }
-
         @media (max-width: 768px) {
             .search-container { display: none; }
             .elegant-tagline { display: none; }
@@ -188,7 +253,7 @@ if ($conn) {
             .wardrobe-btn img { width: 35px; }
         }
 
-        /* OVERLAY E SIDEBAR PROFILO */
+        /* --- OVERLAY E SIDEBAR PROFILO --- */
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 1005; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
         .sidebar-overlay.active { opacity: 1; visibility: visible; }
         .profile-sidebar { position: fixed; top: 0; right: -350px; width: 320px; height: 100vh; background-color: var(--pure-white); z-index: 1010; box-shadow: -5px 0 25px rgba(0,0,0,0.1); transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; overflow-y: auto; }
@@ -204,11 +269,8 @@ if ($conn) {
         .sidebar-stats { display: flex; justify-content: space-around; margin-bottom: 30px; padding: 15px 0; border-top: 1px solid var(--gray-border); border-bottom: 1px solid var(--gray-border); }
         .sidebar-stats div { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
         .sidebar-stats strong { font-size: 1.2rem; color: var(--text-main); }
-        .edit-profile-btn { display: block; width: 100%; padding: 14px 0; background-color: var(--accent-pop); color: var(--pure-white); text-decoration: none; border-radius: 30px; font-weight: 500; font-size: 0.9rem; transition: background-color 0.3s ease; box-sizing: border-box; margin-bottom: 10px; }
+        .edit-profile-btn { display: block; width: 100%; padding: 14px 0; background-color: var(--accent-pop); color: var(--pure-white); text-decoration: none; border-radius: 30px; font-weight: 500; font-size: 0.9rem; transition: background-color 0.3s ease; box-sizing: border-box; }
         .edit-profile-btn:hover { background-color: var(--text-main); }
-
-        .logout-btn { background-color: #f8f5f0; color: #d9534f; border: 1px solid #d9534f; }
-        .logout-btn:hover { background-color: #d9534f; color: white; }
 
         @media (max-width: 400px) { .profile-sidebar { width: 100%; right: -100%; } }
     </style>
@@ -221,7 +283,7 @@ if ($conn) {
             <div class="hamburger">☰</div>
             <div class="dropdown-menu">
                 <a href="#">Esplora Tendenze</a>
-                <a href="<?php echo $is_logged ? 'premium.php' : 'Admin/login.php'; ?>">Premium</a>
+                <a href="Admin/premium.php">Premium</a>
                 <a href="impostazioni.php">Impostazioni</a>
             </div>
         </div>
@@ -229,25 +291,26 @@ if ($conn) {
     </div>
 
     <div class="search-container">
+        <img src="images/LenteDiIngrandimento.png" alt="Cerca" class="search-icon">
         <input type="text" class="search-bar" placeholder="Cerca stili, capi o creator...">
     </div>
 
     <div class="nav-links">
-        <?php if(!$is_logged): ?>
-            <a href="Admin/login.php" style="text-decoration:none; color:var(--text-main); font-size:0.8rem; font-weight:600;">ACCEDI</a>
-        <?php endif; ?>
+        <a href="Admin/login.php" class="text-link">Accedi</a>
+        <a href="Admin/registrazione.php" class="text-link" style="color: var(--accent-dark);">Registrati</a>
         <div id="profile-toggle-btn" class="header-profile-link" title="Visualizza Profilo" style="cursor: pointer;">
             <div class="header-avatar">👤</div>
         </div>
     </div>
 </nav>
 
-<a href="<?php echo $is_logged ? '#' : 'Admin/login.php'; ?>" class="wardrobe-btn" title="Il mio armadio">
-    👗
+<a href="#" class="wardrobe-btn" title="Il mio armadio">
+    <img src="images/Armadio.png" alt="Armadio">
 </a>
-<a href="<?php echo $is_logged ? 'carica_look.php' : 'Admin/login.php'; ?>" class="add-look-btn" title="Carica un nuovo look">+</a>
+<a href="carica_look.php" class="add-look-btn" title="Carica un nuovo look">+</a>
 
 <main class="lookbook-container">
+
     <div class="style-navigation">
         <button class="style-pill active">Tutti i look</button>
         <button class="style-pill">Streetwear</button>
@@ -261,31 +324,12 @@ if ($conn) {
 
         <div class="main-feed">
             <div class="gallery-grid">
-                <?php
-                if ($conn) {
-                    $sql_outfits = "SELECT * FROM Outfit ORDER BY timestamp DESC LIMIT 20";
-                    $result_outfits = mysqli_query($conn, $sql_outfits);
-
-                    if ($result_outfits && mysqli_num_rows($result_outfits) > 0) {
-                        while ($outfit = mysqli_fetch_assoc($result_outfits)) {
-                            ?>
-                            <article class="look-card">
-                                <img src="uploads/<?php echo htmlspecialchars($outfit['immagine']); ?>" alt="<?php echo htmlspecialchars($outfit['descrizione'] ?? 'Look'); ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                                <div class="look-overlay">
-                                    <div class="overlay-user">
-                                        <div class="overlay-mini-avatar">👤</div>
-                                        @<?php echo htmlspecialchars($outfit['username']); ?>
-                                    </div>
-                                </div>
-                            </article>
-                            <?php
-                        }
-                    } else {
-                        echo "<p style='color: var(--text-muted); grid-column: 1 / -1; text-align: center; padding: 40px;'>Nessun outfit caricato ancora. Sii il primo!</p>";
-                    }
-                    mysqli_close($conn);
-                }
-                ?>
+                <article class="look-card"><div class="look-image-placeholder">FOTO_01</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @m_pigna</div></div></article>
+                <article class="look-card" style="background-color: #d1d5db;"><div class="look-image-placeholder">FOTO_02</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @ale_ono</div></div></article>
+                <article class="look-card" style="background-color: #e2c9c8;"><div class="look-image-placeholder">FOTO_03</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @simone_dm</div></div></article>
+                <article class="look-card" style="background-color: #dcd7d2;"><div class="look-image-placeholder">FOTO_04</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @cosmin_r</div></div></article>
+                <article class="look-card" style="background-color: #c5d0d3;"><div class="look-image-placeholder">FOTO_05</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @sara_style</div></div></article>
+                <article class="look-card"><div class="look-image-placeholder">FOTO_06</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @luca_fit</div></div></article>
             </div>
         </div>
 
@@ -301,23 +345,10 @@ if ($conn) {
                                     <strong><?php echo htmlspecialchars(!empty($u['nome']) ? $u['nome'] : $u['username']); ?></strong>
                                     <span>@<?php echo htmlspecialchars($u['username']); ?></span>
                                 </div>
-
-                                <?php if($is_logged): ?>
-                                    <form action="azione_follow.php" method="POST" style="margin: 0;">
-                                        <input type="hidden" name="id_da_seguire" value="<?php echo $u['id']; ?>">
-                                        <button type="submit" class="follow-btn-index">Segui</button>
-                                    </form>
-                                <?php else: ?>
-                                    <a href="Admin/login.php" class="follow-btn-index" style="text-align: center;">Segui</a>
-                                <?php endif; ?>
-
+                                <a href="Admin/login.php" class="follow-btn-index" onclick="alert('Devi accedere o registrarti per seguire questo utente!');">Segui</a>
                             </div>
                         <?php endforeach; ?>
                     </div>
-                </section>
-            <?php else: ?>
-                <section class="suggested-section" style="text-align: center; color: var(--text-muted);">
-                    <p style="font-size: 0.85rem; margin: 0;">Nessun nuovo suggerimento al momento!</p>
                 </section>
             <?php endif; ?>
         </aside>
@@ -336,28 +367,42 @@ if ($conn) {
         <h2>Il mio Profilo</h2>
         <button class="close-sidebar-btn" id="close-sidebar">×</button>
     </div>
-
     <div class="sidebar-content">
-        <div class="sidebar-avatar-large">👤</div>
 
-        <?php if($is_logged): ?>
+        <?php if($is_logged) { ?>
+
+            <div class="sidebar-avatar-large">👤</div>
             <h3 class="sidebar-username">@<?php echo htmlspecialchars($username_loggato); ?></h3>
             <p class="sidebar-bio"><?php echo htmlspecialchars($bio); ?></p>
 
             <div class="sidebar-stats">
-                <div><strong><?php echo $num_look; ?></strong><br>Look</div>
-                <div><strong><?php echo $num_followers; ?></strong><br>Follower</div>
-                <div><strong><?php echo $num_seguite; ?></strong><br>Seguiti</div>
+                <div><strong>12</strong><br>Look</div>
+                <div><strong>340</strong><br>Follower</div>
+                <div><strong>150</strong><br>Seguiti</div>
             </div>
 
-            <a href="modifica_profilo.php" class="edit-profile-btn">Modifica le tue informazioni</a>
-            <a href="logout.php" class="edit-profile-btn logout-btn">Esci dall'account</a>
-        <?php else: ?>
+            <a href="modifica_profilo.php" class="edit-profile-btn">
+                Modifica le tue informazioni
+            </a>
+
+        <?php } else { ?>
+
+            <div class="sidebar-avatar-large">👤</div>
             <h3 class="sidebar-username">Benvenuto su Fitgram</h3>
-            <p class="sidebar-bio"><?php echo htmlspecialchars($bio); ?></p>
-            <a href="Admin/login.php" class="edit-profile-btn" style="margin-bottom:10px;">Accedi</a>
-            <a href="Admin/registrazione.php" class="edit-profile-btn" style="background-color: var(--accent-dark);">Registrati</a>
-        <?php endif; ?>
+            <p class="sidebar-bio">
+                Accedi o registrati per vedere il tuo profilo, caricare look e seguire altri creator.
+            </p>
+
+            <a href="Admin/login.php" class="edit-profile-btn" style="margin-bottom:10px;">
+                Accedi
+            </a>
+
+            <a href="Admin/registrazione.php" class="edit-profile-btn" style="background-color: var(--accent-dark);">
+                Registrati
+            </a>
+
+        <?php } ?>
+
     </div>
 </aside>
 
