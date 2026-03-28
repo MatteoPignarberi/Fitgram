@@ -210,7 +210,7 @@ if ($conn) {
             <div><strong><?php echo $num_seguite; ?></strong><br>Seguiti</div>
         </div>
 
-        <a href="modifica_profilo.php" class="edit-profile-btn">
+        <a href="modifica_profilo.php" class="edit-profile-btn" style="margin-bottom: 10px;">
             Modifica le tue informazioni
         </a>
 

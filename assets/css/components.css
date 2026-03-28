@@ -41,17 +41,3 @@
 @media (max-width: 400px) {
     .profile-sidebar { width: 100%; right: -100%; }
 }
-.edit-profile-btn {
-    margin-bottom: 15px !important;
-}
-
-.logout-btn {
-    background-color: #dc3545 !important;
-    color: white !important;
-    margin-top: 15px !important; /* Diamo una spinta anche da sopra */
-    margin-bottom: 0 !important;
-}
-/* Effetto hover carino per il bottone di uscita (diventa più scuro) */
-.logout-btn:hover {
-    background-color: #c82333;
-}
