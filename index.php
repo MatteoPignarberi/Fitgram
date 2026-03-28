@@ -1,54 +1,29 @@
 <?php
 session_start();
 
-// 1. VARIABILI DI DEFAULT
+// 1. FORZIAMO LA PAGINA A COMPORTARSI DA "OSPITE"
+// L'index è la vetrina pubblica, chi entra qui lo vede sempre da non loggato.
 $is_logged = false;
 $nome = "Ospite";
 $username_mostrato = "Accedi";
-$bio = "Benvenuto su Fitgram. Effettua il login per vedere il tuo profilo.";
+$bio = "Benvenuto su Fitgram. Effettua il login per vedere il tuo profilo, caricare look e seguire altri creator.";
 $utenti_suggeriti = [];
 
 // 2. RICHIAMIAMO LA CONNESSIONE AL DB
-// Questo file crea la variabile $conn pronta per essere usata
 require_once 'config/connessione.php';
 /** @var mysqli $conn */
-
 // 3. RECUPERO UTENTI DA SEGUIRE
-$sql_utenti = "SELECT id, username, nome FROM Utenti ORDER BY RAND() LIMIT 5";
-$result_utenti = mysqli_query($conn, $sql_utenti);
-if ($result_utenti) {
-    while ($row = mysqli_fetch_assoc($result_utenti)) {
-        $utenti_suggeriti[] = $row;
-    }
-}
-
-// 4. SE L'UTENTE E' LOGGATO, RECUPERIAMO I SUOI DATI
-if (isset($_SESSION['username'])) {
-    $is_logged = true;
-    $username_loggato = $_SESSION['username'];
-    $nome = isset($_SESSION['nome']) ? $_SESSION['nome'] : $_SESSION['username'];
-    $username_mostrato = $username_loggato;
-    $bio = "Appassionato di stile e fitness. Sempre alla ricerca del fit perfetto.";
-
-    $sql = "SELECT * FROM Utenti WHERE username = ?";
-    $stmt = mysqli_prepare($conn, $sql);
-
-    if ($stmt) {
-        mysqli_stmt_bind_param($stmt, "s", $username_loggato);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        if ($dati_utente = mysqli_fetch_assoc($result)) {
-            if (!empty($dati_utente['bio'])) {
-                $bio = $dati_utente['bio'];
-            }
+if ($conn) {
+    $sql_utenti = "SELECT id, username, nome FROM Utenti ORDER BY RAND() LIMIT 5";
+    $result_utenti = mysqli_query($conn, $sql_utenti);
+    if ($result_utenti) {
+        while ($row = mysqli_fetch_assoc($result_utenti)) {
+            $utenti_suggeriti[] = $row;
         }
-        mysqli_stmt_close($stmt);
     }
+    // Chiudiamo la connessione
+    mysqli_close($conn);
 }
-
-// Chiudiamo la connessione alla fine delle operazioni
-mysqli_close($conn);
 ?>
 <!DOCTYPE html>
 <html lang="it">
@@ -116,42 +91,21 @@ mysqli_close($conn);
         <h2>Il mio Profilo</h2>
         <button class="close-sidebar-btn" id="close-sidebar">×</button>
     </div>
+
     <div class="sidebar-content">
+        <div class="sidebar-avatar-large">👤</div>
+        <h3 class="sidebar-username">Benvenuto su Fitgram</h3>
+        <p class="sidebar-bio">
+            Accedi o registrati per vedere il tuo profilo, caricare look e seguire altri creator.
+        </p>
 
-        <?php if($is_logged) { ?>
+        <a href="Admin/login.php" class="edit-profile-btn" style="margin-bottom:10px;">
+            Accedi
+        </a>
 
-            <div class="sidebar-avatar-large">👤</div>
-            <h3 class="sidebar-username">@<?php echo htmlspecialchars($username_loggato); ?></h3>
-            <p class="sidebar-bio"><?php echo htmlspecialchars($bio); ?></p>
-
-            <div class="sidebar-stats">
-                <div><strong>12</strong><br>Look</div>
-                <div><strong>340</strong><br>Follower</div>
-                <div><strong>150</strong><br>Seguiti</div>
-            </div>
-
-            <a href="modifica_profilo.php" class="edit-profile-btn">
-                Modifica le tue informazioni
-            </a>
-
-        <?php } else { ?>
-
-            <div class="sidebar-avatar-large">👤</div>
-            <h3 class="sidebar-username">Benvenuto su Fitgram</h3>
-            <p class="sidebar-bio">
-                Accedi o registrati per vedere il tuo profilo, caricare look e seguire altri creator.
-            </p>
-
-            <a href="Admin/login.php" class="edit-profile-btn" style="margin-bottom:10px;">
-                Accedi
-            </a>
-
-            <a href="Admin/registrazione.php" class="edit-profile-btn" style="background-color: var(--accent-dark);">
-                Registrati
-            </a>
-
-        <?php } ?>
-
+        <a href="Admin/registrazione.php" class="edit-profile-btn" style="background-color: var(--accent-dark);">
+            Registrati
+        </a>
     </div>
 </aside>
 <?php require_once 'includes/footer.php'; ?>

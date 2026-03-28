@@ -182,12 +182,6 @@ if ($conn) {
         </aside>
 
     </div> </main>
-
-<footer>
-    &copy; 2026 Fitgram - Be fit, Be Style.<br>
-    <div style="margin-top: 10px; font-size: 0.6rem;">Privacy Policy • Termini di Servizio • Contatti</div>
-</footer>
-
 <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
 <aside class="profile-sidebar" id="profile-sidebar">
