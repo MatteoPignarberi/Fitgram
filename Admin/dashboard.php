@@ -107,36 +107,7 @@ if ($conn) {
     <link rel="stylesheet" href="assets/css/feed.css">
 </head>
 <body>
-
-<nav>
-    <div class="nav-left">
-        <div class="menu-container">
-            <div class="hamburger">☰</div>
-            <div class="dropdown-menu">
-                <a href="#">Esplora Tendenze</a>
-                <a href="premium.php">Premium</a>
-                <a href="../impostazioni.php">Impostazioni</a>
-            </div>
-        </div>
-        <div class="elegant-tagline">be fit. be style.</div>
-    </div>
-
-    <div class="search-container">
-        <img src="../images/LenteDiIngrandimento.png" alt="Cerca" class="search-icon">
-        <input type="text" class="search-bar" placeholder="Cerca stili, capi o creator...">
-    </div>
-
-    <div class="nav-links">
-        <div id="profile-toggle-btn" class="header-profile-link" title="Visualizza Profilo" style="cursor: pointer;">
-            <div class="header-avatar">👤</div>
-        </div>
-    </div>
-</nav>
-
-<a href="#" class="wardrobe-btn" title="Il mio armadio">
-    <img src="../images/Armadio.png" alt="Armadio">
-</a>
-<a href="../carica_look.php" class="add-look-btn" title="Carica un nuovo look">+</a>
+<?php require_once 'includes/header.php'; ?>
 
 <main class="lookbook-container">
     <div class="style-navigation">
@@ -250,7 +221,7 @@ if ($conn) {
         </a>
     </div>
 </aside>
-
+<?php require_once 'includes/footer.php'; ?>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const profileToggleBtn = document.getElementById('profile-toggle-btn');
