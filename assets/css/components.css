@@ -41,3 +41,19 @@
 @media (max-width: 400px) {
     .profile-sidebar { width: 100%; right: -100%; }
 }
+/* Distanzia i bottoni del profilo l'uno dall'altro */
+.edit-profile-btn {
+    margin-bottom: 15px;
+}
+
+/* Stile specifico per il bottone di uscita */
+.logout-btn {
+    background-color: #dc3545;
+    color: white;
+    margin-bottom: 0; /* L'ultimo bottone non ha bisogno di spazio sotto */
+}
+
+/* Effetto hover carino per il bottone di uscita (diventa più scuro) */
+.logout-btn:hover {
+    background-color: #c82333;
+}
