@@ -3,84 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Minimal Outfit</title>
-    <style>
-        body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: #fafafa;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background: #ffffff;
-            padding: 50px 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            text-align: center;
-            width: 100%;
-            max-width: 320px;
-        }
-        h1 {
-            font-weight: 300;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-size: 20px;
-        }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #eaeaea;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 14px;
-            background-color: #fcfcfc;
-            transition: border 0.3s;
-        }
-        input[type="text"]:focus, input[type="password"]:focus {
-            outline: none;
-            border-color: #333;
-        }
-        input[type="submit"] {
-            background-color: #FAD6C9;
-            color: black;
-            border: none;
-            padding: 14px;
-            width: 100%;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: background 0.3s;
-        }
-        input[type="submit"]:hover {
-            background-color: #555;
-            color: white;
-        }
-        a.login-link {
-            display: block;
-            margin-top: 25px;
-            font-size: 12px;
-            color: #999;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        a.login-link:hover {
-            color: #333;
-        }
-    </style>
+    <title>Login</title>
+    <link rel="stylesheet" href="../styles/css/login.css">
 </head>
 <body>
 
 <div class="container">
     <h1>Accedi</h1>
-
     <form id="form-login">
         <input type="text" name="username" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>

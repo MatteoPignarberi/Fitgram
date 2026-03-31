@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (in_array($fileExtension, $estensioni_permesse)) {
 
             // Generiamo un nome UNICO per il file (evita che due foto chiamate "foto.jpg" si sovrascrivano)
-            $nuovoNomeFile = md5(time() . $fileName) . '.' . $fileExtension;
+            $nuovoNomeFile = md5(time() . $fileName) . 'Fitgram' . $fileExtension;
 
             // Cartella dove salveremo le foto
             $cartellaUpload = './uploads/';
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     mysqli_stmt_bind_param($stmt, "sss", $descrizione, $nuovoNomeFile, $username);
 
                     if (mysqli_stmt_execute($stmt)) {
-                        $messaggio = "<div class='msg success'>Look pubblicato con successo! <a href='index.php'>Torna alla Home</a></div>";
+                        $messaggio = "<div class='msg success'>Look pubblicato con successo! <a href='../index.php'>Torna alla Home</a></div>";
                     } else {
                         $messaggio = "<div class='msg error'>Errore nel salvataggio sul database.</div>";
                     }
@@ -151,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="submit" value="Pubblica Look">
     </form>
 
-    <a href="index.php" class="back-link">← Annulla e torna alla Home</a>
+    <a href="../index.php" class="back-link">← Annulla e torna alla Home</a>
 </div>
 
 </body>

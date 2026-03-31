@@ -106,9 +106,9 @@ if ($conn) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fitgram</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/components.css">
-    <link rel="stylesheet" href="../assets/css/feed.css">
+    <link rel="stylesheet" href="../styles/css/main.css">
+    <link rel="stylesheet" href="../styles/css/components.css">
+    <link rel="stylesheet" href="../styles/css/feed.css">
 </head>
 <body>
 <?php require_once '../includes/header.php'; ?>
