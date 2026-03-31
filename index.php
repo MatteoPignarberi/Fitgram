@@ -11,7 +11,6 @@ $utenti_suggeriti = [];
 
 // 2. RICHIAMIAMO LA CONNESSIONE AL DB
 require_once 'config/connessione.php';
-/** @var mysqli $conn */
 // 3. RECUPERO UTENTI DA SEGUIRE
 if ($conn) {
     $sql_utenti = "SELECT id, username, nome FROM Utenti ORDER BY RAND() LIMIT 5";
@@ -99,11 +98,11 @@ if ($conn) {
             Accedi o registrati per vedere il tuo profilo, caricare look e seguire altri creator.
         </p>
 
-        <a href="Admin/login.php" class="edit-profile-btn" style="margin-bottom:10px;">
+        <a href="view/login.php" class="edit-profile-btn" style="margin-bottom:10px;">
             Accedi
         </a>
 
-        <a href="Admin/registrazione.php" class="edit-profile-btn" style="background-color: var(--accent-dark);">
+        <a href="view/registrazione.php" class="edit-profile-btn" style="background-color: var(--accent-dark);">
             Registrati
         </a>
     </div>
