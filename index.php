@@ -74,7 +74,7 @@ if ($conn) {
                                     <strong><?php echo htmlspecialchars(!empty($u['nome']) ? $u['nome'] : $u['username']); ?></strong>
                                     <span>@<?php echo htmlspecialchars($u['username']); ?></span>
                                 </div>
-                                <a href="Admin/login.php" class="follow-btn-index" onclick="alert('Devi accedere o registrarti per seguire questo utente!');">Segui</a>
+                                <a href="view/login.php" class="follow-btn-index" onclick="alert('Devi accedere o registrarti per seguire questo utente!');">Segui</a>
                             </div>
                         <?php endforeach; ?>
                     </div>
