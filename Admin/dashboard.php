@@ -3,7 +3,7 @@ session_start();
 
 // SICUREZZA: Se non c'è una sessione attiva, lo sbatto fuori al login
 if (!isset($_SESSION['username'])) {
-    header("Location: login.php"); // Nota: ho tolto "Admin/" perché sei già dentro la cartella!
+    header("Location: ../view/login.php"); // Nota: ho tolto "Admin/" perché sei già dentro la cartella!
     exit();
 }
 
@@ -92,7 +92,7 @@ if ($conn) {
 
         } else {
             session_destroy();
-            header("Location: Admin/login.php");
+            header("Location: ../view/login.php");
             exit();
         }
         mysqli_stmt_close($stmt);
