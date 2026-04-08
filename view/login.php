@@ -32,7 +32,7 @@
         divMessaggio.innerHTML = "<span style='color: #999;'>Verifica in corso...</span>";
 
         // Attenzione: ora chiamiamo un file diverso!
-        fetch('../admin/verificaLogin.php', {
+        fetch('../Admin/verificaLogin.php', {
             method: 'POST',
             body: formData
         })
