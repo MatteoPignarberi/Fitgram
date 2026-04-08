@@ -55,7 +55,7 @@
 
                     // Reindirizza alla pagina principale dopo 1.5 secondi
                     setTimeout(() => {
-                        window.location.href = 'dashboard.php'; // Cambia questo nome con la tua pagina principale!
+                        window.location.href = '../Admin/dashboard.php'; // Cambia questo nome con la tua pagina principale!
                     }, 1500);
                 }
             })
