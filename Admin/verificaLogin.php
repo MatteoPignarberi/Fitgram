@@ -7,7 +7,7 @@ $username = isset($_POST["username"]) ? $_POST["username"] : '';
 $password = isset($_POST["password"]) ? $_POST["password"] : '';
 
 // Connessione locale (ricordati di cambiarla in Altervista quando andrai online!)
-$conn = mysqli_connect("localhost", "root", "", "my_fitgram");
+$conn = mysqli_connect("localhost", "fitgram", "", "my_fitgram");
 
 if (!$conn) {
     echo json_encode(["status" => "error", "message" => "Errore di connessione al database."]);

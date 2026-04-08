@@ -1,6 +1,6 @@
 <?php
 $host = "localhost";
-$username = "root";
+$username = "fitgram";
 $password = "";
 $database = "my_fitgram";
 
