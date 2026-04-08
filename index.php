@@ -31,9 +31,9 @@ if ($conn) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fitgram</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles/css/main.css">
-    <link rel="stylesheet" href="styles/css/components.css">
-    <link rel="stylesheet" href="styles/css/feed.css">
+    <link rel="stylesheet" href="/styles/css/main.css">
+    <link rel="stylesheet" href="/styles/css/components.css">
+    <link rel="stylesheet" href="/styles/css/feed.css">
 </head>
 <body>
 <?php require_once 'includes/header.php'; ?>
@@ -98,11 +98,11 @@ if ($conn) {
             Accedi o registrati per vedere il tuo profilo, caricare look e seguire altri creator.
         </p>
 
-        <a href="view/login.php" class="edit-profile-btn" style="margin-bottom:10px;">
+        <a href="/view/login.php" class="edit-profile-btn" style="margin-bottom:10px;">
             Accedi
         </a>
 
-        <a href="view/registrazione.php" class="edit-profile-btn" style="background-color: var(--accent-dark);">
+        <a href="/view/registrazione.php" class="edit-profile-btn" style="background-color: var(--accent-dark);">
             Registrati
         </a>
     </div>
