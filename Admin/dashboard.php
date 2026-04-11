@@ -23,7 +23,6 @@ $utenti_suggeriti = []; // Inizializzo l'array per i suggeriti
 
 // Mi collego al DB (Usiamo il file intelligente!)
 require_once '../config/connessione.php';
-/** @var mysqli $conn */
 if ($conn) {
     // 1. Prendo l'ID e la bio dell'utente loggato
     $sql = "SELECT id, bio FROM Utenti WHERE username = ?";

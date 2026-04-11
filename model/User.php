@@ -19,5 +19,19 @@ function findUserByUsername($conn, $username) {
 
     return null;
 }
+function createUser($conn, $nome, $cognome, $username, $password_hash, $email) {
+    $sql = "INSERT INTO Utenti (nome, cognome, username, pass, email, dataRegistrazione) VALUES (?, ?, ?, ?, ?, NOW())";
+
+    $stmt = mysqli_prepare($conn, $sql);
+    if (!$stmt) {
+        return false;
+    }
+
+    // Inseriamo i dati ("sssss" = 5 stringhe)
+    mysqli_stmt_bind_param($stmt, "sssss", $nome, $cognome, $username, $password_hash, $email);
+
+    // Eseguiamo e restituiamo true se va a buon fine
+    return mysqli_stmt_execute($stmt);
+}
 
 ?>
