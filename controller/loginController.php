@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = findUserByUsername($conn, $_POST['username']);
 
 
-    if ($user && $_POST['password'] === $user['password']) {
+    if ($user && $_POST['password'] === $user['pass']) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
 
