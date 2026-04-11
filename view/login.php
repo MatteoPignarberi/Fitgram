@@ -7,6 +7,7 @@ session_start();
     <meta charset="UTF-8">
     <title>Login Fitgram</title>
     <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/components.css">
 </head>
 <body>
 
