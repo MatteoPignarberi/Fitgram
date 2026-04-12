@@ -44,4 +44,4 @@
 <a href="#" class="wardrobe-btn" title="Il mio armadio">
     <img src="../resources/Images/Armadio.png" alt="Armadio">
 </a>
-<a href="../Admin/carica_look.php" class="add-look-btn" title="Carica un nuovo look">+</a>
+<a href="../view/carica_look.php" class="add-look-btn" title="Carica un nuovo look">+</a>
