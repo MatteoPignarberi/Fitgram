@@ -32,7 +32,7 @@ session_start();
         <input type="submit" value="Accedi">
 
         <p style="text-align: center; font-size: 0.85rem; margin-top: 15px; color: #888;">
-            Non hai un account? <a href="registrazione.php" style="color: #b8807d; text-decoration: none; font-weight: 600;">Registrati</a>
+            Non hai un account? <a href="registrazione.php" style="text-decoration: none; font-weight: 600;">Registrati</a>
         </p>
     </form>
 
