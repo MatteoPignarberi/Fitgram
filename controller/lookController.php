@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Generiamo il nome unico
             $nuovoNomeFile = md5(time() . $fileName) . 'Fitgram.' . $fileExtension;
 
-            $cartellaUpload = '../resources/Images/';
+            $cartellaUpload = '../uploads/';
 
             if (!is_dir($cartellaUpload)) {
                 mkdir($cartellaUpload, 0777, true);
