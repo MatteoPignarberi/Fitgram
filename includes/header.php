@@ -12,7 +12,7 @@
                 <a href="#">Esplora Tendenze</a>
                 <a href="../view/premium.php">Premium</a>
                 <?php if ($is_logged): ?>
-                    <a href="../Admin/impostazioni.php">Impostazioni</a>
+                    <a href="../view/impostazioni.php">Impostazioni</a>
                     <a href="../Admin/logout.php">Esci</a>
                 <?php endif; ?>
             </div>

@@ -213,7 +213,7 @@ if ($conn) {
             Modifica le tue informazioni
         </a>
 
-        <a href="logout.php" class="edit-profile-btn logout-btn">
+        <a href="../controller/logoutController.php" class="edit-profile-btn logout-btn">
             Esci dall'account
         </a>
     </div>
