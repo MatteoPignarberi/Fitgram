@@ -53,12 +53,33 @@ if ($conn) {
 
         <div class="main-feed">
             <div class="gallery-grid">
-                <article class="look-card"><div class="look-image-placeholder">FOTO_01</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @m_pigna</div></div></article>
-                <article class="look-card" style="background-color: #d1d5db;"><div class="look-image-placeholder">FOTO_02</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @ale_ono</div></div></article>
-                <article class="look-card" style="background-color: #e2c9c8;"><div class="look-image-placeholder">FOTO_03</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @simone_dm</div></div></article>
-                <article class="look-card" style="background-color: #dcd7d2;"><div class="look-image-placeholder">FOTO_04</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @cosmin_r</div></div></article>
-                <article class="look-card" style="background-color: #c5d0d3;"><div class="look-image-placeholder">FOTO_05</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @sara_style</div></div></article>
-                <article class="look-card"><div class="look-image-placeholder">FOTO_06</div><div class="look-overlay"><div class="overlay-user"><div class="overlay-mini-avatar"></div> @luca_fit</div></div></article>
+                <?php
+                if ($conn) {
+                    // Peschiamo gli ultimi 20 outfit
+                    $sql_outfits = "SELECT * FROM Outfit ORDER BY timestamp DESC LIMIT 20";
+                    $result_outfits = mysqli_query($conn, $sql_outfits);
+
+                    if ($result_outfits && mysqli_num_rows($result_outfits) > 0) {
+                        while ($outfit = mysqli_fetch_assoc($result_outfits)) {
+                            ?>
+                            <article class="look-card">
+                                <img src="../uploads/<?php echo htmlspecialchars($outfit['immagine']); ?>" alt="<?php echo htmlspecialchars(isset($outfit['descrizione']) ? $outfit['descrizione'] : 'Look'); ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                                <div class="look-overlay">
+                                    <div class="overlay-user">
+                                        <div class="overlay-mini-avatar">👤</div>
+                                        @<?php echo htmlspecialchars($outfit['username']); ?>
+                                    </div>
+                                </div>
+                            </article>
+                            <?php
+                        }
+                    } else {
+                        echo "<p style='color: var(--text-muted); grid-column: 1 / -1; text-align: center; padding: 40px;'>Nessun outfit caricato ancora. Sii il primo!</p>";
+                    }
+
+                    mysqli_close($conn); // Chiudo la connessione solo alla fine!
+                }
+                ?>
             </div>
         </div>
 
