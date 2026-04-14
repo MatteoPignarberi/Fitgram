@@ -2,7 +2,7 @@
 session_start();
 if (isset($_SESSION['username'])) {
     // Utente LOGGATO
-    $link_ritorno = "..Admin/dashboard.php";
+    $link_ritorno = "../Admin/dashboard.php";
     $testo_ritorno = "← Torna alla Home";
 } else {
     $link_ritorno = "../index.php";
