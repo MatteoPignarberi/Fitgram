@@ -25,7 +25,8 @@ $utenti_suggeriti = []; // Inizializzo l'array per i suggeriti
 require_once '../config/connessione.php';
 if ($conn) {
     // 1. Prendo l'ID e la bio dell'utente loggato (USIAMO UN ALIAS SICURO!)
-    $sql = "SELECT id AS id_sicuro, bio FROM Utenti WHERE username = ?";
+    // 1. Prendo l'ID dell'utente loggato (NIENTE PIU' BIO, colonna non presente nel DB!)
+    $sql = "SELECT id FROM Utenti WHERE username = ?";
     $stmt = mysqli_prepare($conn, $sql);
 
     if ($stmt) {
@@ -34,17 +35,10 @@ if ($conn) {
         $result = mysqli_stmt_get_result($stmt);
 
         if ($dati_utente = mysqli_fetch_assoc($result)) {
-            // Preleviamo l'ID tramite il nostro alias a prova di bomba
-            $mio_id = $dati_utente['id_sicuro'] ?? $dati_utente['id'] ?? $dati_utente['ID'];
+            // Preleviamo l'ID in modo pulito
+            $mio_id = $dati_utente['id'];
 
-            // (DEBUG EXTRA: Se per qualche motivo assurdo è ancora vuoto, ce lo facciamo stampare!)
-            if (!$mio_id) {
-                echo "<script>console.error('ERRORE CRITICO: I dati dell\'utente sono: ', " . json_encode($dati_utente) . ");</script>";
-            }
-
-            if (!empty($dati_utente['bio'])) {
-                $bio = $dati_utente['bio'];
-            }
+            // 2. Conto i FOLLOWER
 
             // 2. Conto i FOLLOWER
             $sql_f1 = "SELECT COUNT(*) AS total FROM Followers WHERE idSeguito = ?";
