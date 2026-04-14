@@ -3,7 +3,7 @@ session_start();
 
 // SICUREZZA: Se non c'è una sessione attiva, lo sbatto fuori al login
 if (!isset($_SESSION['username'])) {
-    header("Location: ../view/login.php"); // Nota: ho tolto "Admin/" perché sei già dentro la cartella!
+    header("Location: ../view/login.php");
     exit();
 }
 
@@ -21,7 +21,7 @@ $num_seguite = 0;
 $num_look = 0;
 $utenti_suggeriti = []; // Inizializzo l'array per i suggeriti
 
-// Mi collego al DB (Usiamo il file intelligente!)
+// Mi collego al DB
 require_once '../config/connessione.php';
 if ($conn) {
     // 1. Prendo l'ID e la bio dell'utente loggato
@@ -40,7 +40,7 @@ if ($conn) {
                 $bio = $dati_utente['bio'];
             }
 
-            // 2. Conto i FOLLOWER (Quanti hanno il mio ID come 'idSeguito')
+            // 2. Conto i FOLLOWER
             $sql_f1 = "SELECT COUNT(*) AS total FROM Followers WHERE idSeguito = ?";
             $stmt_f1 = mysqli_prepare($conn, $sql_f1);
             mysqli_stmt_bind_param($stmt_f1, "i", $mio_id);
@@ -48,7 +48,7 @@ if ($conn) {
             $res_f1 = mysqli_stmt_get_result($stmt_f1);
             $num_followers = mysqli_fetch_assoc($res_f1)['total'];
 
-            // 3. Conto i SEGUITI (Quanti hanno il mio ID come 'idFollower')
+            // 3. Conto i SEGUITI
             $sql_f2 = "SELECT COUNT(*) AS total FROM Followers WHERE idFollower = ?";
             $stmt_f2 = mysqli_prepare($conn, $sql_f2);
             mysqli_stmt_bind_param($stmt_f2, "i", $mio_id);
@@ -56,7 +56,7 @@ if ($conn) {
             $res_f2 = mysqli_stmt_get_result($stmt_f2);
             $num_seguite = mysqli_fetch_assoc($res_f2)['total'];
 
-            // 4. NUOVO: Conto quanti LOOK ha caricato questo utente
+            // 4. Conto quanti LOOK ha caricato
             $sql_l = "SELECT COUNT(*) AS total FROM Outfit WHERE username = ?";
             $stmt_l = mysqli_prepare($conn, $sql_l);
             mysqli_stmt_bind_param($stmt_l, "s", $username_loggato);
@@ -64,10 +64,9 @@ if ($conn) {
             $res_l = mysqli_stmt_get_result($stmt_l);
             $num_look = mysqli_fetch_assoc($res_l)['total'];
 
-            // Query per utenti suggeriti usando NOT EXISTS
-            $sql_sugg = "SELECT id, username, nome 
-             FROM Utenti u
-             WHERE id != ? 
+            $sql_sugg = "SELECT u.id, u.username, u.nome 
+            FROM Utenti u
+            WHERE u.id != ? 
              AND NOT EXISTS (
                  SELECT 1 FROM Followers f 
                  WHERE f.idSeguito = u.id 
@@ -82,14 +81,17 @@ if ($conn) {
                 mysqli_stmt_execute($stmt_sugg);
                 $res_sugg = mysqli_stmt_get_result($stmt_sugg);
 
-                $utenti_suggeriti = [];
                 while ($row = mysqli_fetch_assoc($res_sugg)) {
                     $utenti_suggeriti[] = $row;
                 }
                 mysqli_stmt_close($stmt_sugg);
+            } else {
+                // DEBUG: In caso di errore SQL
+                echo "<script>console.error('Errore SQL Suggeriti: " . addslashes(mysqli_error($conn)) . "');</script>";
             }
 
         } else {
+            // Fine blocco $dati_utente
             session_destroy();
             header("Location: ../view/login.php");
             exit();
