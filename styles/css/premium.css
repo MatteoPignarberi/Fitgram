@@ -141,9 +141,9 @@ nav {
 }
 
 .subscribe-btn {
-    background-color: var(--pure-white);
-    color: var(--text-main);
-    border: 1px solid var(--text-main);
+    background-color: var(--rosa-carne); /* Sfondo rosa carne richiamando la tua variabile */
+    color: #000000; /* Testo nero per abbinarsi al bordo */
+    border: 2px solid #000000; /* Bordo nero (ho messo 2px per farlo risaltare bene, puoi scendere a 1px se lo preferisci più sottile) */
     padding: 15px;
     border-radius: 30px;
     text-decoration: none;
@@ -154,17 +154,20 @@ nav {
     letter-spacing: 1px;
 }
 
+/* Effetto quando ci passi sopra col mouse */
 .subscribe-btn:hover {
-    background-color: var(--text-main);
-    color: var(--pure-white);
+    background-color: #000000; /* Sfondo nero */
+    color: var(--rosa-carne); /* Il testo diventa rosa carne, crea un bellissimo contrasto! */
 }
 
+/* Uniformiamo anche il bottone della card Premium */
 .card.premium .subscribe-btn {
-    background-color: var(--accent-pop);
-    color: var(--pure-white);
-    border: none;
+    background-color: var(--rosa-carne);
+    color: #000000;
+    border: 2px solid #000000;
 }
 
 .card.premium .subscribe-btn:hover {
-    background-color: var(--text-main);
+    background-color: #000000;
+    color: var(--rosa-carne);
 }
