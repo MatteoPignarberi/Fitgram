@@ -13,7 +13,7 @@ session_start();
 <body>
 
 <nav>
-    <a href="../index.php" class="back-link">
+    <a href="../Admin/dashboard.php" class="back-link">
         ← Torna alla Home
     </a>
     <div class="elegant-tagline">Fitgram</div>
