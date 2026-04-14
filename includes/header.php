@@ -10,7 +10,7 @@
             <div class="hamburger">☰</div>
             <div class="dropdown-menu">
                 <a href="#">Esplora Tendenze</a>
-                <a href="../view/premium.php">Premium</a>
+                <a href="../controller/premiumController.php">Premium</a>
                 <?php if ($is_logged): ?>
                     <a href="../view/impostazioni.php">Impostazioni</a>
                     <a href="../controller/logoutController.php">Esci</a>
