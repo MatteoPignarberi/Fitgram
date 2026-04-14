@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abbonamenti - Fitgram</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../styles/css/premium.css">
+    <link rel="stylesheet" href="/styles/css/premium.css">
 </head>
 <body>
 
