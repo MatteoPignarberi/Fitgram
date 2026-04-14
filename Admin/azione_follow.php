@@ -50,8 +50,6 @@ if ($conn) {
     }
     mysqli_close($conn);
 }
-
-// Lavoro finito! Ritorno istantaneamente alla pagina in cui ero
 header("Location: " . $_SERVER['HTTP_REFERER']);
 exit();
 ?>

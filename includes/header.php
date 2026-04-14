@@ -13,7 +13,7 @@
                 <a href="../view/premium.php">Premium</a>
                 <?php if ($is_logged): ?>
                     <a href="../view/impostazioni.php">Impostazioni</a>
-                    <a href="../Admin/logout.php">Esci</a>
+                    <a href="../controller/logoutController.php">Esci</a>
                 <?php endif; ?>
             </div>
         </div>
