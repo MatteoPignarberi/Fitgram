@@ -65,11 +65,22 @@ if ($conn) {
             $num_look = mysqli_fetch_assoc($res_l)['total'];
 
 
-            $sql_sugg = "SELECT id, username, nome FROM Utenti WHERE id != ? LIMIT 5";
+            // 5. Query per utenti suggeriti (COMPLETA E CORRETTA)
+            $sql_sugg = "SELECT u.id, u.username, u.nome 
+             FROM Utenti u
+             WHERE u.id != ? 
+             AND NOT EXISTS (
+                 SELECT 1 FROM Followers f 
+                 WHERE f.idSeguito = u.id 
+                 AND f.idFollower = ?
+             )
+             ORDER BY RAND() LIMIT 5";
 
             $stmt_sugg = mysqli_prepare($conn, $sql_sugg);
+
             if ($stmt_sugg) {
-                mysqli_stmt_bind_param($stmt_sugg, "i", $mio_id);
+                // ATTENZIONE: Qui tornano le due "i" e i due $mio_id!
+                mysqli_stmt_bind_param($stmt_sugg, "ii", $mio_id, $mio_id);
                 mysqli_stmt_execute($stmt_sugg);
                 $res_sugg = mysqli_stmt_get_result($stmt_sugg);
 
@@ -77,38 +88,10 @@ if ($conn) {
                     $utenti_suggeriti[] = $row;
                 }
                 mysqli_stmt_close($stmt_sugg);
-            } else {
-                // DEBUG: In caso di errore SQL
-                echo "<script>console.error('Errore SQL Suggeriti: " . addslashes(mysqli_error($conn)) . "');</script>";
             }
-
-        } else {
-            // Fine blocco $dati_utente
-            session_destroy();
-            header("Location: ../view/login.php");
-            exit();
         }
-        mysqli_stmt_close($stmt);
     }
 }
-// --- INIZIO TEST DEBUG ---
-echo "<div style='background: #ff4757; color: white; padding: 20px; font-family: sans-serif; text-align: center; position: relative; z-index: 9999;'>";
-echo "<h3>🕵️‍♂️ REPORT DETECTIVE FITGRAM</h3>";
-
-// 1. Controlliamo se ha preso il tuo ID
-echo "<p><strong>Il mio ID Utente:</strong> " . var_export($mio_id, true) . "</p>";
-
-// 2. Controlliamo quanti utenti esistono in TOTALE nel database
-$res_tot = mysqli_query($conn, "SELECT COUNT(*) as tot FROM Utenti");
-if ($res_tot) {
-    $tot_utenti = mysqli_fetch_assoc($res_tot)['tot'];
-    echo "<p><strong>Utenti TOTALI registrati nel database:</strong> " . $tot_utenti . "</p>";
-}
-
-// 3. Controlliamo quanti ne ha salvati nell'array
-echo "<p><strong>Utenti messi nell'array dei suggeriti:</strong> " . count($utenti_suggeriti) . "</p>";
-echo "</div>";
-// --- FINE TEST DEBUG ---
 ?>
 <!DOCTYPE html>
 <html lang="it">
