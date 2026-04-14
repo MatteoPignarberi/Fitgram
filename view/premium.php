@@ -1,6 +1,3 @@
-<?php
-session_start();
-?>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -9,11 +6,12 @@ session_start();
     <title>Abbonamenti - Fitgram</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/css/premium.css">
+</head>
 <body>
 
 <nav>
-    <a href="../index.php" class="logo">Fitgram</a>
-    <a href="../index.php" class="back-link">← Torna alla Home</a>
+    <a href="<?php echo $link_ritorno; ?>" class="logo">Fitgram</a>
+    <a href="<?php echo $link_ritorno; ?>" class="back-link"><?php echo $testo_ritorno; ?></a>
 </nav>
 
 <main class="pricing-container">
@@ -46,7 +44,7 @@ session_start();
                 <li>Zero pubblicità</li>
                 <li>Accesso anticipato alle tendenze</li>
             </ul>
-            <form action="checkout.php" method="POST">
+            <form action="../controller/checkoutController.php" method="POST">
                 <input type="hidden" name="piano" value="premium">
                 <button type="submit" class="subscribe-btn" style="width: 100%; cursor: pointer;">Abbonati Ora</button>
             </form>
