@@ -9,10 +9,6 @@ if (isset($_SESSION['username'])) {
     $testo_ritorno = "← Torna alla Home";
 }
 ?>
-<nav>
-    <a href="<?php echo $link_ritorno; ?>" class="logo">Fitgram</a>
-    <a href="<?php echo $link_ritorno; ?>" class="back-link"><?php echo $testo_ritorno; ?></a>
-</nav>
 <?php
 // 2. Richiamiamo la View! (Passandole implicitamente le variabili create qui sopra)
 require_once '../view/premium.php';
