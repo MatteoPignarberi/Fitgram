@@ -20,8 +20,6 @@ if ($conn) {
             $utenti_suggeriti[] = $row;
         }
     }
-    // Chiudiamo la connessione
-    mysqli_close($conn);
 }
 ?>
 <!DOCTYPE html>
