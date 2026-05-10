@@ -10,7 +10,10 @@ if (!isset($_SESSION['username'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Recuperiamo tutti i dati, inclusi i nuovi campi per i tag e il link
     $descrizione = $_POST['descrizione'] ?? '';
+    $tags = $_POST['tags'] ?? '';                   // NUOVO CAMPO
+    $link_acquisto = $_POST['link_acquisto'] ?? ''; // NUOVO CAMPO
     $username = $_SESSION['username'];
 
     if (isset($_FILES['immagine']) && $_FILES['immagine']['error'] === UPLOAD_ERR_OK) {
@@ -39,8 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Spostiamo il file
             if(move_uploaded_file($fileTmpPath, $percorso_destinazione)) {
 
-                // SALVATAGGIO NEL DATABASE TRAMITE MODEL
-                $inserito = createLook($conn, $descrizione, $nuovoNomeFile, $username);
+                // SALVATAGGIO NEL DATABASE TRAMITE MODEL (passiamo anche tags e link)
+                $inserito = createLook($conn, $descrizione, $nuovoNomeFile, $username, $tags, $link_acquisto);
 
                 if ($inserito) {
                     $_SESSION['msg_look'] = "<div class='msg success'>Look pubblicato con successo! <a href='../index.php'>Torna alla Home</a></div>";

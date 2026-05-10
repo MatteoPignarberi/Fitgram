@@ -1,18 +1,19 @@
 <?php
-function createLook($conn, $descrizione, $nomeImmagine, $username) {
-    $sql = "INSERT INTO Outfit (descrizione, immagine, username) VALUES (?, ?, ?)";
+function createLook($conn, $descrizione, $nomeFile, $username, $tags, $link_acquisto) {
+    // Query SQL con i nuovi campi
+    $sql = "INSERT INTO looks (descrizione, immagine, username, tags, link_acquisto) VALUES (?, ?, ?, ?, ?)";
 
     $stmt = mysqli_prepare($conn, $sql);
 
-    if (!$stmt) {
+    if ($stmt) {
+        // 'sssss' indica che stiamo passando 5 stringhe
+        mysqli_stmt_bind_param($stmt, "sssss", $descrizione, $nomeFile, $username, $tags, $link_acquisto);
+
+        $esito = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        return $esito;
+    } else {
         return false;
     }
-
-    // Inseriamo i dati ("sss" = 3 stringhe)
-    mysqli_stmt_bind_param($stmt, "sss", $descrizione, $nomeImmagine, $username);
-
-    // Eseguiamo e restituiamo true o false
-    return mysqli_stmt_execute($stmt);
 }
-
-?>
