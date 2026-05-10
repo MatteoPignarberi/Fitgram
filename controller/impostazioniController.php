@@ -1,16 +1,26 @@
 <?php
 session_start();
 
+// TRAPPOLA 1: Controllo se il database esiste in quel percorso
+if (!file_exists('../config/connessione.php')) {
+    die("<h1>🚨 ERRORE: DATABASE NON TROVATO!</h1><p>PHP non trova il file in <b>../config/connessione.php</b>. Sicuro che la cartella 'config' esista?</p>");
+}
+require_once '../config/connessione.php';
+
+// TRAPPOLA 2: Controllo se il Model esiste in quel percorso
+if (!file_exists('../Model/UtenteModel.php')) {
+    die("<h1>🚨 ERRORE: MODEL NON TROVATO!</h1><p>PHP non trova il file in <b>../Model/UtenteModel.php</b>. Controlla le maiuscole/minuscole!</p>");
+}
 require_once '../Model/UtenteModel.php';
 
-// Controllo sicurezza: l'utente deve essere loggato
+// Controllo sicurezza...
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");
     exit;
 }
 
 $mio_id = $_SESSION['user_id'];
-$model = new UtenteModel($conn); // $conn deve arrivare dal tuo file database.php
+$model = new UtenteModel($conn);
 
 // 1. GESTIONE DEL FORM (quando l'utente clicca "Salva")
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
