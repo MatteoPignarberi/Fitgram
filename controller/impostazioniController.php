@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+// MANCAVA QUESTA RIGA! Fondamentale per far esistere la variabile $conn
+require_once '../config/connessione.php';
+
 require_once '../Model/UtenteModel.php';
 
 // Controllo sicurezza: l'utente deve essere loggato
@@ -10,7 +13,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $mio_id = $_SESSION['user_id'];
-$model = new UtenteModel($conn); // $conn deve arrivare dal tuo file database.php
+$model = new UtenteModel($conn);
 
 // 1. GESTIONE DEL FORM (quando l'utente clicca "Salva")
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
