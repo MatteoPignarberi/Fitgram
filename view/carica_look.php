@@ -12,7 +12,6 @@ if (!isset($_SESSION['username'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carica Look - Fitgram</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="../styles/css/carica_look.css">
 </head>
 <body>
@@ -57,20 +56,18 @@ if (!isset($_SESSION['username'])) {
         if (linkCount < maxLinks) {
             linkCount++;
             const newGroup = document.createElement("div");
-            newGroup.className = "link-input-group"; // Applica l'allineamento flex anche ai nuovi link
+            newGroup.className = "link-input-group"; // Applica Flex alle nuove righe
             newGroup.innerHTML = `
             <input type="url" name="link_acquisto[]" placeholder="https://www.esempio.com/prodotto">
             <button type="button" class="btn-action remove-link-btn">-</button>
         `;
             container.appendChild(newGroup);
 
-            // Gestione rimozione riga
             newGroup.querySelector('.remove-link-btn').onclick = function() {
                 newGroup.remove();
                 linkCount--;
                 addBtn.style.display = "flex";
             };
-
             if (linkCount === maxLinks) addBtn.style.display = "none";
         }
     });

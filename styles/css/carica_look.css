@@ -27,26 +27,6 @@ h2 {
     margin-bottom: 30px;
 }
 
-.msg {
-    padding: 15px;
-    border-radius: 6px;
-    margin-bottom: 20px;
-    font-size: 0.9rem;
-    text-align: center;
-}
-
-.msg.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.msg.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
 label {
     display: block;
     margin-bottom: 8px;
@@ -54,7 +34,7 @@ label {
     font-weight: 600;
 }
 
-/* Regola universale per tutti gli input (escluso il submit) e textarea */
+/* Stile universale per input e textarea */
 input:not([type="submit"]), textarea {
     width: 100%;
     padding: 12px;
@@ -66,58 +46,52 @@ input:not([type="submit"]), textarea {
     font-family: inherit;
 }
 
-textarea {
-    resize: vertical;
-    min-height: 80px;
-}
+/* --- FIX PER ALLINEAMENTO E BOTTONE ROSA --- */
 
-/* --- STILI PER I LINK DINAMICI --- */
 .link-input-group {
-    display: flex;
-    align-items: center; /* Allinea verticalmente input e bottone */
-    flex-wrap: nowrap;   /* Impedisce di andare a capo */
+    display: flex !important; /* Forza l'allineamento orizzontale */
+    align-items: center;
     gap: 10px;
     margin-bottom: 15px;
 }
 
 .link-input-group input {
-    margin-bottom: 0 !important; /* Rimuove il margine inferiore solo per questo input */
-    flex: 1; /* Permette all'input di occupare lo spazio disponibile, lasciando posto al bottone */
+    margin-bottom: 0 !important; /* Rimuove lo spazio sotto l'input per allinearlo al + */
+    flex: 1;
 }
 
-/* Stile base per i bottoni + e - */
+/* Rimuove lo sfondo grigio del browser e imposta il colore rosa */
 .btn-action {
-    background-color: transparent; /* Senza sfondo */
-    border: none;
-    font-size: 2rem; /* Più grande e visibile */
-    font-weight: 500;
+    background: none !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 5px !important;
+    margin: 0 !important;
     cursor: pointer;
-    padding: 0 5px;
+    font-size: 2.2rem; /* Rende il + bello grande */
+    line-height: 1;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     transition: color 0.3s;
+    outline: none;
 }
 
-/* Colore rosa per il bottone + */
 .add-link-btn {
-    color: #b8807d;
+    color: #b8807d !important; /* ROSA DEL SITO */
 }
 
-.add-link-btn:hover {
-    color: #3d3d3d; /* Grigio scuro al passaggio del mouse */
-}
-
-/* Colore rossastro per il bottone - */
 .remove-link-btn {
-    color: #cc5b68;
+    color: #cc5b68 !important; /* ROSSO PER IL - */
 }
 
-.remove-link-btn:hover {
-    color: #3d3d3d;
+.btn-action:hover {
+    color: #3d3d3d !important;
 }
 
-/* --- STILI BOTTONE SUBMIT E LINK INDIETRO --- */
+/* --- FINE FIX --- */
+
 input[type="submit"] {
     background-color: #b8807d;
     color: white;
@@ -143,8 +117,4 @@ input[type="submit"]:hover {
     color: #888;
     text-decoration: none;
     font-size: 0.85rem;
-}
-
-.back-link:hover {
-    color: #3d3d3d;
 }
