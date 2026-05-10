@@ -34,7 +34,14 @@ if (!isset($_SESSION['username'])) {
         <label for="descrizione">Aggiungi una descrizione (opzionale)</label>
         <textarea name="descrizione" id="descrizione" placeholder="Es: Outfit perfetto per la palestra..."></textarea>
 
+        <label for="tags">Tag (separati da virgola):</label>
+        <input type="text" name="tags" id="tags" placeholder="es. #casual, #estate, #vintage">
+
+        <label for="link_acquisto">Link di acquisto del prodotto:</label>
+        <input type="url" name="link_acquisto" id="link_acquisto" placeholder="https://www.esempio.com/prodotto">
+
         <input type="submit" value="Pubblica Look">
+
     </form>
 
     <a href="../index.php" class="back-link">← Annulla e torna alla Home</a>
