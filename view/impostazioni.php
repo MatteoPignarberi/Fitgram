@@ -6,7 +6,7 @@ session_start();
 require_once '../config/connessione.php';
 
 // 2. Includi il Model
-require_once '../Model/UtenteModel.php';
+require_once '../Model/utenteModel.php';
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");
