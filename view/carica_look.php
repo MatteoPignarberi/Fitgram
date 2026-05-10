@@ -24,7 +24,7 @@ if (!isset($_SESSION['username'])) {
         <?php echo $_SESSION['msg_look']; unset($_SESSION['msg_look']); ?>
     <?php endif; ?>
 
-    <form action="../controller/upload_look_controller.php" method="POST" enctype="multipart/form-data">
+    <form action="../controller/lookController.php" method="POST" enctype="multipart/form-data">
         <label>Seleziona una foto:</label>
         <input type="file" name="immagine" required>
 
@@ -57,17 +57,20 @@ if (!isset($_SESSION['username'])) {
         if (linkCount < maxLinks) {
             linkCount++;
             const newGroup = document.createElement("div");
-            newGroup.className = "link-input-group";
+            newGroup.className = "link-input-group"; // Applica l'allineamento flex anche ai nuovi link
             newGroup.innerHTML = `
             <input type="url" name="link_acquisto[]" placeholder="https://www.esempio.com/prodotto">
             <button type="button" class="btn-action remove-link-btn">-</button>
         `;
             container.appendChild(newGroup);
+
+            // Gestione rimozione riga
             newGroup.querySelector('.remove-link-btn').onclick = function() {
                 newGroup.remove();
                 linkCount--;
                 addBtn.style.display = "flex";
             };
+
             if (linkCount === maxLinks) addBtn.style.display = "none";
         }
     });
