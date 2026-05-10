@@ -1,5 +1,5 @@
 <?php
-$host = "localhost";
+$host = "127.0.0.1";
 $username = "fitgram";
 $password = "";
 $database = "my_fitgram";
