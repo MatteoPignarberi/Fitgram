@@ -136,3 +136,9 @@ nav {
     color: white;
     border-color: #cc0000;
 }
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; font-size: 0.9em; margin-bottom: 5px; color: #555; }
+.form-group input, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+.alert { padding: 10px; margin-bottom: 20px; border-radius: 5px; text-align: center; }
+.alert-success { background-color: #d4edda; color: #155724; }
+.alert-error { background-color: #f8d7da; color: #721c24; }
