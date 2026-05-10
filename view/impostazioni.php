@@ -1,8 +1,11 @@
 <?php
+// View/impostazioni.php
 session_start();
 
-// Includi il database e il Model per precaricare i dati attuali nei campi di testo
-// require_once '../config/database.php';
+// 1. INCLUDI IL TUO DATABASE! (Sostituisci il percorso se il tuo file si chiama diversamente)
+require_once '../connessione.php'; // <-- ATTENZIONE QUI
+
+// 2. Includi il Model
 require_once '../Model/UtenteModel.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -11,7 +14,8 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $mio_id = $_SESSION['user_id'];
-// Instanzio il model per prendere i dati correnti (es. per far vedere il nome attuale nel campo)
+
+// 3. Ora $conn esiste e possiamo avviare il Model senza far esplodere il server
 $model = new UtenteModel($conn);
 $dati_utente = $model->getUtenteById($mio_id);
 ?>
