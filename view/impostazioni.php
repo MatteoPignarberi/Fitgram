@@ -2,22 +2,21 @@
 // View/impostazioni.php
 session_start();
 
-// 1. INCLUDI IL TUO DATABASE! (Sostituisci il percorso se il tuo file si chiama diversamente)
 require_once '../config/connessione.php';
 
 // 2. Includi il Model
-require_once '../Model/utenteModel.php';
+require_once '../Model/UtenteModel.php';
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");
     exit;
 }
 
-$mio_id = $_SESSION['user_id'];
+// $mio_id = $_SESSION['user_id'];
 
 // 3. Ora $conn esiste e possiamo avviare il Model senza far esplodere il server
-$model = new UtenteModel($conn);
-$dati_utente = $model->getUtenteById($mio_id);
+// $model = new UtenteModel($conn);
+// $dati_utente = $model->getUtenteById($mio_id);
 ?>
 
 <!DOCTYPE html>
