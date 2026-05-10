@@ -2,11 +2,10 @@
 // View/impostazioni.php
 session_start();
 
-// 1. INCLUDI IL TUO DATABASE! (Sostituisci il percorso se il tuo file si chiama diversamente)
 require_once '../config/connessione.php';
 
 // 2. Includi il Model
-require_once '../Model/utenteModel.php';
+require_once '../Model/UtenteModel.php';
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");
