@@ -13,7 +13,7 @@ if (!isset($_SESSION['username'])) {
     <title>Carica Look - Fitgram</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../styles/css/carica_look.css">
 </head>
 <body>
 

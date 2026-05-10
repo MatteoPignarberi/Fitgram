@@ -74,43 +74,50 @@ textarea {
 /* --- STILI PER I LINK DINAMICI --- */
 .link-input-group {
     display: flex;
+    align-items: center; /* Allinea verticalmente input e bottone */
+    flex-wrap: nowrap;   /* Impedisce di andare a capo */
     gap: 10px;
     margin-bottom: 15px;
 }
 
 .link-input-group input {
-    margin-bottom: 0 !important;
-    flex-grow: 1;
+    margin-bottom: 0 !important; /* Rimuove il margine inferiore solo per questo input */
+    flex: 1; /* Permette all'input di occupare lo spazio disponibile, lasciando posto al bottone */
 }
 
+/* Stile base per i bottoni + e - */
 .btn-action {
-    width: 45px;
+    background-color: transparent; /* Senza sfondo */
     border: none;
-    border-radius: 6px;
-    font-size: 1.2rem;
+    font-size: 2rem; /* Più grande e visibile */
+    font-weight: 500;
     cursor: pointer;
+    padding: 0 5px;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background 0.3s;
+    transition: color 0.3s;
 }
 
+/* Colore rosa per il bottone + */
 .add-link-btn {
-    background-color: #b8807d;
-    color: white;
-}
-
-.remove-link-btn {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    color: #b8807d;
 }
 
 .add-link-btn:hover {
-    background-color: #3d3d3d;
+    color: #3d3d3d; /* Grigio scuro al passaggio del mouse */
 }
 
-/* --- STILI BOTTONE SUBMIT E LINK --- */
+/* Colore rossastro per il bottone - */
+.remove-link-btn {
+    color: #cc5b68;
+}
+
+.remove-link-btn:hover {
+    color: #3d3d3d;
+}
+
+/* --- STILI BOTTONE SUBMIT E LINK INDIETRO --- */
 input[type="submit"] {
     background-color: #b8807d;
     color: white;
