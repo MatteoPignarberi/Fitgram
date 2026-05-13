@@ -2,27 +2,20 @@
 class UtenteModel {
     private $conn;
 
-    public function __construct($db) {
-        $this->conn = $db;
+    public function __construct($connessione) {
+        $this->conn = $connessione;
     }
 
     public function getUtenteById($id) {
-        $sql = "SELECT nome, username, bio FROM Utenti WHERE id = ?";
-        $stmt = $this->conn->prepare($sql);
+        $stmt = $this->conn->prepare("SELECT nome, username, bio FROM Utenti WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_assoc();
+        return $stmt->get_result()->fetch_assoc();
     }
 
     public function updateProfilo($id, $nome, $username, $bio) {
-        $sql = "UPDATE Utenti SET nome = ?, username = ?, bio = ? WHERE id = ?";
-        $stmt = $this->conn->prepare($sql);
-        if ($stmt) {
-            $stmt->bind_param("sssi", $nome, $username, $bio, $id);
-            return $stmt->execute();
-        }
-        return false;
+        $stmt = $this->conn->prepare("UPDATE Utenti SET nome = ?, username = ?, bio = ? WHERE id = ?");
+        $stmt->bind_param("sssi", $nome, $username, $bio, $id);
+        return $stmt->execute();
     }
 }
-?>
