@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once "../db/db_config.php";
+include_once "../config/connessione.php";
 include_once "../model/Look.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
