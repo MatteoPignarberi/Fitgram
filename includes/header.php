@@ -3,11 +3,10 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Controlliamo se l'utente è loggato
 $is_logged = isset($_SESSION['user_id']);
 $username_mostrato = $is_logged ? $_SESSION['username'] : "Ospite";
 
-// Gestione dei percorsi relativi basata sulla cartella attuale
+// Gestione dei percorsi relativi
 $base = (basename(getcwd()) == 'Admin' || basename(getcwd()) == 'view' || basename(getcwd()) == 'controller') ? '../' : '';
 ?>
     <nav>
@@ -39,8 +38,11 @@ $base = (basename(getcwd()) == 'Admin' || basename(getcwd()) == 'view' || basena
                 <div id="profile-toggle-btn" class="header-profile-link" title="Visualizza Profilo" style="cursor: pointer;">
                     <div class="header-avatar">
                         <?php
-                        if (!empty($_SESSION['foto_profilo']) && $_SESSION['foto_profilo'] !== 'default_avatar.png'): ?>
-                            <img src="<?php echo $base; ?>uploads/<?php echo $_SESSION['foto_profilo']; ?>" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                        // Prendiamo la foto dalla sessione aggiornata dal controller
+                        $foto_sessione = $_SESSION['foto_profilo'] ?? '';
+                        if (!empty($foto_sessione) && $foto_sessione !== 'default_avatar.png'): ?>
+                            <img src="<?php echo $base; ?>uploads/<?php echo $foto_sessione; ?>?v=<?php echo time(); ?>"
+                                 style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
                         <?php else: ?>
                             <?php echo strtoupper(substr($username_mostrato, 0, 1)); ?>
                         <?php endif; ?>
