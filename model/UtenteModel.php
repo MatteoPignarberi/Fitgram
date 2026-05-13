@@ -2,32 +2,27 @@
 class UtenteModel {
     private $conn;
 
-    public function __construct($connessione_db) {
-        $this->conn = $connessione_db;
+    public function __construct($db) {
+        $this->conn = $db;
     }
 
-    // Funzione per ottenere i dati attuali dell'utente
     public function getUtenteById($id) {
-        $sql = "SELECT username, nome, bio FROM Utenti WHERE id = ?";
-        $stmt = mysqli_prepare($this->conn, $sql);
-        mysqli_stmt_bind_param($stmt, "i", $id);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-        return mysqli_fetch_assoc($result);
+        $sql = "SELECT nome, username, bio FROM Utenti WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
     }
 
-    // Funzione per aggiornare il profilo
     public function updateProfilo($id, $nome, $username, $bio) {
         $sql = "UPDATE Utenti SET nome = ?, username = ?, bio = ? WHERE id = ?";
-        $stmt = mysqli_prepare($this->conn, $sql);
-
+        $stmt = $this->conn->prepare($sql);
         if ($stmt) {
-            mysqli_stmt_bind_param($stmt, "sssi", $nome, $username, $bio, $id);
-            if (mysqli_stmt_execute($stmt)) {
-                return true; // Aggiornamento riuscito
-            }
+            $stmt->bind_param("sssi", $nome, $username, $bio, $id);
+            return $stmt->execute();
         }
-        return false; // Errore
+        return false;
     }
 }
 ?>
