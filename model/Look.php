@@ -3,7 +3,7 @@
 
 function createLook($conn, $descrizione, $nomeFile, $username, $tags, $link_acquisto) {
     // Query basata sulla tua tabella Outfit
-    $sql = "INSERT INTO outfit (descrizione, immagine, username, tags, link_acquisto) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO Outfit (descrizione, immagine, username, tags, link_acquisto) VALUES (?, ?, ?, ?, ?)";
 
     if ($stmt = mysqli_prepare($conn, $sql)) {
         mysqli_stmt_bind_param($stmt, "sssss", $descrizione, $nomeFile, $username, $tags, $link_acquisto);
