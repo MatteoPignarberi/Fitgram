@@ -119,20 +119,26 @@ if ($conn) {
         <h2>Il mio Profilo</h2>
         <button class="close-sidebar-btn" id="close-sidebar">×</button>
     </div>
-    <div class="sidebar-content">
-        <div class="sidebar-avatar-large">
-            <img src="../uploads/<?php echo htmlspecialchars($foto_sessione); ?>" alt="Profilo">
+
+    <div class="sidebar-content" style="padding: 20px; display: flex; flex-direction: column; align-items: center;">
+
+        <div class="avatar-container-fixed" style="width: 120px !important; height: 120px !important; border-radius: 50%; overflow: hidden; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 15px;">
+            <img src="../uploads/<?php echo htmlspecialchars($foto_sessione); ?>"
+                 style="width: 100% !important; height: 100% !important; object-fit: cover !important; display: block !important;">
         </div>
+
         <h3 class="sidebar-username">@<?php echo htmlspecialchars($user_loggato); ?></h3>
 
-        <div class="sidebar-stats">
+        <div class="sidebar-stats" style="width: 100%; margin: 20px 0;">
             <div><strong><?php echo $look_count; ?></strong><br>Look</div>
             <div><strong><?php echo $foll; ?></strong><br>Follower</div>
             <div><strong><?php echo $segu; ?></strong><br>Seguiti</div>
         </div>
 
-        <a href="modifica_profilo.php" class="edit-profile-btn">Modifica Profilo</a>
-        <a href="../controller/logoutController.php" class="edit-profile-btn logout-btn" style="margin-top:10px; background:#fff0f0; color:#d93025; border: 1px solid #f8d7da;">Esci</a>
+        <div style="width: 100%; display: flex; flex-direction: column; gap: 10px;">
+            <a href="modifica_profilo.php" class="edit-profile-btn" style="text-align: center;">Modifica Profilo</a>
+            <a href="../controller/logoutController.php" class="edit-profile-btn logout-btn" style="text-align: center; background: #fff; color: #ff4d4d; border: 1px solid #ff4d4d;">Esci</a>
+        </div>
     </div>
 </aside>
 
