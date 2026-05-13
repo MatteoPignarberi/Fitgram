@@ -18,7 +18,7 @@ $dati_utente = $model->getUtenteById($_SESSION['user_id']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impostazioni - Fitgram</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../styles/css/impostazioni.css">
+    <link rel="stylesheet" href="/styles/css/impostazioni.css?v=<?php echo time(); ?>">
 </head>
 <body>
 
