@@ -1,40 +1,43 @@
 <?php
 // controller/upload_look_controller.php
 session_start();
-include_once "../config/connessione.php";
+include_once "../db/db_config.php";
 include_once "../model/Look.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Recupero dati
     $descrizione = $_POST['descrizione'] ?? '';
     $tags = $_POST['tags'] ?? '';
-    $username = $_SESSION['username'] ?? 'Utente_Test';
+    $username = $_SESSION['username'] ?? 'Utente';
 
-    // Trasformiamo l'array dei link in stringa
+    // Gestione Link: trasformiamo l'array in stringa
     $links_array = $_POST['link_acquisto'] ?? [];
     $links_filtrati = array_filter($links_array, fn($value) => !empty(trim($value)));
     $links_string = implode(", ", $links_filtrati);
 
+    // Gestione File
     if (isset($_FILES['immagine']) && $_FILES['immagine']['error'] === 0) {
         $nomeFile = time() . "_" . basename($_FILES['immagine']['name']);
         $target = "../uploads/" . $nomeFile;
 
         if (move_uploaded_file($_FILES['immagine']['tmp_name'], $target)) {
 
-            // Proviamo l'inserimento
+            // Proviamo l'inserimento finale
             if (createLook($conn, $descrizione, $nomeFile, $username, $tags, $links_string)) {
-                $_SESSION['msg_look'] = "<div class='msg success'>Look pubblicato con successo!</div>";
+                $_SESSION['msg_look'] = "<div class='msg success' style='color: green; background: #d4edda; padding: 10px; border-radius: 5px; margin-bottom: 20px;'>Look pubblicato con successo!</div>";
             } else {
-                // --- DEBUG: RECUPERIAMO L'ERRORE REALE ---
-                $errore_db = mysqli_error($conn);
-                $_SESSION['msg_look'] = "<div class='msg error'>Errore Database: " . $errore_db . "</div>";
+                // Se fallisce ancora, stampiamo l'errore specifico di MySQL
+                $errore_tecnico = mysqli_error($conn);
+                $_SESSION['msg_look'] = "<div class='msg error' style='color: red;'>Errore database: $errore_tecnico</div>";
             }
         } else {
-            $_SESSION['msg_look'] = "<div class='msg error'>Errore nel caricamento fisico del file.</div>";
+            $_SESSION['msg_look'] = "<div class='msg error' style='color: red;'>Errore nel caricamento del file nella cartella uploads.</div>";
         }
     } else {
-        $_SESSION['msg_look'] = "<div class='msg error'>File immagine non valido o mancante.</div>";
+        $_SESSION['msg_look'] = "<div class='msg error' style='color: red;'>Seleziona un'immagine valida.</div>";
     }
 
     header("Location: ../view/carica_look.php");
     exit();
 }
+?>
