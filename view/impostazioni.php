@@ -17,219 +17,208 @@ $dati_utente = $model->getUtenteById($_SESSION['user_id']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impostazioni - Fitgram</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #ffffff;
-            --secondary-bg: #fafafa;
-            --border: #dbdbdb;
-            --accent: #0095f6;
-            --text: #262626;
-            --text-muted: #8e8e8e;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #2d3436;
+            --accent-color: #6c5ce7; /* Un viola elegante coerente con Fitgram */
+            --border-radius: 20px;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--secondary-bg);
-            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
             margin: 0;
             display: flex;
             flex-direction: column;
+            align-items: center;
             min-height: 100vh;
         }
 
         .navbar {
-            background: var(--bg);
-            border-bottom: 1px solid var(--border);
-            padding: 12px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-content {
-            max-width: 935px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav-content a { text-decoration: none; color: var(--text); font-weight: 600; }
-
-        .main-wrapper {
-            max-width: 935px;
             width: 100%;
-            margin: 30px auto;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 3px;
-            display: flex;
-            min-height: 600px;
+            padding: 20px 0;
+            text-align: center;
         }
 
-        /* Sidebar */
-        .sidebar {
-            width: 230px;
-            border-right: 1px solid var(--border);
-        }
-
-        .sidebar ul { list-style: none; padding: 0; margin: 0; }
-        .sidebar li {
-            padding: 16px 25px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .sidebar li.active {
+        .navbar a {
+            text-decoration: none;
+            color: var(--accent-color);
             font-weight: 600;
-            border-left: 2px solid var(--text);
-        }
-        .sidebar li:hover:not(.active) { background: var(--secondary-bg); }
-
-        /* Contenuto */
-        .content {
-            flex: 1;
-            padding: 40px 60px;
+            font-size: 0.9rem;
+            transition: 0.3s;
         }
 
-        .profile-header {
+        .navbar a:hover { opacity: 0.7; }
+
+        .settings-card {
+            background: var(--glass-bg);
+            max-width: 600px;
+            width: 90%;
+            margin: 20px auto 50px auto;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        }
+
+        .header-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-title h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            margin: 0;
+            color: var(--text-main);
+        }
+
+        .profile-pic-section {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
-        .avatar {
-            width: 38px;
-            height: 38px;
+        .avatar-circle {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, var(--accent-color), #a29bfe);
             border-radius: 50%;
-            background: #eee;
-            margin-right: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
+            color: white;
+            font-size: 2.5rem;
+            font-family: 'Playfair Display', serif;
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.2);
+            margin-bottom: 15px;
         }
 
-        .user-info h2 { margin: 0; font-size: 20px; font-weight: 400; }
-        .change-photo { color: var(--accent); font-weight: 600; cursor: pointer; border: none; background: none; padding: 0; font-size: 14px; }
-
-        /* Form */
         .form-group {
-            display: flex;
-            margin-bottom: 16px;
+            margin-bottom: 25px;
         }
 
         .form-group label {
-            width: 150px;
-            text-align: right;
-            padding-right: 32px;
+            display: block;
             font-weight: 600;
-            font-size: 14px;
-            margin-top: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            margin-left: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #636e72;
         }
-
-        .input-container { flex: 1; max-width: 350px; }
 
         input[type="text"], textarea {
             width: 100%;
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 3px;
-            font-size: 16px;
+            padding: 15px 20px;
+            border: 2px solid #edf2f7;
+            border-radius: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            transition: 0.3s;
             box-sizing: border-box;
+            background: #fdfdfd;
         }
 
-        .help-text {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 8px;
-            line-height: 1.4;
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
         }
 
-        .btn-save {
-            background: var(--accent);
+        .btn-submit {
+            width: 100%;
+            background: var(--accent-color);
             color: white;
             border: none;
-            padding: 5px 12px;
-            border-radius: 4px;
+            padding: 18px;
+            border-radius: 15px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            margin-left: 182px;
-            margin-top: 20px;
+            transition: 0.4s;
+            margin-top: 10px;
+            box-shadow: 0 8px 15px rgba(108, 92, 231, 0.2);
         }
 
-        .alert {
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            text-align: center;
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(108, 92, 231, 0.3);
+            background: #5b4bc4;
         }
-        .alert-success { background: #e6f4ea; color: #1e7e34; }
+
+        .alert-success {
+            background: #d1f7e1;
+            color: #1b5e20;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            border: 1px solid #c3e6cb;
+        }
+
+        .footer-tagline {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            margin-top: 20px;
+            color: var(--accent-color);
+            opacity: 0.6;
+        }
     </style>
 </head>
 <body>
 
 <nav class="navbar">
-    <div class="nav-content">
-        <a href="../Admin/dashboard.php">← Home</a>
-        <div style="font-size: 20px; font-weight: bold;">Fitgram</div>
-        <div></div>
-    </div>
+    <a href="../Admin/dashboard.php">← Torna alla Dashboard</a>
 </nav>
 
-<main class="main-wrapper">
-    <aside class="sidebar">
-        <ul>
-            <li class="active">Modifica profilo</li>
-            <li>Cambia la password</li>
-            <li>Notifiche push</li>
-            <li>Privacy e sicurezza</li>
-        </ul>
-    </aside>
+<main class="settings-card">
+    <div class="header-title">
+        <h1>Il Tuo Profilo</h1>
+        <div class="footer-tagline">Fitgram</div>
+    </div>
 
-    <section class="content">
-        <div class="profile-header">
-            <div class="avatar"><?= strtoupper(substr($dati_utente['username'], 0, 1)) ?></div>
-            <div class="user-info">
-                <h2><?= htmlspecialchars($dati_utente['username']) ?></h2>
-                <button class="change-photo">Cambia la foto del profilo</button>
-            </div>
+    <div class="profile-pic-section">
+        <div class="avatar-circle">
+            <?= strtoupper(substr($dati_utente['username'], 0, 1)) ?>
+        </div>
+        <span style="color: var(--accent-color); cursor: pointer; font-size: 0.8rem; font-weight: 600;">Aggiorna Avatar</span>
+    </div>
+
+    <?php if (isset($_SESSION['messaggio_successo'])): ?>
+        <div class="alert-success">
+            ✨ <?= $_SESSION['messaggio_successo']; unset($_SESSION['messaggio_successo']); ?>
+        </div>
+    <?php endif; ?>
+
+    <form action="../controller/impostazioniController.php" method="POST">
+        <input type="hidden" name="action" value="update_profilo">
+
+        <div class="form-group">
+            <label>Nome Completo</label>
+            <input type="text" name="nome" value="<?= htmlspecialchars($dati_utente['nome'] ?? '') ?>" placeholder="Es. Mario Rossi">
         </div>
 
-        <?php if (isset($_SESSION['messaggio_successo'])): ?>
-            <div class="alert alert-success"><?= $_SESSION['messaggio_successo']; unset($_SESSION['messaggio_successo']); ?></div>
-        <?php endif; ?>
+        <div class="form-group">
+            <label>Nome Utente</label>
+            <input type="text" name="username" value="<?= htmlspecialchars($dati_utente['username'] ?? '') ?>" placeholder="username_unico">
+        </div>
 
-        <form action="../controller/impostazioniController.php" method="POST">
-            <input type="hidden" name="action" value="update_profilo">
+        <div class="form-group">
+            <label>La tua Bio</label>
+            <textarea name="bio" rows="4" placeholder="Racconta qualcosa di te..."><?= htmlspecialchars($dati_utente['bio'] ?? '') ?></textarea>
+        </div>
 
-            <div class="form-group">
-                <label>Nome</label>
-                <div class="input-container">
-                    <input type="text" name="nome" value="<?= htmlspecialchars($dati_utente['nome'] ?? '') ?>">
-                    <p class="help-text">Aiuta le persone a scoprire il tuo account utilizzando il nome con cui sei conosciuto.</p>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Username</label>
-                <div class="input-container">
-                    <input type="text" name="username" value="<?= htmlspecialchars($dati_utente['username'] ?? '') ?>">
-                    <p class="help-text">Puoi modificare il tuo nome utente in qualsiasi momento.</p>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Bio</label>
-                <div class="input-container">
-                    <textarea name="bio" rows="3"><?= htmlspecialchars($dati_utente['bio'] ?? '') ?></textarea>
-                </div>
-            </div>
-
-            <button type="submit" class="btn-save">Invia</button>
-        </form>
-    </section>
+        <button type="submit" class="btn-submit">Salva i cambiamenti</button>
+    </form>
 </main>
 
 </body>
