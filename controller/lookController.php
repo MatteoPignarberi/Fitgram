@@ -1,67 +1,54 @@
 <?php
+// controller/upload_look_controller.php
 session_start();
-require_once '../config/connessione.php';
-require_once '../model/Look.php'; // Includiamo il nuovo magazziniere dei Look!
 
-// Protezione aggiuntiva nel controller
-if (!isset($_SESSION['username'])) {
-    header("Location: ../view/login.php");
-    exit();
-}
+// Includiamo la configurazione del database e il model
+include_once "../config/connessione.php";
+include_once "../model/Look.php";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Recuperiamo tutti i dati, inclusi i nuovi campi per i tag e il link
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // 1. Recupero i dati base dal form
     $descrizione = $_POST['descrizione'] ?? '';
-    $tags = $_POST['tags'] ?? '';                   // NUOVO CAMPO
-    $link_acquisto = $_POST['link_acquisto'] ?? ''; // NUOVO CAMPO
-    $username = $_SESSION['username'];
+    $tags = $_POST['tags'] ?? '';
+    $username = $_SESSION['username'] ?? 'ospite';
 
-    if (isset($_FILES['immagine']) && $_FILES['immagine']['error'] === UPLOAD_ERR_OK) {
+    // 2. GESTIONE LINK: Trasformo l'array dei link in una stringa unica
+    // Prendo l'array, pulisco i campi vuoti e li unisco con una virgola
+    $links_array = $_POST['link_acquisto'] ?? [];
+    $links_filtrati = array_filter($links_array, function($val) {
+        return !empty(trim($val)); // Rimuove link lasciati in bianco
+    });
+    $links_string = implode(", ", $links_filtrati);
 
-        $fileTmpPath = $_FILES['immagine']['tmp_name'];
-        $fileName = $_FILES['immagine']['name'];
+    // 3. GESTIONE IMMAGINE
+    if (isset($_FILES['immagine']) && $_FILES['immagine']['error'] === 0) {
+        $nomeFile = time() . "_" . basename($_FILES['immagine']['name']); // Aggiungo timestamp per evitare duplicati
+        $target = "../uploads/" . $nomeFile;
 
-        $fileNameCmps = explode(".", $fileName);
-        $fileExtension = strtolower(end($fileNameCmps));
+        // Creiamo la cartella uploads se non esiste
+        if (!is_dir("../uploads/")) {
+            mkdir("../uploads/", 0777, true);
+        }
 
-        $estensioni_permesse = array('jpg', 'jpeg', 'png', 'gif', 'webp');
+        if (move_uploaded_file($_FILES['immagine']['tmp_name'], $target)) {
 
-        if (in_array($fileExtension, $estensioni_permesse)) {
-
-            // Generiamo il nome unico
-            $nuovoNomeFile = md5(time() . $fileName) . 'Fitgram.' . $fileExtension;
-
-            $cartellaUpload = '../uploads/';
-
-            if (!is_dir($cartellaUpload)) {
-                mkdir($cartellaUpload, 0777, true);
-            }
-
-            $percorso_destinazione = $cartellaUpload . $nuovoNomeFile;
-
-            // Spostiamo il file
-            if(move_uploaded_file($fileTmpPath, $percorso_destinazione)) {
-
-                // SALVATAGGIO NEL DATABASE TRAMITE MODEL (passiamo anche tags e link)
-                $inserito = createLook($conn, $descrizione, $nuovoNomeFile, $username, $tags, $link_acquisto);
-
-                if ($inserito) {
-                    $_SESSION['msg_look'] = "<div class='msg success'>Look pubblicato con successo! <a href='../index.php'>Torna alla Home</a></div>";
-                } else {
-                    $_SESSION['msg_look'] = "<div class='msg error'>Errore nel salvataggio sul database.</div>";
-                }
-
+            // 4. SALVATAGGIO NEL DATABASE (Tabella outfit)
+            // Passiamo i 6 parametri richiesti dalla funzione createLook
+            if (createLook($conn, $descrizione, $nomeFile, $username, $tags, $links_string)) {
+                $_SESSION['msg_look'] = "<div class='msg success'>Look pubblicato con successo!</div>";
+                header("Location: ../view/carica_look.php");
+                exit();
             } else {
-                $_SESSION['msg_look'] = "<div class='msg error'>Errore nello spostamento del file. Controlla i permessi della cartella.</div>";
+                $_SESSION['msg_look'] = "<div class='msg error'>Errore nel salvataggio sul database. Verifica le colonne tags e link_acquisto.</div>";
             }
         } else {
-            $_SESSION['msg_look'] = "<div class='msg error'>Formato non valido! Carica solo JPG, PNG, GIF o WEBP.</div>";
+            $_SESSION['msg_look'] = "<div class='msg error'>Errore nello spostamento del file nella cartella uploads.</div>";
         }
     } else {
-        $_SESSION['msg_look'] = "<div class='msg error'>Nessun file selezionato o errore nel caricamento.</div>";
+        $_SESSION['msg_look'] = "<div class='msg error'>Devi selezionare un'immagine valida.</div>";
     }
 
-    // Finito il lavoro, rimandiamo l'utente alla View per fargli vedere l'esito
+    // Se arriviamo qui, c'è stato un errore
     header("Location: ../view/carica_look.php");
     exit();
 }
