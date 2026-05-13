@@ -1,7 +1,7 @@
 <?php
 function createLook($conn, $descrizione, $nomeFile, $username, $tags, $link_acquisto) {
     // Query SQL con i nuovi campi
-    $sql = "INSERT INTO looks (descrizione, immagine, username, tags, link_acquisto) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO outfit (descrizione, immagine, username, tags, link_acquisto) VALUES (?, ?, ?, ?, ?)";
 
     $stmt = mysqli_prepare($conn, $sql);
 
