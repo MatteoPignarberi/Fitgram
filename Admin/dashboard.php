@@ -28,7 +28,11 @@ if ($conn) {
     <link rel="stylesheet" href="../styles/css/main.css">
     <link rel="stylesheet" href="../styles/css/components.css">
     <link rel="stylesheet" href="../styles/css/feed.css">
-    <link rel="stylesheet" href="../styles/css/custom_fix.css">
+    <link rel="stylesheet" href="../styles/css/dashboard_style.css">
+
+    <div class="avatar-fixed-container">
+        <img src="../uploads/<?php echo $foto; ?>">
+    </div>
     <script src="../js/homepage.js" defer></script>
     <style>
         /* FIX DEFINITIVI PER EVITARE IL CASINO DELLO SCREENSHOT */
