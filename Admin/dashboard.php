@@ -114,31 +114,74 @@ if ($conn) {
     </div>
 </main>
 
+<aside class="suggested-sidebar">
+    <section class="suggested-section">
+        <h3>Suggeriti per te</h3>
+        <div class="suggested-list">
+            <?php
+            $sugg = mysqli_query($conn, "SELECT id, username, nome FROM Utenti WHERE id != $id_loggato LIMIT 5");
+            while($s = mysqli_fetch_assoc($sugg)): ?>
+                <div class="suggested-card">
+                    <div class="suggested-avatar">👤</div>
+                    <div class="suggested-info">
+                        <strong><?php echo htmlspecialchars($s['nome'] ?? $s['username']); ?></strong>
+                        <span>@<?php echo htmlspecialchars($s['username']); ?></span>
+                    </div>
+                    <form action="azione_follow.php" method="POST" style="margin:0;">
+                        <input type="hidden" name="id_da_seguire" value="<?php echo $s['id']; ?>">
+                        <button type="submit" class="follow-btn-index" style="border: none !important; outline: none !important; box-shadow: none !important;">Segui</button>
+                    </form>
+                </div>
+            <?php endwhile; ?>
+        </div>
+    </section>
+</aside>
+
+<aside class="suggested-sidebar">
+    <section class="suggested-section">
+        <h3>Suggeriti per te</h3>
+        <div class="suggested-list">
+            <?php
+            $sugg = mysqli_query($conn, "SELECT id, username, nome FROM Utenti WHERE id != $id_loggato LIMIT 5");
+            while($s = mysqli_fetch_assoc($sugg)): ?>
+                <div class="suggested-card">
+                    <div class="suggested-avatar">👤</div>
+                    <div class="suggested-info">
+                        <strong><?php echo htmlspecialchars($s['nome'] ?? $s['username']); ?></strong>
+                        <span>@<?php echo htmlspecialchars($s['username']); ?></span>
+                    </div>
+                    <form action="azione_follow.php" method="POST" style="margin:0;">
+                        <input type="hidden" name="id_da_seguire" value="<?php echo $s['id']; ?>">
+                        <button type="submit" class="follow-btn-index" style="border: none !important; outline: none !important; box-shadow: none !important;">Segui</button>
+                    </form>
+                </div>
+            <?php endwhile; ?>
+        </div>
+    </section>
+</aside>
+
 <aside class="profile-sidebar" id="profile-sidebar">
     <div class="sidebar-header">
         <h2>Il mio Profilo</h2>
         <button class="close-sidebar-btn" id="close-sidebar">×</button>
     </div>
+    <div class="sidebar-content" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
 
-    <div class="sidebar-content" style="padding: 20px; display: flex; flex-direction: column; align-items: center;">
-
-        <div class="avatar-container-fixed" style="width: 120px !important; height: 120px !important; border-radius: 50%; overflow: hidden; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 15px;">
+        <div style="width: 120px !important; height: 120px !important; border-radius: 50% !important; overflow: hidden !important; margin: 20px auto !important; border: 3px solid #eee !important; display: block !important;">
             <img src="../uploads/<?php echo htmlspecialchars($foto_sessione); ?>"
-                 style="width: 100% !important; height: 100% !important; object-fit: cover !important; display: block !important;">
+                 style="width: 100% !important; height: 100% !important; object-fit: cover !important; display: block !important; border-radius: 50% !important;">
         </div>
 
         <h3 class="sidebar-username">@<?php echo htmlspecialchars($user_loggato); ?></h3>
 
-        <div class="sidebar-stats" style="width: 100%; margin: 20px 0;">
+        <div class="sidebar-stats">
             <div><strong><?php echo $look_count; ?></strong><br>Look</div>
             <div><strong><?php echo $foll; ?></strong><br>Follower</div>
             <div><strong><?php echo $segu; ?></strong><br>Seguiti</div>
         </div>
 
-        <div style="width: 100%; display: flex; flex-direction: column; gap: 10px;">
-            <a href="modifica_profilo.php" class="edit-profile-btn" style="text-align: center;">Modifica Profilo</a>
-            <a href="../controller/logoutController.php" class="edit-profile-btn logout-btn" style="text-align: center; background: #fff; color: #ff4d4d; border: 1px solid #ff4d4d;">Esci</a>
-        </div>
+        <a href="modifica_profilo.php" class="edit-profile-btn" style="border: none;">Modifica Profilo</a>
+        <a href="../controller/logoutController.php" class="edit-profile-btn logout-btn" style="margin-top:10px; border: none;">Esci</a>
     </div>
 </aside>
 
