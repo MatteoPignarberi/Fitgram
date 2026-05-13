@@ -104,13 +104,6 @@ if ($conn) {
         </aside>
     </div>
 </main>
-
-<a href="view/login.php" class="add-look-btn" title="Accedi per caricare un look"
-   onclick="return confirm('Devi essere loggato per caricare un look. Vuoi andare al login?');"
-   style="position: fixed; bottom: 30px; right: 30px; z-index: 999;">
-    +
-</a>
-
 <?php require_once 'includes/footer.php'; ?>
 
 </body>
