@@ -42,7 +42,7 @@ $suggeriti = mysqli_query($conn, "SELECT id, username FROM Utenti WHERE id != $i
                     <article class="look-card" style="position: relative;">
                         <img src="../uploads/<?php echo $o['immagine']; ?>" style="width:100%; height:100%; object-fit:cover;">
                         <div class="look-overlay"><div class="overlay-user">@<?php echo $o['username']; ?></div></div>
-                        <a href="../controller/like_controller.php?idOutfit=<?php echo $idO; ?>" class="like-btn-dash">
+                        <a href="../controller/likeController.php?idOutfit=<?php echo $idO; ?>" class="like-btn-dash">
                             <?php echo $ha_l ? "❤️" : "🤍"; ?> <b><?php echo $n_l; ?></b>
                         </a>
                     </article>
