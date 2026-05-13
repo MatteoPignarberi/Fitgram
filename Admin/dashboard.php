@@ -119,20 +119,27 @@ if ($conn) {
         <h2>Il mio Profilo</h2>
         <button class="close-sidebar-btn" id="close-sidebar">×</button>
     </div>
-    <div class="sidebar-content">
-        <div class="sidebar-avatar-large">
-            <img src="../uploads/<?php echo htmlspecialchars($foto_sessione); ?>" alt="Profilo">
-        </div>
-        <h3 class="sidebar-username">@<?php echo htmlspecialchars($user_loggato); ?></h3>
+    <div class="sidebar-content" style="display: flex; flex-direction: column; align-items: center; padding: 20px;">
 
-        <div class="sidebar-stats">
-            <div><strong><?php echo $look_count; ?></strong><br>Look</div>
-            <div><strong><?php echo $foll; ?></strong><br>Follower</div>
-            <div><strong><?php echo $segu; ?></strong><br>Seguiti</div>
+        <div class="sidebar-avatar-large" style="width: 120px; height: 120px; min-width: 120px; min-height: 120px; border-radius: 50%; overflow: hidden; margin-bottom: 15px; border: 3px solid #eee; display: block;">
+            <img src="../uploads/<?php echo htmlspecialchars($foto_sessione); ?>"
+                 alt="Profilo"
+                 style="width: 100%; height: 100%; object-fit: cover; display: block;">
         </div>
 
-        <a href="modifica_profilo.php" class="edit-profile-btn">Modifica Profilo</a>
-        <a href="../controller/logoutController.php" class="edit-profile-btn logout-btn" style="margin-top:10px; background:#fff0f0; color:#d93025; border: 1px solid #f8d7da;">Esci</a>
+        <h3 class="sidebar-username" style="margin-bottom: 5px;">@<?php echo htmlspecialchars($user_loggato); ?></h3>
+        <p style="color: #666; font-size: 0.9em; margin-bottom: 20px;">Appassionato di stile</p>
+
+        <div class="sidebar-stats" style="width: 100%; display: flex; justify-content: space-around; text-align: center; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 15px 0; margin-bottom: 20px;">
+            <div><strong><?php echo $look_count; ?></strong><br><span style="font-size: 0.8em; color: #888;">Look</span></div>
+            <div><strong><?php echo $foll; ?></strong><br><span style="font-size: 0.8em; color: #888;">Follower</span></div>
+            <div><strong><?php echo $segu; ?></strong><br><span style="font-size: 0.8em; color: #888;">Seguiti</span></div>
+        </div>
+
+        <div style="width: 100%; display: flex; flex-direction: column; gap: 10px;">
+            <a href="modifica_profilo.php" class="edit-profile-btn" style="text-align: center; text-decoration: none; padding: 10px; background: #000; color: #fff; border-radius: 5px; font-weight: 500;">Modifica Profilo</a>
+            <a href="../controller/logoutController.php" class="logout-link" style="text-align: center; text-decoration: none; padding: 10px; color: #d93025; font-weight: 600; font-size: 0.9em;">Esci dall'account</a>
+        </div>
     </div>
 </aside>
 
