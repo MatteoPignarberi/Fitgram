@@ -17,67 +17,84 @@ $dati_utente = $model->getUtenteById($_SESSION['user_id']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impostazioni - Fitgram</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            --glass-bg: rgba(255, 255, 255, 0.95);
-            --text-main: #2d3436;
-            --accent-color: #6c5ce7; /* Un viola elegante coerente con Fitgram */
-            --border-radius: 20px;
+            --bg-site: #f4f1ee; /* Il crema dello sfondo che si vede nello screen */
+            --card-bg: #ffffff;
+            --accent-site: #b29491; /* Il marrone rosato dei bottoni "Segui" */
+            --text-dark: #4a4a4a;
+            --text-light: #8e8e8e;
+            --soft-shadow: 0 10px 30px rgba(0,0,0,0.03);
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background: var(--bg-gradient);
-            background-attachment: fixed;
-            color: var(--text-main);
+            background-color: var(--bg-site);
+            color: var(--text-dark);
             margin: 0;
+            padding: 0;
+        }
+
+        /* Header minimale */
+        .top-nav {
+            padding: 30px;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            min-height: 100vh;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .navbar {
-            width: 100%;
-            padding: 20px 0;
-            text-align: center;
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            color: var(--accent-site);
         }
 
-        .navbar a {
+        .back-link {
             text-decoration: none;
-            color: var(--accent-color);
-            font-weight: 600;
+            color: var(--text-light);
             font-size: 0.9rem;
-            transition: 0.3s;
+            font-weight: 500;
         }
 
-        .navbar a:hover { opacity: 0.7; }
+        /* Container centrale */
+        .settings-container {
+            max-width: 700px;
+            margin: 0 auto 100px auto;
+            padding: 0 20px;
+        }
 
         .settings-card {
-            background: var(--glass-bg);
-            max-width: 600px;
-            width: 90%;
-            margin: 20px auto 50px auto;
-            padding: 40px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            background: var(--card-bg);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: var(--soft-shadow);
         }
 
-        .header-title {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .header-title h1 {
+        h1 {
             font-family: 'Playfair Display', serif;
+            font-weight: 400;
             font-size: 2.2rem;
-            margin: 0;
-            color: var(--text-main);
+            margin-bottom: 40px;
+            text-align: center;
         }
 
-        .profile-pic-section {
+        .section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-site);
+            margin: 40px 0 20px 0;
+            font-weight: 600;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        /* Avatar Section */
+        .profile-header {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -85,140 +102,191 @@ $dati_utente = $model->getUtenteById($_SESSION['user_id']);
         }
 
         .avatar-circle {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(45deg, var(--accent-color), #a29bfe);
+            width: 90px;
+            height: 90px;
+            background-color: var(--bg-site);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 2.5rem;
+            font-size: 1.8rem;
+            color: var(--accent-site);
             font-family: 'Playfair Display', serif;
-            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.2);
             margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
         }
 
+        /* Form styling */
         .form-group {
             margin-bottom: 25px;
         }
 
         .form-group label {
             display: block;
-            font-weight: 600;
             font-size: 0.85rem;
-            margin-bottom: 8px;
-            margin-left: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #636e72;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--text-dark);
         }
 
-        input[type="text"], textarea {
+        input[type="text"],
+        input[type="email"],
+        textarea,
+        select {
             width: 100%;
             padding: 15px 20px;
-            border: 2px solid #edf2f7;
+            border: 1px solid #eee;
             border-radius: 15px;
+            background-color: #fafafa;
             font-family: 'Montserrat', sans-serif;
-            font-size: 1rem;
-            transition: 0.3s;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
             box-sizing: border-box;
-            background: #fdfdfd;
         }
 
         input:focus, textarea:focus {
             outline: none;
-            border-color: var(--accent-color);
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
+            border-color: var(--accent-site);
+            background-color: #fff;
         }
 
-        .btn-submit {
+        /* Opzioni Extra (Toggle-like) */
+        .option-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .option-info h4 {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .option-info p {
+            margin: 5px 0 0 0;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* Bottone in stile "Segui" dello screen */
+        .btn-save {
             width: 100%;
-            background: var(--accent-color);
+            background-color: var(--accent-site);
             color: white;
             border: none;
             padding: 18px;
-            border-radius: 15px;
-            font-size: 1rem;
+            border-radius: 50px; /* Molto morbido */
+            font-family: 'Montserrat', sans-serif;
             font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            transition: 0.4s;
-            margin-top: 10px;
-            box-shadow: 0 8px 15px rgba(108, 92, 231, 0.2);
+            margin-top: 40px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
         }
 
-        .btn-submit:hover {
+        .btn-save:hover {
+            opacity: 0.9;
             transform: translateY(-2px);
-            box-shadow: 0 12px 20px rgba(108, 92, 231, 0.3);
-            background: #5b4bc4;
         }
 
         .alert-success {
-            background: #d1f7e1;
-            color: #1b5e20;
+            background-color: #f4f1ee;
+            color: var(--accent-site);
             padding: 15px;
-            border-radius: 12px;
+            border-radius: 15px;
             text-align: center;
             margin-bottom: 30px;
             font-size: 0.9rem;
-            border: 1px solid #c3e6cb;
-        }
-
-        .footer-tagline {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            margin-top: 20px;
-            color: var(--accent-color);
-            opacity: 0.6;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
 
-<nav class="navbar">
-    <a href="../Admin/dashboard.php">← Torna alla Dashboard</a>
-</nav>
+<div class="top-nav">
+    <a href="../Admin/dashboard.php" class="back-link">← torna indietro</a>
+    <div class="logo-text">be fit. be style.</div>
+</div>
 
-<main class="settings-card">
-    <div class="header-title">
-        <h1>Il Tuo Profilo</h1>
-        <div class="footer-tagline">Fitgram</div>
+<main class="settings-container">
+    <div class="settings-card">
+        <h1>Impostazioni</h1>
+
+        <?php if (isset($_SESSION['messaggio_successo'])): ?>
+            <div class="alert-success">
+                Profilo aggiornato con eleganza.
+                <?php unset($_SESSION['messaggio_successo']); ?>
+            </div>
+        <?php endif; ?>
+
+        <form action="../controller/impostazioniController.php" method="POST">
+            <input type="hidden" name="action" value="update_profilo">
+
+            <div class="profile-header">
+                <div class="avatar-circle">
+                    <?= strtoupper(substr($dati_utente['username'], 0, 1)) ?>
+                </div>
+                <p style="color: var(--accent-site); font-size: 0.8rem; font-weight: 600; cursor: pointer;">Cambia foto</p>
+            </div>
+
+            <div class="section-title">Informazioni Pubbliche</div>
+
+            <div class="form-group">
+                <label>Nome Completo</label>
+                <input type="text" name="nome" value="<?= htmlspecialchars($dati_utente['nome'] ?? '') ?>">
+            </div>
+
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" value="<?= htmlspecialchars($dati_utente['username'] ?? '') ?>">
+            </div>
+
+            <div class="form-group">
+                <label>Biografia</label>
+                <textarea name="bio" rows="3"><?= htmlspecialchars($dati_utente['bio'] ?? '') ?></textarea>
+            </div>
+
+            <div class="section-title">Privacy e Preferenze</div>
+
+            <div class="option-row">
+                <div class="option-info">
+                    <h4>Account Privato</h4>
+                    <p>Solo le persone che approvi possono vedere i tuoi look.</p>
+                </div>
+                <select style="width: auto;">
+                    <option>No</option>
+                    <option>Si</option>
+                </select>
+            </div>
+
+            <div class="option-row">
+                <div class="option-info">
+                    <h4>Notifiche Look</h4>
+                    <p>Ricevi avvisi quando i tuoi creator preferiti postano.</p>
+                </div>
+                <select style="width: auto;">
+                    <option>Attive</option>
+                    <option>Silenziate</option>
+                </select>
+            </div>
+
+            <div class="option-row">
+                <div class="option-info">
+                    <h4>Tema Interfaccia</h4>
+                    <p>Personalizza l'aspetto della tua dashboard.</p>
+                </div>
+                <select style="width: auto;">
+                    <option>Chiaro (Beige)</option>
+                    <option>Scuro (Antracite)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-save">Salva modifiche</button>
+        </form>
     </div>
-
-    <div class="profile-pic-section">
-        <div class="avatar-circle">
-            <?= strtoupper(substr($dati_utente['username'], 0, 1)) ?>
-        </div>
-        <span style="color: var(--accent-color); cursor: pointer; font-size: 0.8rem; font-weight: 600;">Aggiorna Avatar</span>
-    </div>
-
-    <?php if (isset($_SESSION['messaggio_successo'])): ?>
-        <div class="alert-success">
-            ✨ <?= $_SESSION['messaggio_successo']; unset($_SESSION['messaggio_successo']); ?>
-        </div>
-    <?php endif; ?>
-
-    <form action="../controller/impostazioniController.php" method="POST">
-        <input type="hidden" name="action" value="update_profilo">
-
-        <div class="form-group">
-            <label>Nome Completo</label>
-            <input type="text" name="nome" value="<?= htmlspecialchars($dati_utente['nome'] ?? '') ?>" placeholder="Es. Mario Rossi">
-        </div>
-
-        <div class="form-group">
-            <label>Nome Utente</label>
-            <input type="text" name="username" value="<?= htmlspecialchars($dati_utente['username'] ?? '') ?>" placeholder="username_unico">
-        </div>
-
-        <div class="form-group">
-            <label>La tua Bio</label>
-            <textarea name="bio" rows="4" placeholder="Racconta qualcosa di te..."><?= htmlspecialchars($dati_utente['bio'] ?? '') ?></textarea>
-        </div>
-
-        <button type="submit" class="btn-submit">Salva i cambiamenti</button>
-    </form>
 </main>
 
 </body>
