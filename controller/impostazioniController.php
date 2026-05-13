@@ -1,10 +1,12 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 session_start();
 
 // MANCAVA QUESTA RIGA! Fondamentale per far esistere la variabile $conn
 require_once '../config/connessione.php';
 
-require_once '../Model/UtenteModel.php';
+require_once '../model/UtenteModel.php';
 
 // Controllo sicurezza: l'utente deve essere loggato
 if (!isset($_SESSION['user_id'])) {
@@ -36,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         }
 
         // Ricarico la pagina per mostrare i cambiamenti
-        header("Location: ../View/impostazioni.php");
+        header("Location: ../view/impostazioni.php");
         exit;
     }
 }
