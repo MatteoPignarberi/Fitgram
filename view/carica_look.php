@@ -43,7 +43,7 @@ if (!isset($_SESSION['username'])) {
 
         <input type="submit" value="Pubblica Look">
     </form>
-    <a href="../index.php" class="back-link">← Annulla e torna alla Home</a>
+    <a href="../Admin/dashboard.php" class="back-link">← Annulla e torna alla Home</a>
 </div>
 
 <script>
