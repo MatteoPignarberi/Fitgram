@@ -171,7 +171,7 @@ if ($conn) {
             <div><strong><?php echo $num_seguite; ?></strong><br>Seguiti</div>
         </div>
 
-        <a href="../controller/impostazioniController.php" class="edit-profile-btn">Modifica Profilo</a>
+        <a href="../view/impostazioni.php" class="edit-profile-btn">Modifica Profilo</a>
         <a href="../controller/logoutController.php" class="edit-profile-btn logout-btn" style="margin-top:10px;">Esci</a>
     </div>
 </aside>
