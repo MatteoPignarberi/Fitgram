@@ -1,0 +1,126 @@
+/* --- LAYOUT GENERALE --- */
+.lookbook-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-top: 20px;
+}
+
+.content-layout {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 0 20px;
+}
+
+/* --- CATEGORIE (STYLE PILLS) --- */
+.style-navigation {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.style-pill {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 12px;
+    padding: 8px 20px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background: white;
+    cursor: pointer;
+    transition: 0.3s;
+    color: #666;
+}
+
+.style-pill.active {
+    border-color: #333;
+    color: #333;
+    font-weight: 600;
+}
+
+/* --- FEED E CARDS --- */
+.main-feed {
+    flex: 1;
+}
+
+.look-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.like-btn-container {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    text-decoration: none;
+    z-index: 10;
+}
+
+/* --- SIDEBAR SUGGERITI --- */
+.suggested-sidebar {
+    width: 350px;
+    flex-shrink: 0;
+}
+
+.follow-btn-index {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    cursor: pointer;
+    background-color: #b08d8d;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 15px;
+    transition: 0.2s;
+}
+
+.follow-btn-index:hover {
+    filter: brightness(0.9);
+}
+
+/* --- SIDEBAR PROFILO E FOTO --- */
+.avatar-fixed-container {
+    width: 120px !important;
+    height: 120px !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    margin: 0 auto 15px !important;
+    border: 3px solid #eee !important;
+    display: block !important;
+}
+
+.avatar-fixed-container img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
+
+/* --- PULSANTE AGGIUNGI (+) --- */
+.add-look-btn {
+    position: fixed !important;
+    bottom: 30px !important;
+    right: 30px !important;
+    width: 60px !important;
+    height: 60px !important;
+    background-color: #b08d8d !important;
+    color: white !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 30px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+    text-decoration: none !important;
+    z-index: 999 !important;
+}

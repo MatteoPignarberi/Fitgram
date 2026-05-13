@@ -28,6 +28,7 @@ if ($conn) {
     <link rel="stylesheet" href="../styles/css/main.css">
     <link rel="stylesheet" href="../styles/css/components.css">
     <link rel="stylesheet" href="../styles/css/feed.css">
+    <link rel="stylesheet" href="../styles/css/custom_fix.css">
     <script src="../js/homepage.js" defer></script>
     <style>
         /* FIX DEFINITIVI PER EVITARE IL CASINO DELLO SCREENSHOT */
@@ -115,23 +116,15 @@ if ($conn) {
 </main>
 
 <aside class="profile-sidebar" id="profile-sidebar">
-    <div class="sidebar-header" style="padding: 20px; display: flex; justify-content: space-between; align-items: center;">
-        <h2 style="font-family: 'Playfair Display';">Il mio Profilo</h2>
-        <button id="close-sidebar" style="background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
-    </div>
-    <div class="sidebar-content" style="display:flex; flex-direction:column; align-items:center; padding:20px;">
-        <div class="avatar-fixed">
+    <div class="sidebar-content">
+        <div class="avatar-fixed-container">
             <img src="../uploads/<?php echo htmlspecialchars($foto_sessione); ?>" alt="Profilo">
         </div>
-        <h3>@<?php echo htmlspecialchars($user_loggato); ?></h3>
-        <div class="sidebar-stats" style="width:100%; display:flex; justify-content:space-around; margin:20px 0; border-top:1px solid #eee; border-bottom:1px solid #eee; padding:15px 0;">
-            <div><strong><?php echo $look_count; ?></strong><br><small>Look</small></div>
-            <div><strong><?php echo $foll; ?></strong><br><small>Follower</small></div>
-            <div><strong><?php echo $segu; ?></strong><br><small>Seguiti</small></div>
-        </div>
-        <a href="../controller/logoutController.php" style="color: #d93025; text-decoration: none; font-weight: 600; margin-top: 20px;">Esci dall'account</a>
+        <h3 class="sidebar-username">@<?php echo htmlspecialchars($user_loggato); ?></h3>
     </div>
 </aside>
+
+<a href="../view/carica_look.php" class="add-look-btn">+</a>
 
 <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
