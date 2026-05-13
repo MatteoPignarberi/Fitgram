@@ -7,31 +7,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'update_profil
     $model = new UtenteModel($conn);
     $user_id = $_SESSION['user_id'];
 
-    // Dati testuali
-    $nome = $_POST['nome'];
-    $username = $_POST['username'];
-    $bio = $_POST['bio'];
+    // Recupero dati dal form
+    $nome = isset($_POST['nome']) ? $_POST['nome'] : '';
+    $username = isset($_POST['username']) ? $_POST['username'] : '';
+    $bio = isset($_POST['bio']) ? $_POST['bio'] : '';
 
-    // Gestione Immagine
+    // --- MECCANISMO CARICAMENTO FOTO (SIMILE A LOOKCONTROLLER) ---
     if (isset($_FILES['foto_profilo']) && $_FILES['foto_profilo']['error'] === 0) {
-        $upload_dir = __DIR__ . '/../uploads/';
 
-        // Se la cartella non esiste, la crea
-        if (!is_dir($upload_dir)) { mkdir($upload_dir, 0777, true); }
+        // Genero il nome file come fai per i look (time + nome originale)
+        $nomeFile = time() . "_" . basename($_FILES['foto_profilo']['name']);
+        $dir_destinazione = "../uploads/";
 
-        $file_ext = pathinfo($_FILES['foto_profilo']['name'], PATHINFO_EXTENSION);
-        $file_name = "profile_" . $user_id . "_" . time() . "." . $file_ext;
-        $dest_path = $upload_dir . $file_name;
+        // Creo la cartella se non esiste
+        if (!is_dir($dir_destinazione)) {
+            mkdir($dir_destinazione, 0777, true);
+        }
 
-        if (move_uploaded_file($_FILES['foto_profilo']['tmp_name'], $dest_path)) {
-            // Aggiorna il nome del file nel database
-            $model->updateFoto($user_id, $file_name);
+        $target = $dir_destinazione . $nomeFile;
+
+        if (move_uploaded_file($_FILES['foto_profilo']['tmp_name'], $target)) {
+            // Se il caricamento riesce, aggiorno il nome della foto nel DB
+            // Assicurati di avere questo metodo nel tuo UtenteModel
+            $model->updateFoto($user_id, $nomeFile);
+        } else {
+            $_SESSION['msg_error'] = "Errore nel salvataggio della foto profilo.";
         }
     }
 
-    $model->updateProfilo($user_id, $nome, $username, $bio);
-    $_SESSION['messaggio_successo'] = "Profilo aggiornato!";
+    // Aggiorno gli altri dati del profilo
+    if ($model->updateProfilo($user_id, $nome, $username, $bio)) {
+        $_SESSION['messaggio_successo'] = "Profilo aggiornato con successo!";
+    } else {
+        $_SESSION['msg_error'] = "Errore durante l'aggiornamento dei dati.";
+    }
 
     header("Location: ../view/impostazioni.php");
-    exit;
+    exit();
 }
