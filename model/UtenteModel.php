@@ -18,4 +18,9 @@ class UtenteModel {
         $stmt->bind_param("sssi", $nome, $username, $bio, $id);
         return $stmt->execute();
     }
+    public function updateFoto($id, $nomeFoto) {
+        $stmt = $this->conn->prepare("UPDATE Utenti SET foto = ? WHERE id = ?");
+        $stmt->bind_param("si", $nomeFoto, $id);
+        return $stmt->execute();
+    }
 }
