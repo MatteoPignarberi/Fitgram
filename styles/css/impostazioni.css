@@ -1,10 +1,9 @@
+/* Palette Colori Fitgram */
 :root {
-    --bg-site: #f4f1ee; /* Il crema dello sfondo che si vede nello screen */
-    --card-bg: #ffffff;
-    --accent-site: #b29491; /* Il marrone rosato dei bottoni "Segui" */
-    --text-dark: #4a4a4a;
-    --text-light: #8e8e8e;
-    --soft-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    --bg-site: #f4f1ee;      /* Crema di sfondo */
+    --accent-site: #b29491;  /* Marrone rosato (colore tasto Segui) */
+    --text-dark: #4a4a4a;    /* Grigio scuro per i testi */
+    --white: #ffffff;
 }
 
 body {
@@ -12,67 +11,60 @@ body {
     background-color: var(--bg-site);
     color: var(--text-dark);
     margin: 0;
-    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
 }
 
-/* Header minimale */
+/* Navigazione superiore */
 .top-nav {
-    padding: 30px;
+    width: 100%;
+    max-width: 700px;
+    padding: 30px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 800px;
-    margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .logo-text {
     font-family: 'Playfair Display', serif;
     font-style: italic;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     color: var(--accent-site);
 }
 
 .back-link {
     text-decoration: none;
-    color: var(--text-light);
+    color: #8e8e8e;
     font-size: 0.9rem;
     font-weight: 500;
 }
 
-/* Container centrale */
+/* Card centrale */
 .settings-container {
+    width: 100%;
     max-width: 700px;
-    margin: 0 auto 100px auto;
-    padding: 0 20px;
+    padding: 0 20px 50px 20px;
+    box-sizing: border-box;
 }
 
 .settings-card {
-    background: var(--card-bg);
-    border-radius: 30px;
-    padding: 50px;
-    box-shadow: var(--soft-shadow);
+    background: var(--white);
+    border-radius: 30px; /* Bordi molto morbidi */
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.03);
 }
 
 h1 {
     font-family: 'Playfair Display', serif;
-    font-weight: 400;
-    font-size: 2.2rem;
-    margin-bottom: 40px;
+    font-size: 2rem;
     text-align: center;
+    margin-bottom: 40px;
 }
 
-.section-title {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--accent-site);
-    margin: 40px 0 20px 0;
-    font-weight: 600;
-    border-bottom: 1px solid #f0f0f0;
-    padding-bottom: 10px;
-}
-
-/* Avatar Section */
+/* --- SEZIONE FOTO PROFILO --- */
 .profile-header {
     display: flex;
     flex-direction: column;
@@ -80,48 +72,96 @@ h1 {
     margin-bottom: 40px;
 }
 
-.avatar-circle {
-    width: 90px;
-    height: 90px;
-    background-color: var(--bg-site);
+.avatar-wrapper {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    cursor: pointer;
     border-radius: 50%;
+    overflow: hidden; /* Taglia l'immagine a cerchio */
+    border: 2px solid var(--accent-site);
+    background: var(--bg-site);
+}
+
+.avatar-img, .avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem;
-    color: var(--accent-site);
-    font-family: 'Playfair Display', serif;
-    margin-bottom: 15px;
-    border: 1px solid #e0e0e0;
 }
 
-/* Form styling */
+.avatar-placeholder {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: var(--accent-site);
+}
+
+/* Overlay scuro che appare al passaggio del mouse */
+.avatar-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.avatar-wrapper:hover .avatar-overlay {
+    opacity: 1;
+}
+
+.avatar-overlay span {
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.photo-hint {
+    margin-top: 12px;
+    font-size: 0.75rem;
+    color: var(--accent-site);
+    font-weight: 600;
+}
+
+/* --- FORM STYLING --- */
+.section-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent-site);
+    margin: 35px 0 15px 0;
+    font-weight: 600;
+}
+
 .form-group {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
     display: block;
     font-size: 0.85rem;
     font-weight: 500;
-    margin-bottom: 10px;
-    color: var(--text-dark);
+    margin-bottom: 8px;
 }
 
-input[type="text"],
-input[type="email"],
-textarea,
-select {
+input[type="text"], textarea, .soft-select {
     width: 100%;
     padding: 15px 20px;
-    border: 1px solid #eee;
+    border: 1px solid #f0f0f0;
     border-radius: 15px;
     background-color: #fafafa;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.95rem;
-    color: var(--text-dark);
-    transition: all 0.3s ease;
     box-sizing: border-box;
+    transition: 0.3s;
 }
 
 input:focus, textarea:focus {
@@ -130,7 +170,7 @@ input:focus, textarea:focus {
     background-color: #fff;
 }
 
-/* Opzioni Extra (Toggle-like) */
+/* Righe per le opzioni (Privacy, Tema) */
 .option-row {
     display: flex;
     justify-content: space-between;
@@ -138,32 +178,28 @@ input:focus, textarea:focus {
     padding: 15px 0;
 }
 
-.option-info h4 {
-    margin: 0;
-    font-size: 0.95rem;
-    font-weight: 600;
+.option-info h4 { margin: 0; font-size: 0.95rem; }
+.option-info p { margin: 5px 0 0 0; font-size: 0.8rem; color: #8e8e8e; }
+
+.soft-select {
+    width: auto;
+    padding: 8px 15px;
 }
 
-.option-info p {
-    margin: 5px 0 0 0;
-    font-size: 0.8rem;
-    color: var(--text-light);
-}
-
-/* Bottone in stile "Segui" dello screen */
+/* Bottone Salva (Stile morbido e largo) */
 .btn-save {
     width: 100%;
     background-color: var(--accent-site);
     color: white;
     border: none;
     padding: 18px;
-    border-radius: 50px; /* Molto morbido */
+    border-radius: 50px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 600;
     font-size: 1rem;
     cursor: pointer;
     margin-top: 40px;
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    transition: 0.3s ease;
 }
 
 .btn-save:hover {
@@ -172,7 +208,7 @@ input:focus, textarea:focus {
 }
 
 .alert-success {
-    background-color: #f4f1ee;
+    background-color: var(--bg-site);
     color: var(--accent-site);
     padding: 15px;
     border-radius: 15px;
