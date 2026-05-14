@@ -12,14 +12,15 @@
 <?php include '../includes/header.php'; ?>
 
 <header class="wardrobe-header">
+    <img src="../resources/Images/Armadio.png" alt="Icona Armadio">
     <h1>Il mio Archivio</h1>
-    <p><?php echo count($miei_look); ?> look caricati</p>
+    <p><?php echo count($miei_look); ?> LOOK CARICATI</p>
 </header>
 
 <main class="wardrobe-container">
     <div class="archive-grid">
         <?php if (empty($miei_look)): ?>
-            <p style="grid-column: 1/-1; text-align: center;">L'armadio è vuoto.</p>
+            <div class="empty-state-msg">L'armadio è attualmente vuoto. Inizia a caricare i tuoi look!</div>
         <?php else: ?>
             <?php foreach ($miei_look as $look): ?>
                 <div class="archive-card">
