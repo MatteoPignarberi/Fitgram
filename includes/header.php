@@ -58,9 +58,11 @@ $base = (basename(getcwd()) == 'Admin' || basename(getcwd()) == 'view' || basena
         </div>
     </nav>
 
-    <a href="../controller/armadioController.php" class="wardrobe-btn" title="Il mio armadio">
-        <img src="../images/Armadio.png" alt="Armadio">
+<?php if ($is_logged): ?>
+    <a href="<?php echo $base; ?>controller/armadioController.php" class="wardrobe-btn" title="Il mio armadio">
+        <img src="<?php echo $base; ?>resources/Images/Armadio.png" alt="Armadio">
     </a>
+<?php endif; ?>
 
 <?php if ($is_logged): ?>
     <a href="<?php echo $base; ?>view/carica_look.php" class="add-look-btn" title="Carica un nuovo look">+</a>
