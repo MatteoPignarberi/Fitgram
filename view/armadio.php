@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<?php require_once '../includes/header.php'; ?>
+<?php include '../includes/header.php'; ?>
 
 <header class="wardrobe-header">
     <h1>Il mio Archivio</h1>
@@ -19,11 +19,11 @@
 <main class="wardrobe-container">
     <div class="archive-grid">
         <?php if (empty($miei_look)): ?>
-            <p>L'armadio è vuoto. Inizia a caricare i tuoi fit!</p>
+            <p style="grid-column: 1/-1; text-align: center;">L'armadio è vuoto.</p>
         <?php else: ?>
             <?php foreach ($miei_look as $look): ?>
                 <div class="archive-card">
-                    <img src="../uploads/<?php echo htmlspecialchars($look['immagine']); ?>">
+                    <img src="../uploads/<?php echo htmlspecialchars($look['immagine']); ?>" alt="Outfit">
                     <div class="archive-info">
                         <p><?php echo htmlspecialchars($look['descrizione']); ?></p>
                         <span><?php echo date("d/m/Y", strtotime($look['timestamp'])); ?></span>
@@ -34,7 +34,7 @@
     </div>
 </main>
 
-<?php require_once '../includes/footer.php'; ?>
+<?php include '../includes/footer.php'; ?>
 
 </body>
 </html>
