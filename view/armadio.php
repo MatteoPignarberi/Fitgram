@@ -45,6 +45,21 @@
         .empty-wardrobe {
             text-align: center; padding: 100px 0; grid-column: 1 / -1;
         }
+        .btn-carica {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--accent-pop);
+            font-weight: 600;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid var(--accent-pop);
+            border-radius: 25px;
+            transition: 0.3s;
+        }
+        .btn-carica:hover {
+            background-color: var(--accent-pop);
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -59,7 +74,7 @@
         <?php if (empty($miei_look)): ?>
             <div class="empty-wardrobe">
                 <p>Non hai ancora aggiunto look al tuo armadio.</p>
-                <a href="carica_look.php" style="color: var(--accent-pop); font-weight: 600;">Carica il primo look ora</a>
+                <a href="carica_look.php" class="btn-carica">Carica il primo look ora</a>
             </div>
         <?php else: ?>
             <?php foreach ($miei_look as $look): ?>

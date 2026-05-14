@@ -1,8 +1,10 @@
 <?php
 // model/Look.php
 
+/**
+ * Crea un nuovo look nella tabella Outfit
+ */
 function createLook($conn, $descrizione, $nomeFile, $username, $tags, $link_acquisto) {
-    // Query basata sulla tua tabella Outfit
     $sql = "INSERT INTO Outfit (descrizione, immagine, username, tags, link_acquisto) VALUES (?, ?, ?, ?, ?)";
 
     if ($stmt = mysqli_prepare($conn, $sql)) {
@@ -14,11 +16,11 @@ function createLook($conn, $descrizione, $nomeFile, $username, $tags, $link_acqu
     return false;
 }
 
-// model/Look.php
-
+/**
+ * Recupera i look dell'utente loggato tramite la tabella pivot OutfitUtenti
+ */
 function getArmadioUtente($conn, $idUtente) {
     $outfits = [];
-    // Query con JOIN per prendere i dati dell'outfit collegati all'utente specifico
     $sql = "SELECT O.* FROM Outfit O
             INNER JOIN OutfitUtenti OU ON O.id = OU.idOutfit
             WHERE OU.idUtente = ?
@@ -36,3 +38,4 @@ function getArmadioUtente($conn, $idUtente) {
     }
     return $outfits;
 }
+?>
