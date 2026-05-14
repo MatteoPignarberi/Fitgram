@@ -58,8 +58,8 @@ $base = (basename(getcwd()) == 'Admin' || basename(getcwd()) == 'view' || basena
         </div>
     </nav>
 
-    <a href="#" class="wardrobe-btn" title="Il mio armadio">
-        <img src="<?php echo $base; ?>resources/Images/Armadio.png" alt="Armadio">
+    <a href="../controller/armadioController.php" class="wardrobe-btn" title="Il mio armadio">
+        <img src="../images/Armadio.png" alt="Armadio">
     </a>
 
 <?php if ($is_logged): ?>
