@@ -1,50 +1,52 @@
-/* Stili specifici per la pagina Armadio */
+/* --- HEADER CENTRALE --- */
+.wardrobe-header {
+    text-align: center;
+    padding: 4rem 1rem;
+    background-color: var(--pure-white);
+    border-bottom: 1px solid var(--rosa-carne);
+    margin-bottom: 3rem;
+}
 
+.wardrobe-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 3rem;
+    color: var(--text-main);
+    margin-bottom: 0.8rem;
+}
+
+.stats-archive {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+/* --- GRIGLIA E CARD --- */
 .wardrobe-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 60px 20px;
+    padding: 0 20px 60px 20px;
 }
 
-.wardrobe-header {
-    text-align: center;
-    margin-bottom: 50px;
-}
-
-.archive-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 3rem;
-    color: var(--text-main);
-}
-
-.archive-subtitle {
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 0.8rem;
-}
-
-/* Griglia degli Outfit */
-.wardrobe-grid {
+.archive-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 35px;
+    gap: 40px;
 }
 
-.outfit-card {
+.archive-card {
     background: var(--pure-white);
-    border-radius: 15px;
+    border-radius: 12px;
     overflow: hidden;
-    border: 1px solid var(--gray-border);
-    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+    transition: transform 0.4s ease;
     position: relative;
-    display: flex;
-    flex-direction: column;
+    border: 1px solid var(--gray-border);
 }
 
-.outfit-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+.archive-card:hover {
+    transform: translateY(-8px);
 }
 
 /* Badge Capi */
@@ -54,33 +56,38 @@
     right: 15px;
     background: rgba(255, 255, 255, 0.9);
     color: var(--accent-pop);
-    padding: 5px 12px;
+    padding: 4px 10px;
     border-radius: 20px;
     font-size: 0.7rem;
     font-weight: 700;
     z-index: 5;
 }
 
-/* Immagine e Hover */
-.outfit-img-container {
+/* Immagine con Overlay */
+.card-img-container {
     position: relative;
     aspect-ratio: 1/1;
     overflow: hidden;
 }
 
-.outfit-img {
+.card-img-container img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.6s ease;
 }
 
-.outfit-hover-overlay {
+.archive-card:hover img {
+    transform: scale(1.08);
+}
+
+.card-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(184, 128, 125, 0.3); /* Un tocco di rosa carne al passaggio */
+    background: rgba(239, 211, 210, 0.3); /* Rosa carne leggero */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -88,47 +95,62 @@
     transition: opacity 0.3s ease;
 }
 
-.outfit-card:hover .outfit-hover-overlay {
+.archive-card:hover .card-overlay {
     opacity: 1;
 }
 
-.btn-details {
+.btn-dettaglio {
     padding: 10px 20px;
-    background: white;
+    background: #fff;
     color: var(--text-main);
     text-decoration: none;
-    border-radius: 20px;
+    border-radius: 25px;
     font-size: 0.8rem;
     font-weight: 600;
+    text-transform: uppercase;
 }
 
-/* Info Testuali */
-.outfit-details {
+/* Info e Testi */
+.archive-info {
     padding: 20px;
-    flex-grow: 1;
 }
 
-.outfit-date {
+.archive-date {
     font-size: 0.7rem;
     color: var(--text-muted);
-    margin-bottom: 10px;
+    letter-spacing: 1px;
     display: block;
+    margin-bottom: 10px;
 }
 
-.outfit-desc {
+.archive-desc {
     font-size: 0.9rem;
+    line-height: 1.5;
     color: var(--text-main);
     margin-bottom: 15px;
 }
 
-.outfit-footer {
+.archive-footer {
     border-top: 1px solid var(--beige-chiaro);
-    padding-top: 10px;
+    padding-top: 12px;
 }
 
-.view-more {
+.link-capi {
     color: var(--accent-dark);
     text-decoration: none;
     font-size: 0.75rem;
     font-weight: 600;
+    transition: color 0.2s;
+}
+
+.link-capi:hover {
+    color: var(--accent-pop);
+}
+
+/* Stato Vuoto */
+.empty-state {
+    text-align: center;
+    padding: 100px 20px;
+    color: var(--text-muted);
+    grid-column: 1 / -1;
 }
