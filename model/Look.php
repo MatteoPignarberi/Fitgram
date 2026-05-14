@@ -34,14 +34,25 @@ function getArmadioUtente($conn, $idUtente) {
     }
     return $outfits;
 }
-function getDettagliOutfit($conn, $idOutfit) {
-    // Conta quanti capi ci sono in questo outfit
-    $sql = "SELECT COUNT(*) as num_capi FROM CapiOutfit WHERE idOutfit = ?";
+// model/Look.php
+
+function getArmadioUtente($conn, $idUtente) {
+    $outfits = [];
+    // Query con JOIN per prendere i dati dell'outfit collegati all'utente specifico
+    $sql = "SELECT O.* FROM Outfit O
+            INNER JOIN OutfitUtenti OU ON O.id = OU.idOutfit
+            WHERE OU.idUtente = ?
+            ORDER BY O.timestamp DESC";
+
     if ($stmt = mysqli_prepare($conn, $sql)) {
-        mysqli_stmt_bind_param($stmt, "i", $idOutfit);
+        mysqli_stmt_bind_param($stmt, "i", $idUtente);
         mysqli_stmt_execute($stmt);
-        $res = mysqli_stmt_get_result($stmt)->fetch_assoc();
-        return $res['num_capi'];
+        $result = mysqli_stmt_get_result($stmt);
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $outfits[] = $row;
+        }
+        mysqli_stmt_close($stmt);
     }
-    return 0;
+    return $outfits;
 }
