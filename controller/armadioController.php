@@ -3,7 +3,6 @@ session_start();
 require_once '../config/connessione.php';
 require_once '../model/Look.php';
 
-// Verifichiamo che l'utente sia loggato
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../view/login.php");
     exit();
@@ -11,9 +10,9 @@ if (!isset($_SESSION['user_id'])) {
 
 $id_utente_loggato = $_SESSION['user_id'];
 
-// Recuperiamo i dati dal Model usando l'ID
+// Questa funzione deve essere nel file model/Look.php
 $miei_look = getArmadioUtente($conn, $id_utente_loggato);
 
-// Passiamo i dati alla View
+// Carica la pagina vera e propria
 include '../view/armadio.php';
 ?>
