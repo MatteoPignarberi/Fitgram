@@ -21,13 +21,13 @@
         .outfit-desc { font-size: 0.9rem; line-height: 1.4; color: #333; }
         .empty-wardrobe { text-align: center; padding: 100px 0; grid-column: 1 / -1; }
         .btn-carica { display: inline-block; margin-top: 15px; color: #b8807d; font-weight: 600; text-decoration: none; padding: 10px 20px; border: 1px solid #b8807d; border-radius: 25px; transition: 0.3s; }
+        .btn-carica:hover { background-color: #b8807d; color: white; }
     </style>
 </head>
 <body>
 
 <?php
 include '../includes/header.php';
-// Usiamo @ per evitare lo schermo bianco se il file manca
 @include '../includes/sidebar.php';
 ?>
 
@@ -60,7 +60,6 @@ include '../includes/header.php';
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const profileBtn = document.getElementById('profile-toggle-btn');
-        // Cerchiamo la sidebar in modo più flessibile
         const sidebar = document.getElementById('account-sidebar') || document.querySelector('.account-sidebar');
         const closeBtn = document.getElementById('close-sidebar') || document.querySelector('.close-sidebar');
 

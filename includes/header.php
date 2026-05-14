@@ -4,6 +4,8 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 $is_logged = isset($_SESSION['user_id']);
 $username_mostrato = $is_logged ? $_SESSION['username'] : "Ospite";
+
+// Logica percorsi: capisce in che cartella ti trovi
 $base = (basename(getcwd()) == 'Admin' || basename(getcwd()) == 'view' || basename(getcwd()) == 'controller') ? '../' : '';
 ?>
     <nav>
