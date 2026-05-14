@@ -2,103 +2,80 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Il mio Armadio - Fitgram</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archivio Armadio - Fitgram</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/css/main.css">
+    <link rel="stylesheet" href="../styles/css/components.css">
     <style>
-        /* CSS INTERNO PER ESSERE SICURI CHE FUNZIONI */
-        body { background-color: #f8f5f0; margin: 0; font-family: 'Montserrat', sans-serif; }
-
-        .wardrobe-header {
-            text-align: center;
-            padding: 40px 20px;
-            background-color: #ffffff;
-            border-bottom: 1px solid #efd3d2;
-        }
-
-        /* FORZIAMO L'ICONA A 80PX */
-        .wardrobe-header img {
-            width: 80px !important;
-            height: auto !important;
-            display: block;
-            margin: 0 auto 15px auto;
-        }
-
-        .wardrobe-header h1 {
+        .wardrobe-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .archive-title {
             font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: 2.2rem;
-            margin: 10px 0;
-            color: #3d3d3d;
+            font-size: 2.8rem;
+            text-align: center;
+            margin-bottom: 10px;
+            color: var(--text-main);
         }
-
-        .wardrobe-header p {
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            color: #b8807d;
+        .archive-subtitle {
+            text-align: center;
+            color: var(--text-muted);
             text-transform: uppercase;
-            margin: 0;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            margin-bottom: 50px;
         }
-
-        .wardrobe-container {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        .archive-grid {
+        .wardrobe-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
         }
-
-        .archive-card {
-            background: #fff;
-            border: 1px solid #eee;
-            transition: 0.3s;
+        .outfit-card {
+            background: var(--pure-white);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid var(--gray-border);
+            transition: all 0.3s ease;
         }
+        .outfit-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+        .outfit-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+        .outfit-details { padding: 20px; }
+        .outfit-date { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 8px; }
+        .outfit-desc { font-size: 0.9rem; line-height: 1.4; color: var(--text-main); }
 
-        .archive-card img {
-            width: 100%;
-            aspect-ratio: 3/4;
-            object-fit: cover;
-            display: block;
+        .empty-wardrobe {
+            text-align: center; padding: 100px 0; grid-column: 1 / -1;
         }
-
-        .archive-info { padding: 15px; }
-        .archive-info p { margin: 0; font-size: 0.9rem; }
-        .archive-info span { font-size: 0.7rem; color: #999; }
     </style>
 </head>
 <body>
 
-<?php include '../includes/header.php'; ?>
+<?php require_once '../includes/header.php'; ?>
 
-<header class="wardrobe-header">
-    <img src="../resources/Images/Armadio.png" alt="Icona">
-    <h1>Il mio Archivio</h1>
-    <p><?php echo count($miei_look); ?> LOOK CARICATI</p>
-</header>
+<div class="wardrobe-container">
+    <h1 class="archive-title">Il mio Armadio</h1>
+    <p class="archive-subtitle">Archivio personale dei tuoi fit</p>
 
-<main class="wardrobe-container">
-    <div class="archive-grid">
+    <div class="wardrobe-grid">
         <?php if (empty($miei_look)): ?>
-            <p style="text-align: center; grid-column: 1/-1;">L'armadio è vuoto.</p>
+            <div class="empty-wardrobe">
+                <p>Non hai ancora aggiunto look al tuo armadio.</p>
+                <a href="carica_look.php" style="color: var(--accent-pop); font-weight: 600;">Carica il primo look ora</a>
+            </div>
         <?php else: ?>
             <?php foreach ($miei_look as $look): ?>
-                <div class="archive-card">
-                    <img src="../uploads/<?php echo htmlspecialchars($look['immagine']); ?>">
-                    <div class="archive-info">
-                        <p><?php echo htmlspecialchars($look['descrizione']); ?></p>
-                        <span><?php echo date("d/m/Y", strtotime($look['timestamp'])); ?></span>
+                <article class="outfit-card">
+                    <img src="../uploads/<?php echo htmlspecialchars($look['immagine']); ?>" class="outfit-img" alt="Mio Outfit">
+                    <div class="outfit-details">
+                        <div class="outfit-date"><?php echo date("d M Y", strtotime($look['timestamp'])); ?></div>
+                        <p class="outfit-desc"><?php echo htmlspecialchars($look['descrizione']); ?></p>
                     </div>
-                </div>
+                </article>
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
-</main>
+</div>
 
-<?php include '../includes/footer.php'; ?>
+<?php require_once '../includes/footer.php'; ?>
 
 </body>
 </html>

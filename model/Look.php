@@ -14,6 +14,8 @@ function createLook($conn, $descrizione, $nomeFile, $username, $tags, $link_acqu
     return false;
 }
 
+// model/Look.php
+
 function getArmadioUtente($conn, $idUtente) {
     $outfits = [];
     // Query con JOIN per prendere i dati dell'outfit collegati all'utente specifico
