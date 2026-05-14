@@ -13,23 +13,22 @@
         .archive-title { font-family: 'Playfair Display', serif; font-size: 2.8rem; text-align: center; margin-bottom: 10px; color: var(--text-main); }
         .archive-subtitle { text-align: center; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 50px; }
         .wardrobe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-        .outfit-card { background: var(--pure-white); border-radius: 15px; overflow: hidden; border: 1px solid var(--gray-border); transition: all 0.3s ease; }
+        .outfit-card { background: white; border-radius: 15px; overflow: hidden; border: 1px solid #eee; transition: all 0.3s ease; }
         .outfit-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
         .outfit-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
         .outfit-details { padding: 20px; }
-        .outfit-date { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 8px; }
-        .outfit-desc { font-size: 0.9rem; line-height: 1.4; color: var(--text-main); }
+        .outfit-date { font-size: 0.7rem; color: #888; margin-bottom: 8px; }
+        .outfit-desc { font-size: 0.9rem; line-height: 1.4; color: #333; }
         .empty-wardrobe { text-align: center; padding: 100px 0; grid-column: 1 / -1; }
-        .btn-carica { display: inline-block; margin-top: 15px; color: var(--accent-pop); font-weight: 600; text-decoration: none; padding: 10px 20px; border: 1px solid var(--accent-pop); border-radius: 25px; transition: 0.3s; }
-        .btn-carica:hover { background-color: var(--accent-pop); color: white; }
+        .btn-carica { display: inline-block; margin-top: 15px; color: #b8807d; font-weight: 600; text-decoration: none; padding: 10px 20px; border: 1px solid #b8807d; border-radius: 25px; transition: 0.3s; }
     </style>
 </head>
 <body>
 
 <?php
-require_once '../includes/header.php';
-// FONDAMENTALE: Se non includi la sidebar qui, non potrà mai aprirsi!
-require_once '../includes/sidebar.php';
+include '../includes/header.php';
+// Usiamo @ per evitare lo schermo bianco se il file manca
+@include '../includes/sidebar.php';
 ?>
 
 <div class="wardrobe-container">
@@ -48,7 +47,7 @@ require_once '../includes/sidebar.php';
                     <img src="../uploads/<?php echo htmlspecialchars($look['immagine']); ?>" class="outfit-img" alt="Mio Outfit">
                     <div class="outfit-details">
                         <div class="outfit-date"><?php echo date("d M Y", strtotime($look['timestamp'])); ?></div>
-                        <p class="outfit-desc"><?php echo htmlspecialchars($look['descrizione']); ?></p>
+                        <p class="outfit-desc"><?php echo htmlspecialchars($look['descrizione'] ?? ''); ?></p>
                     </div>
                 </article>
             <?php endforeach; ?>
@@ -56,36 +55,26 @@ require_once '../includes/sidebar.php';
     </div>
 </div>
 
-<?php require_once '../includes/footer.php'; ?>
+<?php include '../includes/footer.php'; ?>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const profileBtn = document.getElementById('profile-toggle-btn');
-        // Cerca la sidebar sia per ID che per Classe per evitare conflitti
+        // Cerchiamo la sidebar in modo più flessibile
         const sidebar = document.getElementById('account-sidebar') || document.querySelector('.account-sidebar');
         const closeBtn = document.getElementById('close-sidebar') || document.querySelector('.close-sidebar');
 
         if (profileBtn && sidebar) {
-            profileBtn.addEventListener('click', function(e) {
+            profileBtn.onclick = function(e) {
                 e.preventDefault();
                 sidebar.classList.toggle('active');
-            });
+            };
         }
-
         if (closeBtn && sidebar) {
-            closeBtn.addEventListener('click', function() {
+            closeBtn.onclick = function() {
                 sidebar.classList.remove('active');
-            });
+            };
         }
-
-        // Chiude se clicchi fuori dalla sidebar
-        document.addEventListener('click', function(event) {
-            if (sidebar && sidebar.classList.contains('active')) {
-                if (!sidebar.contains(event.target) && !profileBtn.contains(event.target)) {
-                    sidebar.classList.remove('active');
-                }
-            }
-        });
     });
 </script>
 
