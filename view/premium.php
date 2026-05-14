@@ -36,7 +36,7 @@
         <div class="card premium">
             <div class="premium-badge">Più Popolare</div>
             <h2>Premium</h2>
-            <div class="price">€9.99<span>/mese</span></div>
+            <div class="price">€2.99<span>/mese</span></div>
             <ul class="features">
                 <li>Caricamento look illimitato</li>
                 <li>Badge utente verificato/Premium</li>
