@@ -4,6 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 $is_logged = isset($_SESSION['user_id']);
 $username_mostrato = $is_logged ? $_SESSION['username'] : "Ospite";
+// Calcolo della base dinamico: fondamentale per far funzionare i link da ogni cartella
 $base = (basename(getcwd()) == 'Admin' || basename(getcwd()) == 'view' || basename(getcwd()) == 'controller') ? '../' : '';
 ?>
     <nav>
