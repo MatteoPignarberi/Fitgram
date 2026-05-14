@@ -2,11 +2,8 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
 $is_logged = isset($_SESSION['user_id']);
 $username_mostrato = $is_logged ? $_SESSION['username'] : "Ospite";
-
-// Gestione dei percorsi relativi
 $base = (basename(getcwd()) == 'Admin' || basename(getcwd()) == 'view' || basename(getcwd()) == 'controller') ? '../' : '';
 ?>
     <nav>
@@ -35,29 +32,24 @@ $base = (basename(getcwd()) == 'Admin' || basename(getcwd()) == 'view' || basena
                 <span class="text-link" style="margin-right: 15px; color: var(--accent-dark);">
                 Ciao, <?php echo htmlspecialchars($_SESSION['nome'] ?? $username_mostrato); ?>
             </span>
-
-                <a href="<?php echo $base; ?>Admin/dashboard.php" style="text-decoration: none;">
-                    <div id="profile-toggle-btn" class="header-profile-link" title="Visualizza Profilo" style="cursor: pointer;">
-                        <div class="header-avatar">
-                            <?php
-                            $foto_sessione = $_SESSION['foto_profilo'] ?? '';
-                            if (!empty($foto_sessione) && $foto_sessione !== 'default_avatar.png'): ?>
-                                <img src="<?php echo $base; ?>uploads/<?php echo $foto_sessione; ?>?v=<?php echo time(); ?>"
-                                     style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
-                            <?php else: ?>
-                                <?php echo strtoupper(substr($username_mostrato, 0, 1)); ?>
-                            <?php endif; ?>
-                        </div>
+                <div id="profile-toggle-btn" class="header-profile-link" title="Visualizza Sidebar" style="cursor: pointer;">
+                    <div class="header-avatar">
+                        <?php
+                        $foto_sessione = $_SESSION['foto_profilo'] ?? '';
+                        if (!empty($foto_sessione) && $foto_sessione !== 'default_avatar.png'): ?>
+                            <img src="<?php echo $base; ?>uploads/<?php echo $foto_sessione; ?>?v=<?php echo time(); ?>"
+                                 style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                        <?php else: ?>
+                            <?php echo strtoupper(substr($username_mostrato, 0, 1)); ?>
+                        <?php endif; ?>
                     </div>
-                </a>
+                </div>
             <?php else: ?>
                 <a href="<?php echo $base; ?>view/login.php" class="text-link">Accedi</a>
                 <a href="<?php echo $base; ?>view/registrazione.php" class="text-link" style="color: var(--accent-dark);">Registrati</a>
-                <a href="<?php echo $base; ?>view/login.php">
-                    <div id="profile-toggle-btn" class="header-profile-link" title="Visualizza Profilo" style="cursor: pointer;">
-                        <div class="header-avatar">👤</div>
-                    </div>
-                </a>
+                <div id="profile-toggle-btn" class="header-profile-link" style="cursor: pointer;">
+                    <div class="header-avatar">👤</div>
+                </div>
             <?php endif; ?>
         </div>
     </nav>
@@ -66,10 +58,5 @@ $base = (basename(getcwd()) == 'Admin' || basename(getcwd()) == 'view' || basena
     <a href="<?php echo $base; ?>controller/armadioController.php" class="wardrobe-btn" title="Il mio armadio">
         <img src="<?php echo $base; ?>resources/Images/Armadio.png" alt="Armadio">
     </a>
-<?php endif; ?>
-
-<?php if ($is_logged): ?>
     <a href="<?php echo $base; ?>view/carica_look.php" class="add-look-btn" title="Carica un nuovo look">+</a>
-<?php else: ?>
-    <a href="<?php echo $base; ?>view/login.php" class="add-look-btn" title="Accedi per caricare" onclick="return confirm('Devi essere loggato per caricare un look. Vai al login?');">+</a>
 <?php endif; ?>
