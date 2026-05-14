@@ -34,3 +34,14 @@ function getArmadioUtente($conn, $idUtente) {
     }
     return $outfits;
 }
+function getDettagliOutfit($conn, $idOutfit) {
+    // Conta quanti capi ci sono in questo outfit
+    $sql = "SELECT COUNT(*) as num_capi FROM CapiOutfit WHERE idOutfit = ?";
+    if ($stmt = mysqli_prepare($conn, $sql)) {
+        mysqli_stmt_bind_param($stmt, "i", $idOutfit);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt)->fetch_assoc();
+        return $res['num_capi'];
+    }
+    return 0;
+}

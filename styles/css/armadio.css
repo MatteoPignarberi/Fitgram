@@ -1,0 +1,134 @@
+/* Stili specifici per la pagina Armadio */
+
+.wardrobe-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+.wardrobe-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.archive-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: var(--text-main);
+}
+
+.archive-subtitle {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+}
+
+/* Griglia degli Outfit */
+.wardrobe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 35px;
+}
+
+.outfit-card {
+    background: var(--pure-white);
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid var(--gray-border);
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.outfit-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+}
+
+/* Badge Capi */
+.outfit-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--accent-pop);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    z-index: 5;
+}
+
+/* Immagine e Hover */
+.outfit-img-container {
+    position: relative;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+}
+
+.outfit-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.outfit-hover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(184, 128, 125, 0.3); /* Un tocco di rosa carne al passaggio */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.outfit-card:hover .outfit-hover-overlay {
+    opacity: 1;
+}
+
+.btn-details {
+    padding: 10px 20px;
+    background: white;
+    color: var(--text-main);
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Info Testuali */
+.outfit-details {
+    padding: 20px;
+    flex-grow: 1;
+}
+
+.outfit-date {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    display: block;
+}
+
+.outfit-desc {
+    font-size: 0.9rem;
+    color: var(--text-main);
+    margin-bottom: 15px;
+}
+
+.outfit-footer {
+    border-top: 1px solid var(--beige-chiaro);
+    padding-top: 10px;
+}
+
+.view-more {
+    color: var(--accent-dark);
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
