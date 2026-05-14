@@ -21,31 +21,17 @@
 <main class="wardrobe-container">
     <?php if (empty($miei_look)): ?>
         <div class="empty-state">
-            <p>Il tuo armadio è ancora vuoto.</p>
-            <a href="carica_look.php" class="text-link" style="color: var(--accent-pop);">Carica il tuo primo look ora →</a>
+            <p>Non hai ancora caricato nessun look nel tuo armadio.</p>
+            <a href="carica_look.php" class="text-link" style="color: var(--accent-pop);">Inizia ora →</a>
         </div>
     <?php else: ?>
         <div class="archive-grid">
-            <?php foreach ($miei_look as $look):
-                // Recuperiamo il numero di capi dal Model
-                $n_capi = getDettagliOutfit($conn, $look['id']);
-                ?>
+            <?php foreach ($miei_look as $look): ?>
                 <article class="archive-card">
-                    <div class="outfit-badge"><?php echo $n_capi; ?> Capi</div>
-
-                    <div class="card-img-container">
-                        <img src="../uploads/<?php echo htmlspecialchars($look['immagine']); ?>" alt="Outfit Fitgram">
-                        <div class="card-overlay">
-                            <a href="dettaglio_outfit.php?id=<?php echo $look['id']; ?>" class="btn-dettaglio">Vedi dettagli</a>
-                        </div>
-                    </div>
-
+                    <img src="../uploads/<?php echo htmlspecialchars($look['immagine']); ?>" alt="Outfit">
                     <div class="archive-info">
-                        <span class="archive-date"><?php echo date("d.m.Y", strtotime($look['timestamp'])); ?></span>
                         <p class="archive-desc"><?php echo htmlspecialchars($look['descrizione']); ?></p>
-                        <div class="archive-footer">
-                            <a href="dettaglio_outfit.php?id=<?php echo $look['id']; ?>" class="link-capi">Scopri i capi →</a>
-                        </div>
+                        <div class="archive-date"><?php echo date("d/m/Y", strtotime($look['timestamp'])); ?></div>
                     </div>
                 </article>
             <?php endforeach; ?>
